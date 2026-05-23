@@ -16,18 +16,12 @@ export default function RootLayout() {
       <NativeTabs labelStyle={{ selected: { color: textColor } }}>
         <NativeTabs.Trigger name="index">
           <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
-          <NativeTabs.Trigger.Icon
-            src={require("@/assets/images/tabIcons/home.png")}
-            renderingMode="template"
-          />
+          <NativeTabs.Trigger.Icon sf="house.fill" md="house" />
         </NativeTabs.Trigger>
 
-        <NativeTabs.Trigger name="trip/TripDetails">
+        <NativeTabs.Trigger name="trip">
           <NativeTabs.Trigger.Label>Trip</NativeTabs.Trigger.Label>
-          <NativeTabs.Trigger.Icon
-            src={require("@/assets/images/tabIcons/explore.png")}
-            renderingMode="template"
-          />
+          <NativeTabs.Trigger.Icon sf="suitcase.fill" md="luggage" />
         </NativeTabs.Trigger>
       </NativeTabs>
     </ThemeProvider>

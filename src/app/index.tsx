@@ -1,4 +1,5 @@
 import { ThemedText, ThemedView } from "@/components/ui";
+import "@/i18n";
 import { StyleSheet } from "react-native";
 
 export default function Index() {

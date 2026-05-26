@@ -1,0 +1,21 @@
+{
+  "night": "Night",
+  "night_other": "Nights",
+
+  "activity": "Activity",
+  "activity_other": "Activities",
+
+  "accommodation": "Accommodation",
+  "accommodation_other": "Accommodations",
+
+  "openMap": "Open Map",
+  "viewReservation": "View Reservation",
+  "confirmationN": "Confirmation #",
+  "airport": "Airport",
+  
+  "arrivalFrom": "Arrival from {{name}}",
+  "arrivalHome": "Arrival from Home",
+  "departureTo": "Departure to {{name}}",
+  "departureHome": "Departure to Home"
+
+}

@@ -2,8 +2,8 @@
 import { MapView } from "@/components";
 import { getThemeProperty, TripProvider, useThemeColor } from "@/hooks";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { Slot } from "expo-router";
-import { useRef } from "react";
+import { Slot, usePathname } from "expo-router";
+import { useEffect, useRef } from "react";
 import { Animated, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -12,6 +12,16 @@ export default function TripLayout() {
   const activeTint = useThemeColor("activeTint");
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const pathName = usePathname();
+
+  useEffect(() => {
+    fadeAnim.setValue(0);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim, pathName]);
 
   return (
     <TripProvider>

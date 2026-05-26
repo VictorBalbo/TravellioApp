@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   subtitle: {
-    fontSize: Theme.base.textSize * 1.5,
-    lineHeight: Theme.base.textSize * 1.875,
+    fontSize: Theme.base.textSize * 1.25,
+    lineHeight: Theme.base.textSize * 1.5,
     fontWeight: "bold",
   },
   default: {

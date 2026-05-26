@@ -1,5 +1,10 @@
 import { useThemeColor } from "@/hooks";
-import { SymbolView, SymbolWeight } from "expo-symbols";
+import {
+  AndroidSymbol,
+  SFSymbol,
+  SymbolView,
+  SymbolWeight,
+} from "expo-symbols";
 import { ViewStyle } from "react-native";
 
 /**
@@ -51,15 +56,27 @@ export const Icon = ({
 };
 
 const symbolMapping: IconSymbols = {
-  plus: { ios: "x.circle", android: "close", web: "close" },
+  close: { ios: "xmark", android: "close", web: "close" },
+  building: { ios: "building.2.fill", android: "apartment", web: "apartment" },
+  house: { ios: "house.fill", android: "house", web: "house" },
+  ticket: {
+    ios: "ticket.fill",
+    android: "local_activity",
+    web: "local_activity",
+  },
+  map: { ios: "map.fill", android: "map", web: "map" },
 };
 
 export type IconSymbols = {
-  plus: IconSymbol;
+  close: IconSymbol;
+  building: IconSymbol;
+  house: IconSymbol;
+  ticket: IconSymbol;
+  map: IconSymbol;
 };
 
 type IconSymbol = {
-  ios: "x.circle";
-  android: "close";
-  web: "close";
+  ios: SFSymbol;
+  android: AndroidSymbol;
+  web: AndroidSymbol;
 };

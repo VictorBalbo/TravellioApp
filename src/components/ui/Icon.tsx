@@ -65,6 +65,12 @@ const symbolMapping: IconSymbols = {
     web: "local_activity",
   },
   map: { ios: "map.fill", android: "map", web: "map" },
+  pin: { ios: "mappin.and.ellipse", android: "pin_drop", web: "pin_drop" },
+  arrival: {
+    ios: "airplane.arrival",
+    android: "flight_land",
+    web: "flight_land",
+  },
 };
 
 export type IconSymbols = {
@@ -73,6 +79,8 @@ export type IconSymbols = {
   house: IconSymbol;
   ticket: IconSymbol;
   map: IconSymbol;
+  pin: IconSymbol;
+  arrival: IconSymbol;
 };
 
 type IconSymbol = {

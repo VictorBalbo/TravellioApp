@@ -1,8 +1,7 @@
 import { HeroView } from "@/components";
 import {
   ButtonType,
-  CardView,
-  HorizontalDivider,
+  CardList,
   IconTitleValue,
   TextType,
   ThemedButton,
@@ -26,6 +25,11 @@ export default function DestinationOverview() {
     [destinationId, destinations],
   );
 
+  const accommodations = useMemo(
+    () => destination?.accommodations,
+    [destination],
+  );
+
   const arrival = useMemo(
     () => transportations?.find((t) => destination?.id === t.destinationId),
     [transportations, destination],
@@ -39,6 +43,13 @@ export default function DestinationOverview() {
   return (
     <HeroView headerImageUrl={destination?.place?.images?.[0] ?? ""}>
       <ThemedView style={styles.header}>
+        <ThemedText type={TextType.Title}>{destination?.place.name}</ThemedText>
+        <ThemedText type={TextType.Bold}>
+          {destination?.startDate &&
+            displayDate(destination.startDate, "DD MMM")}
+          {" - "}
+          {destination?.endDate && displayDate(destination.endDate, "DD MMM")}
+        </ThemedText>
         {destination?.endDate && destination?.startDate && (
           <ThemedText type={TextType.Small}>
             {dateDiff(destination.endDate, destination.startDate)}{" "}
@@ -47,63 +58,41 @@ export default function DestinationOverview() {
             })}
           </ThemedText>
         )}
-        <ThemedText type={TextType.Title}>{destination?.place.name}</ThemedText>
-        <ThemedText type={TextType.Bold}>
-          {destination?.startDate &&
-            displayDate(destination.startDate, "DD MMM")}
-          {" - "}
-          {destination?.endDate && displayDate(destination.endDate, "DD MMM")}
-        </ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.body}>
-        {destination?.accommodations?.length && (
-          <CardView style={styles.card}>
+        {/* Accommodations */}
+        {accommodations?.length && (
+          <ThemedView style={styles.accommodations}>
             <IconTitleValue
               icon="house"
               valueType={TextType.Subtitle}
               value={t("accommodation", {
-                count: destination.accommodations.length,
+                count: accommodations.length,
               })}
             />
-            {destination.accommodations.map((a, i) => (
-              <ThemedView style={styles.accommodation} key={a.id}>
-                <IconTitleValue
-                  value={a.name ?? a.place.name}
-                  displayTitleAfterText={true}
-                  title={
-                    a.checkin &&
-                    a.checkout &&
-                    `${displayDate(a.checkin, "DD MMM HH:mm")}  -  ${displayDate(a.checkout, "DD MMM HH:mm")}`
-                  }
-                />
-                <ThemedView style={{ flexDirection: "row", gap: 8 }}>
-                  {a.website && (
-                    <ThemedButton
-                      type={ButtonType.Secondary}
-                      style={{ flex: 1 }}
-                      icon="ticket"
-                      // icon={require("@/assets/images/airbnb-icon.png")}
-                      onPress={() => console.log("Reservation")}
-                      // title={t("viewReservation")}
-                    />
-                  )}
-                  {a.place.mapsUrl && (
-                    <ThemedButton
-                      type={ButtonType.Secondary}
-                      style={{ flex: 1 }}
-                      icon="map"
-                      onPress={() => console.log("Map")}
-                      // title={t("openMap")}
-                    />
-                  )}
+            <CardList
+              data={accommodations}
+              renderItem={(a, i) => (
+                <ThemedView style={styles.accommodation}>
+                  <IconTitleValue
+                    value={a.name ?? a.place.name}
+                    displayTitleAfterText={true}
+                    title={
+                      a.checkin &&
+                      a.checkout &&
+                      `${displayDate(a.checkin, "DD MMM HH:mm")}  -  ${displayDate(a.checkout, "DD MMM HH:mm")}`
+                    }
+                  />
+                  <ThemedButton
+                    icon="pin"
+                    type={ButtonType.Secondary}
+                    onPress={() => {}}
+                  />
                 </ThemedView>
-                {i !== destination.accommodations!.length - 1 && (
-                  <HorizontalDivider />
-                )}
-              </ThemedView>
-            ))}
-          </CardView>
+              )}
+            ></CardList>
+          </ThemedView>
         )}
       </ThemedView>
     </HeroView>
@@ -120,10 +109,11 @@ const styles = StyleSheet.create({
     padding: smallSpacing,
     gap: largeSpacing,
   },
-  card: {
+  accommodations: {
     gap: smallSpacing,
   },
   accommodation: {
-    gap: smallSpacing,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });

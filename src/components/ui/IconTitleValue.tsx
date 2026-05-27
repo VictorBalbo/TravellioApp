@@ -24,6 +24,7 @@ export const IconTitleValue = ({
 }: IconTitleValueProps) => {
   return (
     <ThemedView style={styles.container}>
+      {icon && <Icon name={icon} />}
       <ThemedView
         style={[
           styles.titleValue,
@@ -38,8 +39,6 @@ export const IconTitleValue = ({
           </ThemedText>
         )}
       </ThemedView>
-      {icon && <Icon name={icon} />}
-      {icon && <Icon name={icon} />}
     </ThemedView>
   );
 };

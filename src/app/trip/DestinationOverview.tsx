@@ -1,7 +1,9 @@
 import { HeroView } from "@/components";
 import {
   ButtonType,
+  CardCollapsable,
   CardList,
+  Icon,
   IconTitleValue,
   TextType,
   ThemedButton,
@@ -10,6 +12,7 @@ import {
 } from "@/components/ui";
 import { dateDiff, displayDate } from "@/helpers";
 import { getThemeProperty, useTripContext } from "@/hooks";
+import { TripService } from "@/services/TripService";
 import { useLocalSearchParams } from "expo-router";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -34,6 +37,10 @@ export default function DestinationOverview() {
     () => transportations?.find((t) => destination?.id === t.destinationId),
     [transportations, destination],
   );
+  const arrivalOrigin = useMemo(
+    () => destinations?.find((d) => arrival?.originId === d.id),
+    [arrival],
+  );
 
   const departure = useMemo(
     () => transportations?.find((t) => destination?.id === t.originId),
@@ -41,7 +48,9 @@ export default function DestinationOverview() {
   );
 
   return (
-    <HeroView headerImageUrl={destination?.place?.images?.[0] ?? ""}>
+    <HeroView
+      headerImageUrl={TripService.getPhotoForPlace(destination?.place.images)}
+    >
       <ThemedView style={styles.header}>
         <ThemedText type={TextType.Title}>{destination?.place.name}</ThemedText>
         <ThemedText type={TextType.Bold}>
@@ -91,7 +100,50 @@ export default function DestinationOverview() {
                   />
                 </ThemedView>
               )}
-            ></CardList>
+            />
+          </ThemedView>
+        )}
+
+        {/* Arrival */}
+        {arrival && (
+          <ThemedView style={styles.arrival}>
+            <IconTitleValue
+              icon="arrival"
+              valueType={TextType.Subtitle}
+              value={t("arrival")}
+            />
+            <CardCollapsable
+              header={
+                <ThemedView style={styles.arrivalHeader}>
+                  <Icon name="arrival" />
+                  <ThemedView>
+                    <ThemedText>
+                      {t("arrivalAt")}{" "}
+                      {arrival.segments[arrival.segments.length - 1]?.endDate &&
+                        displayDate(
+                          arrival.segments[arrival.segments.length - 1]
+                            ?.endDate!,
+                          "HH:mm",
+                        )}
+                    </ThemedText>
+                    <ThemedText>
+                      {arrivalOrigin?.place?.name ?? "fsdfsdf"}
+                      {" - "}
+                      {destination?.place?.name}
+                    </ThemedText>
+                  </ThemedView>
+                </ThemedView>
+              }
+              body={
+                <ThemedView>
+                  <ThemedText>Body</ThemedText>
+                  <ThemedText>Body</ThemedText>
+                  <ThemedText>Body</ThemedText>
+                  <ThemedText>Body</ThemedText>
+                  <ThemedText>Body</ThemedText>
+                </ThemedView>
+              }
+            />
           </ThemedView>
         )}
       </ThemedView>
@@ -115,5 +167,13 @@ const styles = StyleSheet.create({
   accommodation: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  arrival: {
+    gap: smallSpacing,
+  },
+  arrivalHeader: {
+    flexDirection: "row",
+    gap: smallSpacing,
+    alignItems: "center",
   },
 });

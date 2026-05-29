@@ -1,3 +1,4 @@
+export { CardCollapsable } from "./CardCollapsable";
 export { CardList } from "./CardList";
 export { CardView } from "./CardView";
 export { ExternalLink } from "./ExternalLink";

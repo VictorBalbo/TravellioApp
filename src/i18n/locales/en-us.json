@@ -13,9 +13,8 @@
   "confirmationN": "Confirmation #",
   "airport": "Airport",
   
-  "arrivalFrom": "Arrival from {{name}}",
-  "arrivalHome": "Arrival from Home",
-  "departureTo": "Departure to {{name}}",
-  "departureHome": "Departure to Home"
-
+  "arrival": "Arrival",
+  "arrivalAt": "Arrival at",
+  "departure": "Departure",
+  "departureAt": "Departure at"
 }

@@ -13,8 +13,8 @@
   "confirmationN": "Confirmation N",
   "airport": "Aeroporto",
 
-  "arrivalFrom": "Chegada de {{name}}",
-  "arrivalHome": "Chegada de Casa",
-  "departureTo": "Saída para {{name}}",
-  "departureHome": "Saída para Casa"
+  "arrival": "Chegada",
+  "arrivalAt": "Chegada às",
+  "departure": "Saída",
+  "departureAt": "Saída às"
 }

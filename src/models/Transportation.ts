@@ -3,7 +3,9 @@ import type { Place, Price } from ".";
 export interface Transportation {
   id: string;
   originId: string;
+  origin: Place;
   destinationId: string;
+  destination: Place;
   price?: Price;
   segments: TransportationSegment[];
 }

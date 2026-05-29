@@ -71,6 +71,11 @@ const symbolMapping: IconSymbols = {
     android: "flight_land",
     web: "flight_land",
   },
+  chevronDown: {
+    ios: "chevron.down",
+    android: "expand_more",
+    web: "expand_more",
+  },
 };
 
 export type IconSymbols = {
@@ -81,6 +86,7 @@ export type IconSymbols = {
   map: IconSymbol;
   pin: IconSymbol;
   arrival: IconSymbol;
+  chevronDown: IconSymbol;
 };
 
 type IconSymbol = {

@@ -8,13 +8,28 @@
   "accommodation": "Accommodation",
   "accommodation_other": "Accommodations",
 
-  "openMap": "Open Map",
-  "viewReservation": "View Reservation",
-  "confirmationN": "Confirmation #",
-  "airport": "Airport",
-  
-  "arrival": "Arrival",
   "arrivalAt": "Arrival at",
-  "departure": "Departure",
-  "departureAt": "Departure at"
+  "departureAt": "Departure at",
+  "transportation": {
+    "plane": "Plane",
+    "train": "Train",
+    "bus": "Bus",
+    "car": "Car",
+    "ship": "Ship",
+    "company": "Company",
+    "serviceNumber": {
+      "plane": "Flight #",
+      "train": "Train",
+      "bus": "Bus",
+      "car": "Car model",
+      "ship": "Ship"
+    },
+    "seat": "Seat",
+    "connection": "Connection"
+  },
+  "reservation": "Reservation",
+  "checkIn": "Check-in",
+  "checkOut": "Check-out",
+  "address": "Address",
+  "notes": "Notes"
 }

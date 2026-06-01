@@ -7,14 +7,29 @@
 
   "accommodation": "Acomodação",
   "accommodation_other": "Acomodações",
-
-  "openMap": "Abrir no Mapa",
-  "viewReservation": "Ver Reserva",
-  "confirmationN": "Confirmation N",
-  "airport": "Aeroporto",
-
-  "arrival": "Chegada",
+  
   "arrivalAt": "Chegada às",
-  "departure": "Saída",
-  "departureAt": "Saída às"
+  "departureAt": "Saída às",
+  "transportation": {
+    "plane": "Avião",
+    "train": "Trem",
+    "bus": "Ônibus",
+    "car": "Carro",
+    "ship": "Navio",
+    "company": "Empresa",
+    "serviceNumber": {
+      "plane": "Voo",
+      "train": "Trem",
+      "bus": "Ônibus",
+      "car": "Modelo do carro",
+      "ship": "Navio"
+    },
+    "seat": "Assento",
+    "connection": "Conexão"
+  },
+  "reservation": "Reserva",
+  "checkIn": "Check-in",
+  "checkOut": "Check-out",
+  "address": "Endereço",
+  "notes": "Notas"
 }

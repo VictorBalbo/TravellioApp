@@ -53,23 +53,15 @@ export const ThemedButton = ({
       break;
   }
 
-  const iconName =
-    icon && typeof icon === "string" ? (icon as keyof IconSymbols) : undefined;
+  const iconName = icon && typeof icon === "string" ? (icon as keyof IconSymbols) : undefined;
   const image = icon && typeof icon === "number" && (icon as number);
 
   return (
-    <PressableView
-      onPress={onPress}
-      style={[style, styles.buttonContainer, { backgroundColor }]}
-    >
+    <PressableView onPress={onPress} style={[style, styles.buttonContainer, { backgroundColor }]}>
       {iconName && <Icon size={20} color={textColor} name={iconName} />}
       {image && <Image source={image} style={{ height: 20, width: 20 }} />}
       {title && (
-        <ThemedText
-          type={TextType.Bold}
-          style={[styles.title, { color: textColor }]}
-          numberOfLines={1}
-        >
+        <ThemedText type={TextType.Bold} style={[styles.title, { color: textColor }]} numberOfLines={1}>
           {title}
         </ThemedText>
       )}

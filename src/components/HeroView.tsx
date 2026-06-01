@@ -4,12 +4,7 @@ import { getThemeProperty, useThemeColor } from "@/hooks";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import type { PropsWithChildren } from "react";
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-} from "react-native";
+import { Image, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 
 type Props = PropsWithChildren<{
   headerImageUrl: string;
@@ -17,12 +12,7 @@ type Props = PropsWithChildren<{
   closeButtonCallback?: () => void;
 }>;
 
-export const HeroView = ({
-  children,
-  headerImageUrl,
-  showHeaderImageGradient = true,
-  closeButtonCallback,
-}: Props) => {
+export const HeroView = ({ children, headerImageUrl, showHeaderImageGradient = true, closeButtonCallback }: Props) => {
   const background = useThemeColor("background");
 
   const router = useRouter();
@@ -56,7 +46,7 @@ export const HeroView = ({
 };
 
 const borderRadius = getThemeProperty("borderRadius");
-const smallSpacing = getThemeProperty("smallSpacing");
+const mediumSpacing = getThemeProperty("mediumSpacing");
 const largeSpacing = getThemeProperty("largeSpacing");
 const HEADER_HEIGHT = 200;
 
@@ -72,7 +62,7 @@ const styles = StyleSheet.create({
     right: largeSpacing,
     backgroundColor: Colors.black + "B2",
     borderRadius: borderRadius * borderRadius,
-    padding: smallSpacing,
+    padding: mediumSpacing,
   },
   headerImage: {
     height: HEADER_HEIGHT,

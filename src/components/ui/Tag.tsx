@@ -11,10 +11,7 @@ export function Tag({ text, style, ...otherProps }: TagProps) {
   const backgroundColor = useThemeColor("backgroundAccent");
 
   return (
-    <ThemedView
-      style={[styles.tag, { backgroundColor }, style]}
-      {...otherProps}
-    >
+    <ThemedView style={[styles.tag, { backgroundColor }, style]} {...otherProps}>
       <ThemedText type={TextType.Small}>{text}</ThemedText>
     </ThemedView>
   );
@@ -27,7 +24,7 @@ const borderRadius = getThemeProperty("borderRadius");
 const styles = StyleSheet.create({
   tag: {
     alignSelf: "flex-start",
-    paddingVertical: smallSpacing / 2,
+    paddingVertical: smallSpacing,
     paddingHorizontal: largeSpacing / 1.5,
     borderRadius: borderRadius * 2,
   },

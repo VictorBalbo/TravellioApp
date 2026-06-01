@@ -12,6 +12,8 @@ interface IconTitleValueProps {
   value: string;
   valueType?: TextType;
   displayTitleAfterText?: boolean;
+  alignText?: "center" | "left" | "right";
+  spaceTitleValue?: boolean;
 }
 
 export const IconTitleValue = ({
@@ -21,6 +23,8 @@ export const IconTitleValue = ({
   value,
   valueType = TextType.Text,
   displayTitleAfterText,
+  alignText = "left",
+  spaceTitleValue = false,
 }: IconTitleValueProps) => {
   return (
     <ThemedView style={styles.container}>
@@ -29,12 +33,17 @@ export const IconTitleValue = ({
         style={[
           styles.titleValue,
           displayTitleAfterText ? { flexDirection: "column-reverse" } : {},
+          spaceTitleValue ? { gap: smallSpacing } : {},
         ]}
       >
-        {title && <ThemedText type={TextType.Small}>{title}</ThemedText>}
-        {url && <ExternalLink href={url} displayText={value} />}
+        {title && (
+          <ThemedText type={TextType.Small} style={{ textAlign: alignText }} numberOfLines={2}>
+            {title}
+          </ThemedText>
+        )}
+        {url && <ExternalLink href={url} displayText={value} numberOfLines={1} style={{ textAlign: alignText }} />}
         {!url && (
-          <ThemedText type={valueType} numberOfLines={2} selectable>
+          <ThemedText type={valueType} numberOfLines={1} selectable style={{ textAlign: alignText }}>
             {value}
           </ThemedText>
         )}
@@ -44,11 +53,13 @@ export const IconTitleValue = ({
 };
 
 const smallSpacing = getThemeProperty("smallSpacing");
+const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    gap: smallSpacing,
+    gap: mediumSpacing,
+    flexShrink: 1,
   },
   titleValue: {
     flexGrow: 1,

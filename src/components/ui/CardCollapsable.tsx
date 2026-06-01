@@ -1,4 +1,4 @@
-import { getThemeProperty } from "@/hooks";
+import { getThemeProperty, useThemeColor } from "@/hooks";
 import { ReactNode, useRef, useState } from "react";
 import { Animated, Pressable, StyleSheet } from "react-native";
 import { CardView } from "./CardView";
@@ -11,6 +11,8 @@ type CardCollapsableProps = {
 };
 
 export function CardCollapsable({ header, body }: CardCollapsableProps) {
+  const helperTextColor = useThemeColor("helperText");
+
   const [expanded, setExpanded] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
   const growAnim = useRef(new Animated.Value(0)).current;
@@ -46,7 +48,7 @@ export function CardCollapsable({ header, body }: CardCollapsableProps) {
       <Pressable onPress={toggle} style={styles.header}>
         {header}
         <Animated.View style={{ transform: [{ rotate: arrowRotation }] }}>
-          <Icon name="chevronDown" size={20} />
+          <Icon name="chevronDown" size={20} color={helperTextColor} />
         </Animated.View>
       </Pressable>
 
@@ -84,11 +86,10 @@ export function CardCollapsable({ header, body }: CardCollapsableProps) {
   );
 }
 
-const smallSpacing = getThemeProperty("smallSpacing");
-
+const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
   card: {
-    padding: smallSpacing,
+    padding: mediumSpacing,
   },
   header: {
     flexDirection: "row",
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   divider: {
-    marginVertical: smallSpacing,
+    marginVertical: mediumSpacing,
   },
   body: {},
 });

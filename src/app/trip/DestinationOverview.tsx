@@ -1,17 +1,7 @@
-import { HeroView } from "@/components";
-import {
-  ButtonType,
-  CardCollapsable,
-  CardList,
-  Icon,
-  IconTitleValue,
-  TextType,
-  ThemedButton,
-  ThemedText,
-  ThemedView,
-} from "@/components/ui";
-import { dateDiff, displayDate } from "@/helpers";
-import { getThemeProperty, useTripContext } from "@/hooks";
+import { ArrivalDepartureOverview, HeroView } from "@/components";
+import { CardCollapsable, IconTitleValue, TextType, ThemedText, ThemedView } from "@/components/ui";
+import { dateDiff, displayDate, sanitizeUrl } from "@/helpers";
+import { getThemeProperty, useThemeColor, useTripContext } from "@/hooks";
 import { TripService } from "@/services/TripService";
 import { useLocalSearchParams } from "expo-router";
 import { useMemo } from "react";
@@ -19,43 +9,32 @@ import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
 export default function DestinationOverview() {
+  const helperTextColor = useThemeColor("helperText");
+
   const { t } = useTranslation();
   const { destinationId } = useLocalSearchParams();
   const { destinations, transportations } = useTripContext();
 
-  const destination = useMemo(
-    () => destinations?.find((d) => d.id === destinationId),
-    [destinationId, destinations],
-  );
-
-  const accommodations = useMemo(
-    () => destination?.accommodations,
-    [destination],
-  );
+  const destination = useMemo(() => destinations?.find((d) => d.id === destinationId), [destinationId, destinations]);
+  const accommodations = destination?.accommodations;
+  const activities = destination?.activities;
 
   const arrival = useMemo(
-    () => transportations?.find((t) => destination?.id === t.destinationId),
+    () => transportations?.find((t) => destination?.id === t.arrivalDestinationId),
     [transportations, destination],
-  );
-  const arrivalOrigin = useMemo(
-    () => destinations?.find((d) => arrival?.originId === d.id),
-    [arrival],
   );
 
   const departure = useMemo(
-    () => transportations?.find((t) => destination?.id === t.originId),
+    () => transportations?.find((t) => destination?.id === t.departureDestinationId),
     [transportations, destination],
   );
 
   return (
-    <HeroView
-      headerImageUrl={TripService.getPhotoForPlace(destination?.place.images)}
-    >
+    <HeroView headerImageUrl={TripService.getPhotoForPlace(destination?.place.images)}>
       <ThemedView style={styles.header}>
         <ThemedText type={TextType.Title}>{destination?.place.name}</ThemedText>
         <ThemedText type={TextType.Bold}>
-          {destination?.startDate &&
-            displayDate(destination.startDate, "DD MMM")}
+          {destination?.startDate && displayDate(destination.startDate, "DD MMM")}
           {" - "}
           {destination?.endDate && displayDate(destination.endDate, "DD MMM")}
         </ThemedText>
@@ -71,80 +50,52 @@ export default function DestinationOverview() {
 
       <ThemedView style={styles.body}>
         {/* Accommodations */}
-        {accommodations?.length && (
-          <ThemedView style={styles.accommodations}>
-            <IconTitleValue
-              icon="house"
-              valueType={TextType.Subtitle}
-              value={t("accommodation", {
-                count: accommodations.length,
-              })}
-            />
-            <CardList
-              data={accommodations}
-              renderItem={(a, i) => (
-                <ThemedView style={styles.accommodation}>
+        {accommodations?.length &&
+          accommodations.map((a) => (
+            <CardCollapsable
+              key={a.id}
+              header={
+                <ThemedView style={{}}>
                   <IconTitleValue
-                    value={a.name ?? a.place.name}
+                    icon="bed"
+                    value={a.name ?? a.place?.name}
                     displayTitleAfterText={true}
+                    valueType={TextType.Bold}
+                    spaceTitleValue
                     title={
-                      a.checkin &&
-                      a.checkout &&
-                      `${displayDate(a.checkin, "DD MMM HH:mm")}  -  ${displayDate(a.checkout, "DD MMM HH:mm")}`
+                      a.checkIn &&
+                      a.checkOut &&
+                      `${dateDiff(a.checkOut, a.checkIn) + 1} ${t("night", { count: dateDiff(a.checkOut, a.checkIn) + 1 })} · ` +
+                        `${displayDate(a.checkIn, "DD MMM")}  -  ${displayDate(a.checkOut, "DD MMM")}`
                     }
                   />
-                  <ThemedButton
-                    icon="pin"
-                    type={ButtonType.Secondary}
-                    onPress={() => {}}
-                  />
-                </ThemedView>
-              )}
-            />
-          </ThemedView>
-        )}
-
-        {/* Arrival */}
-        {arrival && (
-          <ThemedView style={styles.arrival}>
-            <IconTitleValue
-              icon="arrival"
-              valueType={TextType.Subtitle}
-              value={t("arrival")}
-            />
-            <CardCollapsable
-              header={
-                <ThemedView style={styles.arrivalHeader}>
-                  <Icon name="arrival" />
-                  <ThemedView>
-                    <ThemedText>
-                      {t("arrivalAt")}{" "}
-                      {arrival.segments[arrival.segments.length - 1]?.endDate &&
-                        displayDate(
-                          arrival.segments[arrival.segments.length - 1]
-                            ?.endDate!,
-                          "HH:mm",
-                        )}
-                    </ThemedText>
-                    <ThemedText>
-                      {arrivalOrigin?.place?.name ?? "fsdfsdf"}
-                      {" - "}
-                      {destination?.place?.name}
-                    </ThemedText>
-                  </ThemedView>
                 </ThemedView>
               }
               body={
-                <ThemedView>
-                  <ThemedText>Body</ThemedText>
-                  <ThemedText>Body</ThemedText>
-                  <ThemedText>Body</ThemedText>
-                  <ThemedText>Body</ThemedText>
-                  <ThemedText>Body</ThemedText>
+                <ThemedView style={{ gap: mediumSpacing }}>
+                  <IconTitleValue value={(a.checkIn && displayDate(a.checkIn, "HH:mm")) ?? ""} title={t("checkIn")} />
+                  <IconTitleValue
+                    value={(a.checkOut && displayDate(a.checkOut, "HH:mm")) ?? ""}
+                    title={t("checkOut")}
+                  />
+                  {a.place?.address && (
+                    <IconTitleValue url={a.place?.mapsUrl} value={a.place.address} title={t("address")} />
+                  )}
+                  {a.website && (
+                    <IconTitleValue url={a.website} value={sanitizeUrl(a.website)} title={t("reservation")} />
+                  )}
+                  {a.notes && <IconTitleValue value={a.notes} title={t("notes")} />}
                 </ThemedView>
               }
             />
-          </ThemedView>
+          ))}
+
+        {/* Arrival */}
+        {destination && arrival && (
+          <ArrivalDepartureOverview destination={destination} transportation={arrival} type="arrival" />
+        )}
+        {destination && departure && (
+          <ArrivalDepartureOverview destination={destination} transportation={departure} type="departure" />
         )}
       </ThemedView>
     </HeroView>
@@ -152,28 +103,20 @@ export default function DestinationOverview() {
 }
 
 const largeSpacing = getThemeProperty("largeSpacing");
-const smallSpacing = getThemeProperty("smallSpacing");
+const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
   header: {
-    padding: smallSpacing,
+    padding: mediumSpacing,
   },
   body: {
-    padding: smallSpacing,
+    padding: mediumSpacing,
     gap: largeSpacing,
   },
   accommodations: {
-    gap: smallSpacing,
+    gap: mediumSpacing,
   },
   accommodation: {
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  arrival: {
-    gap: smallSpacing,
-  },
-  arrivalHeader: {
-    flexDirection: "row",
-    gap: smallSpacing,
-    alignItems: "center",
   },
 });

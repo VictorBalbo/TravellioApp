@@ -11,6 +11,7 @@ export type ColorScheme = {
 };
 export type BaseScheme = {
   smallSpacing: number;
+  mediumSpacing: number;
   largeSpacing: number;
   borderRadius: number;
   textSize: number;
@@ -61,7 +62,8 @@ export const Theme: ThemeScheme = {
     border: Colors.gray,
   },
   base: {
-    smallSpacing: 8,
+    smallSpacing: 4,
+    mediumSpacing: 8,
     largeSpacing: 16,
     borderRadius: 8,
     textSize: 16,

@@ -7,16 +7,13 @@ import HorizontalDivider from "./HorizontalDivider";
 interface CardListProps<T> extends ViewProps {
   data: T[];
   renderItem: (item: T, index: number) => ReactNode;
+  renderHeader?: () => ReactNode;
 }
 
-export function CardList<T>({
-  data,
-  renderItem,
-  style,
-  ...otherProps
-}: CardListProps<T>) {
+export function CardList<T>({ data, renderItem, renderHeader, style, ...otherProps }: CardListProps<T>) {
   return (
     <CardView style={[cardStyle.card, style]} {...otherProps}>
+      {renderHeader && renderHeader()}
       {data.map((item, index) => (
         <Fragment key={index}>
           {renderItem(item, index)}
@@ -26,13 +23,13 @@ export function CardList<T>({
     </CardView>
   );
 }
-const smallSpacing = getThemeProperty("smallSpacing");
+const mediumSpacing = getThemeProperty("mediumSpacing");
 const borderRadius = getThemeProperty("borderRadius");
 
 const cardStyle = StyleSheet.create({
   card: {
-    padding: smallSpacing,
+    padding: mediumSpacing,
     borderRadius: borderRadius,
-    gap: smallSpacing,
+    gap: mediumSpacing,
   },
 });

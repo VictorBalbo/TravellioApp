@@ -16,3 +16,9 @@ export const dateDiff = (
   date2: Date,
   unit: dayjs.QUnitType = "days",
 ) => utcDate(date1).diff(utcDate(date2), unit);
+
+export const formatDuration = (totalMinutes: number) => {
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+};

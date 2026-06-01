@@ -51,7 +51,7 @@ export default function TripLayout() {
 }
 
 const largeSpacing = getThemeProperty("largeSpacing");
-const smallSpacing = getThemeProperty("smallSpacing");
+const mediumSpacing = getThemeProperty("mediumSpacing");
 
 const styles = StyleSheet.create({
   container: {
@@ -61,11 +61,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: largeSpacing,
     borderTopRightRadius: largeSpacing,
     overflow: "hidden",
-    marginHorizontal: smallSpacing,
+    marginHorizontal: mediumSpacing,
   },
   handleStyle: {
     position: "absolute",
     width: "100%",
-    padding: smallSpacing,
+    padding: mediumSpacing,
   },
 });

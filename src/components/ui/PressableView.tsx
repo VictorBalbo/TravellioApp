@@ -1,12 +1,6 @@
 import { getThemeProperty } from "@/hooks";
 import { PropsWithChildren, useRef } from "react";
-import {
-  Animated,
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  ViewStyle,
-} from "react-native";
+import { Animated, Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 
 type PressableViewProps = PropsWithChildren<{
   onPress: () => void;
@@ -24,11 +18,7 @@ type PressableViewProps = PropsWithChildren<{
  * - `onPress`: callback fired when the user completes a press gesture.
  * - `style`: optional style overrides for the outer pressable container.
  */
-export const PressableView = ({
-  onPress,
-  style,
-  children,
-}: PressableViewProps) => {
+export const PressableView = ({ onPress, style, children }: PressableViewProps) => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
 
@@ -82,15 +72,15 @@ export const PressableView = ({
     </Pressable>
   );
 };
-const smallSpacing = getThemeProperty("smallSpacing");
+const mediumSpacing = getThemeProperty("mediumSpacing");
 const borderRadius = getThemeProperty("borderRadius");
 const styles = StyleSheet.create({
   pressable: {
     borderRadius: borderRadius,
-    padding: smallSpacing,
+    padding: mediumSpacing,
   },
   button: {
-    gap: smallSpacing,
+    gap: mediumSpacing,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

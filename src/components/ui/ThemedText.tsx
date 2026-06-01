@@ -15,11 +15,7 @@ export type ThemedTextProps = TextProps & {
   type?: TextType;
 };
 
-export const ThemedText = ({
-  style,
-  type = TextType.Text,
-  ...rest
-}: ThemedTextProps) => {
+export const ThemedText = ({ style, type = TextType.Text, ...rest }: ThemedTextProps) => {
   const textColor = useThemeColor("text");
   const linkColor = useThemeColor("link");
   const helperTextColor = useThemeColor("helperText");
@@ -40,7 +36,7 @@ export const ThemedText = ({
       break;
     case TextType.Bold:
       color = textColor;
-      typeStyle = styles.semiBold;
+      typeStyle = styles.bold;
       break;
     case TextType.Link:
       color = linkColor;
@@ -69,7 +65,7 @@ const styles = StyleSheet.create({
     fontSize: Theme.base.textSize,
     lineHeight: Theme.base.textSize * 1.25,
   },
-  semiBold: {
+  bold: {
     fontSize: Theme.base.textSize,
     lineHeight: Theme.base.textSize * 1.25,
     fontWeight: "600",

@@ -1,12 +1,4 @@
-import {
-  CardView,
-  HorizontalDivider,
-  Icon,
-  PressableView,
-  TextType,
-  ThemedText,
-  ThemedView,
-} from "@/components/ui";
+import { CardView, HorizontalDivider, Icon, PressableView, TextType, ThemedText, ThemedView } from "@/components/ui";
 import { utcDate } from "@/helpers";
 import { getThemeProperty, useTripContext } from "@/hooks";
 import { useRouter } from "expo-router";
@@ -45,17 +37,11 @@ export default function TripDestinations() {
                 </ThemedText>
               </ThemedView>
               <ThemedView style={styles.destinationActivities}>
-                <ThemedText type={TextType.Bold}>
-                  {d.activities?.length ?? 0}
-                </ThemedText>
-                <ThemedText type={TextType.Small}>
-                  {t("activity", { count: d.activities?.length ?? 0 })}
-                </ThemedText>
+                <ThemedText type={TextType.Bold}>{d.activities?.length ?? 0}</ThemedText>
+                <ThemedText type={TextType.Small}>{t("activity", { count: d.activities?.length ?? 0 })}</ThemedText>
               </ThemedView>
               <ThemedView style={styles.destinationNights}>
-                <ThemedText type={TextType.Bold}>
-                  {utcDate(d.endDate).diff(d.startDate, "days")}
-                </ThemedText>
+                <ThemedText type={TextType.Bold}>{utcDate(d.endDate).diff(d.startDate, "days")}</ThemedText>
                 <ThemedText type={TextType.Small}>
                   {t("night", {
                     count: utcDate(d.endDate).diff(d.startDate, "days"),
@@ -71,7 +57,7 @@ export default function TripDestinations() {
   );
 }
 const largeSpacing = getThemeProperty("largeSpacing");
-const smallSpacing = getThemeProperty("smallSpacing");
+const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -79,7 +65,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   destinationsCard: {
-    marginVertical: smallSpacing,
+    marginVertical: mediumSpacing,
   },
   destinationName: {
     flex: 2,

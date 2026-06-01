@@ -2,11 +2,11 @@ import type { Accommodation, Activity, Place } from ".";
 
 export interface Destination {
   id: string;
+  placeId: string;
   startDate: Date;
   endDate: Date;
-  placeId: string;
   place: Place;
+  notes?: string;
   accommodations?: Accommodation[];
   activities?: Activity[];
-  notes?: string;
 }

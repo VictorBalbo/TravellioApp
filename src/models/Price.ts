@@ -1,4 +1,4 @@
 export interface Price {
-  value?: number;
-  currency?: string;
+  value: number;
+  currency: string;
 }

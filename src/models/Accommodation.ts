@@ -4,10 +4,10 @@ export interface Accommodation {
   id: string;
   name: string;
   placeId: string;
-  place: Place;
+  place?: Place;
+  checkIn?: Date;
+  checkOut?: Date;
   imageUrl?: string;
-  checkin?: Date;
-  checkout?: Date;
   website?: string;
   notes?: string;
   price: Price;

@@ -24,9 +24,11 @@ export const HeroView = ({ children, headerImageUrl, showHeaderImageGradient = t
       style={{ flex: 1, position: "relative" }}
     >
       <ThemedView background style={styles.container}>
-        <PressableView style={styles.closeButton} onPress={onClose}>
-          <Icon name="close" color={Colors.white} />
-        </PressableView>
+        <ThemedView style={styles.closeButtonContainer}>
+          <PressableView onPress={onClose} style={styles.closeButton}>
+            <Icon name="close" color={Colors.white} />
+          </PressableView>
+        </ThemedView>
 
         <ThemedView>
           <Image source={{ uri: headerImageUrl }} style={styles.headerImage} />
@@ -55,11 +57,13 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
   },
-  closeButton: {
+  closeButtonContainer: {
     position: "absolute",
     zIndex: 1,
     top: largeSpacing * 2,
     right: largeSpacing,
+  },
+  closeButton: {
     backgroundColor: Colors.black + "B2",
     borderRadius: borderRadius * borderRadius,
     padding: mediumSpacing,

@@ -1,4 +1,4 @@
-import { ArrivalDepartureOverview, HeroView } from "@/components";
+import { ActivitiesItinerary, ArrivalDepartureOverview, HeroView } from "@/components";
 import { CardCollapsable, IconTitleValue, TextType, ThemedText, ThemedView } from "@/components/ui";
 import { dateDiff, displayDate, sanitizeUrl } from "@/helpers";
 import { getThemeProperty, useThemeColor, useTripContext } from "@/hooks";
@@ -59,7 +59,7 @@ export default function DestinationOverview() {
                   <IconTitleValue
                     icon="bed"
                     value={a.name ?? a.place?.name}
-                    displayTitleAfterText={true}
+                    displayTitleAfterText
                     valueType={TextType.Bold}
                     spaceTitleValue
                     title={
@@ -72,12 +72,17 @@ export default function DestinationOverview() {
                 </ThemedView>
               }
               body={
-                <ThemedView style={{ gap: mediumSpacing }}>
-                  <IconTitleValue value={(a.checkIn && displayDate(a.checkIn, "HH:mm")) ?? ""} title={t("checkIn")} />
-                  <IconTitleValue
-                    value={(a.checkOut && displayDate(a.checkOut, "HH:mm")) ?? ""}
-                    title={t("checkOut")}
-                  />
+                <ThemedView style={styles.mediumSpacingGap}>
+                  <ThemedView style={styles.inlineInfo}>
+                    <IconTitleValue
+                      value={(a.checkIn && displayDate(a.checkIn, "DD MMM HH:mm")) ?? ""}
+                      title={t("checkIn")}
+                    />
+                    <IconTitleValue
+                      value={(a.checkOut && displayDate(a.checkOut, "DD MMM HH:mm")) ?? ""}
+                      title={t("checkOut")}
+                    />
+                  </ThemedView>
                   {a.place?.address && (
                     <IconTitleValue url={a.place?.mapsUrl} value={a.place.address} title={t("address")} />
                   )}
@@ -94,9 +99,13 @@ export default function DestinationOverview() {
         {destination && arrival && (
           <ArrivalDepartureOverview destination={destination} transportation={arrival} type="arrival" />
         )}
+        {/* Departure */}
         {destination && departure && (
           <ArrivalDepartureOverview destination={destination} transportation={departure} type="departure" />
         )}
+
+        {/* Activities */}
+        {activities && <ActivitiesItinerary activities={activities} />}
       </ThemedView>
     </HeroView>
   );
@@ -112,11 +121,12 @@ const styles = StyleSheet.create({
     padding: mediumSpacing,
     gap: largeSpacing,
   },
-  accommodations: {
+  mediumSpacingGap: {
     gap: mediumSpacing,
   },
-  accommodation: {
+  inlineInfo: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    gap: mediumSpacing,
+    alignItems: "center",
   },
 });

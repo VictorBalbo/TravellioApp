@@ -1,6 +1,6 @@
-import { useThemeColor } from "@/hooks";
+import { getThemeProperty, useThemeColor } from "@/hooks";
 import { AndroidSymbol, SFSymbol, SymbolView, SymbolWeight } from "expo-symbols";
-import { ViewStyle } from "react-native";
+import { StyleSheet, ViewStyle } from "react-native";
 
 /**
  * Renders a platform-aware symbol icon that resolves to the appropriate
@@ -13,19 +13,16 @@ import { ViewStyle } from "react-native";
  * - `style`: optional view style overrides
  * - `weight`: symbol weight/thickness (default: 'regular')
  */
-export const Icon = ({
-  name,
-  size = 24,
-  color,
-  style,
-  weight = "regular",
-}: {
+type Props = {
   name: keyof IconSymbols;
   size?: number;
   color?: string;
   style?: ViewStyle;
   weight?: SymbolWeight;
-}) => {
+  backgroundColor?: string;
+};
+
+export const Icon = ({ name, size = 24, color, style, weight = "regular", backgroundColor }: Props) => {
   const defaultColor = useThemeColor("activeTint");
   if (!color) {
     color = defaultColor;
@@ -58,21 +55,35 @@ export class IconSymbols {
   close: IconSymbol = { ios: "xmark", android: "close" };
 
   chevronDown: IconSymbol = { ios: "chevron.down", android: "expand_more" };
+  chevronRight: IconSymbol = { ios: "chevron.right", android: "chevron_right" };
   arrowRight: IconSymbol = { ios: "arrow.right", android: "arrow_right" };
 
   building: IconSymbol = { ios: "building.2.fill", android: "apartment" };
   bed: IconSymbol = { ios: "bed.double.fill", android: "bed" };
-  ticket: IconSymbol = { ios: "ticket.fill", android: "local_activity" };
   map: IconSymbol = { ios: "map.fill", android: "map" };
-  pin: IconSymbol = { ios: "mappin.and.ellipse", android: "pin_drop" };
   arrival: IconSymbol = { ios: "airplane.arrival", android: "flight_land" };
   departure: IconSymbol = { ios: "airplane.departure", android: "flight_takeoff" };
+  // Transportations
   plane: IconSymbol = { ios: "airplane.up.forward", android: "flight" };
   train: IconSymbol = { ios: "train.side.front.car", android: "train" };
   bus: IconSymbol = { ios: "bus", android: "bus_alert" };
   car: IconSymbol = { ios: "car", android: "car_rental" };
   ship: IconSymbol = { ios: "shippingbox", android: "directions_boat" };
-  line: IconSymbol = { ios: "line.horizontal.3", android: "line_axis" };
+  // ActivityTypes
+  ticket: IconSymbol = { ios: "ticket.fill", android: "local_activity" };
+  pin: IconSymbol = { ios: "mappin", android: "pin_drop" };
+  restaurant: IconSymbol = { ios: "fork.knife", android: "restaurant" };
+  coffee: IconSymbol = { ios: "cup.and.heat.waves.fill", android: "coffee" };
+  nightlife: IconSymbol = { ios: "wineglass.fill", android: "wine_bar" };
+  bakery: IconSymbol = { ios: "fork.knife", android: "breakfast_dining" };
+  museum: IconSymbol = { ios: "building.columns.fill", android: "museum" };
+  nature: IconSymbol = { ios: "tree.fill", android: "museum" };
+  beach: IconSymbol = { ios: "beach.umbrella.fill", android: "museum" };
+  shopping: IconSymbol = { ios: "bag.fill", android: "museum" };
+  tour: IconSymbol = { ios: "map.fill", android: "museum" };
+  activity: IconSymbol = { ios: "mappin", android: "museum" };
+  camera: IconSymbol = { ios: "camera", android: "museum" };
+  wellness: IconSymbol = { ios: "peacesign", android: "museum" };
 }
 
 type IconSymbol = {
@@ -80,3 +91,11 @@ type IconSymbol = {
   android: AndroidSymbol;
   web?: AndroidSymbol;
 };
+
+const mediumSpacing = getThemeProperty("smallSpacing");
+const styles = StyleSheet.create({
+  backgroundIcons: {
+    borderRadius: mediumSpacing,
+    padding: mediumSpacing,
+  },
+});

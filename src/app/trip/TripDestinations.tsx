@@ -24,7 +24,7 @@ export default function TripDestinations() {
       <CardView style={styles.destinationsCard}>
         {destinations?.map((d, i) => (
           <ThemedView key={i}>
-            <PressableView onPress={() => onDestinationSelected(d.id)}>
+            <PressableView onPress={() => onDestinationSelected(d.id)} style={styles.destination}>
               <Icon name="building" />
               <ThemedView style={styles.destinationName}>
                 <ThemedText type={TextType.Bold} numberOfLines={1}>
@@ -49,7 +49,7 @@ export default function TripDestinations() {
                 </ThemedText>
               </ThemedView>
             </PressableView>
-            {i !== destinations.length - 1 && <HorizontalDivider />}
+            {i !== destinations.length - 1 && <HorizontalDivider marginVertical={mediumSpacing} />}
           </ThemedView>
         ))}
       </CardView>
@@ -66,6 +66,11 @@ const styles = StyleSheet.create({
   },
   destinationsCard: {
     marginVertical: mediumSpacing,
+  },
+  destination: {
+    flexDirection: "row",
+    gap: mediumSpacing,
+    alignItems: "center",
   },
   destinationName: {
     flex: 2,

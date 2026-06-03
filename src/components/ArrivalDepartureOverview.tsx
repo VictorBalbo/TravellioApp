@@ -45,7 +45,7 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
       header={
         <ThemedView style={styles.header}>
           <Icon name={type} />
-          <ThemedView style={{ gap: smallSpacing }}>
+          <ThemedView style={styles.headerInfo}>
             <ThemedView style={styles.inlineInfo}>
               <ThemedText type={TextType.Bold}>
                 {t(type === "arrival" ? "arrivalAt" : "departureAt")}{" "}
@@ -100,7 +100,7 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
               valueType={TextType.Bold}
             />
             <ThemedText type={TextType.Small}> - - - - - </ThemedText>
-            <ThemedView style={{ flexDirection: "column", alignItems: "center" }}>
+            <ThemedView style={styles.flightDuration}>
               <Icon name={legTypeIcon(leg.type)} size={12} color={helperTextColor} />
               <ThemedText type={TextType.Small}>{legDuration(leg.departureTime, leg.arrivalTime)}</ThemedText>
             </ThemedView>
@@ -139,7 +139,7 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
                       " " +
                       t("transportation.connection")
                     }
-                    style={styles.connectionTime}
+                    style={styles.connectionDuration}
                   />
                 }
               />
@@ -158,6 +158,9 @@ const styles = StyleSheet.create({
     gap: mediumSpacing,
     alignItems: "center",
   },
+  headerInfo: {
+    gap: smallSpacing,
+  },
   inlineInfo: {
     flexDirection: "row",
     gap: mediumSpacing,
@@ -166,7 +169,11 @@ const styles = StyleSheet.create({
   body: {
     gap: mediumSpacing,
   },
-  connectionTime: {
+  flightDuration: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  connectionDuration: {
     alignSelf: "center",
     marginVertical: mediumSpacing,
   },

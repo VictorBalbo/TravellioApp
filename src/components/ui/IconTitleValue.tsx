@@ -1,5 +1,5 @@
 import { getThemeProperty } from "@/hooks";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ViewStyle } from "react-native";
 import { ExternalLink } from "./ExternalLink";
 import { Icon, IconSymbols } from "./Icon";
 import { TextType, ThemedText } from "./ThemedText";
@@ -14,6 +14,7 @@ interface IconTitleValueProps {
   displayTitleAfterText?: boolean;
   alignText?: "center" | "left" | "right";
   spaceTitleValue?: boolean;
+  containerStyle?: ViewStyle;
 }
 
 export const IconTitleValue = ({
@@ -25,9 +26,10 @@ export const IconTitleValue = ({
   displayTitleAfterText,
   alignText = "left",
   spaceTitleValue = false,
+  containerStyle,
 }: IconTitleValueProps) => {
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={[styles.container, containerStyle]}>
       {icon && <Icon name={icon} />}
       <ThemedView
         style={[

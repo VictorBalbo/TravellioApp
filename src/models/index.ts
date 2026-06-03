@@ -1,5 +1,5 @@
 export { Accommodation } from "./Accommodation";
-export { Activity } from "./Activity";
+export { Activity, ActivityTypes } from "./Activity";
 export { Coordinates } from "./Coordinates";
 export { Destination } from "./Destination";
 export { Place } from "./Place";

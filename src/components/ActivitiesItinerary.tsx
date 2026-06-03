@@ -1,6 +1,7 @@
 import { displayDate } from "@/helpers";
 import { getThemeProperty, useThemeColor } from "@/hooks";
 import { Activity, ActivityTypes } from "@/models";
+import { useRouter } from "expo-router";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
@@ -12,6 +13,7 @@ type Props = {
 
 export const ActivitiesItinerary = ({ activities }: Props) => {
   const { t } = useTranslation();
+  const router = useRouter();
   const helperText = useThemeColor("helperText");
   const unscheduledIdentifier = "###";
   const activitiesByDate = useMemo(
@@ -66,7 +68,16 @@ export const ActivitiesItinerary = ({ activities }: Props) => {
             {date === unscheduledIdentifier ? t("unscheduled") : displayDate(new Date(date), "ddd, DD MMM")}
           </ThemedText>
           {items.map((a) => (
-            <PressableView key={a.id} style={styles.inlineInfo} onPress={() => {}}>
+            <PressableView
+              key={a.id}
+              style={styles.inlineInfo}
+              onPress={() =>
+                router.push({
+                  pathname: "/trip/PlaceDetails",
+                  params: { placeId: a.placeId },
+                })
+              }
+            >
               <ThemedText type={TextType.Bold}>{a.scheduledAt && displayDate(a.scheduledAt, "HH:mm")}</ThemedText>
               <Icon name={getIconForActivity(a)} size={20} color={helperText} />
               <ThemedView style={styles.activityInfo}>

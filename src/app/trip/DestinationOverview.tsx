@@ -30,7 +30,7 @@ export default function DestinationOverview() {
   );
 
   return (
-    <HeroView headerImageUrl={TripService.getPhotoForPlace(destination?.place.images)}>
+    <HeroView headerImageUrl={TripService.getPhotoForPlace(destination?.place.images)} contentStyle={styles.content}>
       <ThemedView style={styles.header}>
         <ThemedText type={TextType.Title}>{destination?.place.name}</ThemedText>
         <ThemedText type={TextType.Bold}>
@@ -114,6 +114,9 @@ export default function DestinationOverview() {
 const largeSpacing = getThemeProperty("largeSpacing");
 const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
+  content: {
+    bottom: 80,
+  },
   header: {
     padding: mediumSpacing,
   },

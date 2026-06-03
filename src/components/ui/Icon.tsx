@@ -63,6 +63,13 @@ export class IconSymbols {
   map: IconSymbol = { ios: "map.fill", android: "map" };
   arrival: IconSymbol = { ios: "airplane.arrival", android: "flight_land" };
   departure: IconSymbol = { ios: "airplane.departure", android: "flight_takeoff" };
+  star: IconSymbol = { ios: "star.fill", android: "star" };
+  plus: IconSymbol = { ios: "plus", android: "star" };
+  trash: IconSymbol = { ios: "trash.fill", android: "star" };
+  globe: IconSymbol = { ios: "globe.fill", android: "star" };
+  info: IconSymbol = { ios: "info.circle.fill", android: "info" };
+  phone: IconSymbol = { ios: "phone.fill", android: "phone" };
+
   // Transportations
   plane: IconSymbol = { ios: "airplane.up.forward", android: "flight" };
   train: IconSymbol = { ios: "train.side.front.car", android: "train" };

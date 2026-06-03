@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/theme";
-import { useThemeColor } from "@/hooks";
+import { getThemeProperty, useThemeColor } from "@/hooks";
 import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { Icon, IconSymbols } from "./Icon";
 import { PressableView } from "./PressableView";
@@ -69,11 +69,16 @@ export const ThemedButton = ({
   );
 };
 
+const mediumSpacing = getThemeProperty("mediumSpacing");
+const smallSpacing = getThemeProperty("smallSpacing");
 const styles = StyleSheet.create({
   buttonContainer: {
+    borderRadius: mediumSpacing,
+    padding: mediumSpacing,
+    gap: smallSpacing,
+    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    flexShrink: 1,
-  },
+  title: {},
 });

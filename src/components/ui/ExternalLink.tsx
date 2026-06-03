@@ -6,17 +6,11 @@ import { TextType, ThemedText } from "./ThemedText";
 
 type Props = Omit<ComponentProps<typeof Link>, "href"> & {
   href: string;
-  displayText?: string;
+  displayText: string;
   inApp?: boolean;
 };
 
-export function ExternalLink({
-  href,
-  displayText,
-  inApp = false,
-  children,
-  ...rest
-}: Props) {
+export function ExternalLink({ href, displayText, inApp = false, children, ...rest }: Props) {
   return (
     <Link
       target="_blank"

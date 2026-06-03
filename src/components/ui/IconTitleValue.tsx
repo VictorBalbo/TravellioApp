@@ -62,6 +62,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: mediumSpacing,
     flexShrink: 1,
+    borderColor: "red",
+    borderWidth: 1,
   },
   titleValue: {
     flexGrow: 1,

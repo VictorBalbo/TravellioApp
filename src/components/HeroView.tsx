@@ -4,15 +4,22 @@ import { getThemeProperty, useThemeColor } from "@/hooks";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import type { PropsWithChildren } from "react";
-import { Image, KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, StyleSheet, ViewStyle } from "react-native";
 
 type Props = PropsWithChildren<{
   headerImageUrl: string;
   showHeaderImageGradient?: boolean;
   closeButtonCallback?: () => void;
+  contentStyle?: ViewStyle;
 }>;
 
-export const HeroView = ({ children, headerImageUrl, showHeaderImageGradient = true, closeButtonCallback }: Props) => {
+export const HeroView = ({
+  children,
+  headerImageUrl,
+  showHeaderImageGradient = true,
+  closeButtonCallback,
+  contentStyle,
+}: Props) => {
   const background = useThemeColor("background");
 
   const router = useRouter();
@@ -41,7 +48,7 @@ export const HeroView = ({ children, headerImageUrl, showHeaderImageGradient = t
             />
           )}
         </ThemedView>
-        <ThemedView style={styles.content}>{children}</ThemedView>
+        <ThemedView style={contentStyle}>{children}</ThemedView>
       </ThemedView>
     </KeyboardAvoidingView>
   );
@@ -76,10 +83,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-  },
-  content: {
-    flex: 1,
-    overflow: "hidden",
-    bottom: 100,
   },
 });

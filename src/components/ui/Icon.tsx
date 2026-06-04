@@ -1,6 +1,8 @@
 import { useThemeColor } from "@/hooks";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { AndroidSymbol, SFSymbol, SymbolView, SymbolWeight } from "expo-symbols";
 import { ViewStyle } from "react-native";
+type IoniconsName = React.ComponentProps<typeof Ionicons>["name"];
 
 /**
  * Renders a platform-aware symbol icon that resolves to the appropriate
@@ -19,10 +21,9 @@ type Props = {
   color?: string;
   style?: ViewStyle;
   weight?: SymbolWeight;
-  backgroundColor?: string;
 };
 
-export const Icon = ({ name, size = 24, color, style, weight = "regular", backgroundColor }: Props) => {
+export const Icon = ({ name, size = 24, color, style, weight = "regular" }: Props) => {
   const defaultColor = useThemeColor("activeTint");
   if (!color) {
     color = defaultColor;
@@ -30,6 +31,13 @@ export const Icon = ({ name, size = 24, color, style, weight = "regular", backgr
 
   const symbolMapping = new IconSymbols();
   const iconConfig = symbolMapping[name];
+
+  // Using IonIcons
+  if (typeof iconConfig === "string") {
+    return <Ionicons name={iconConfig} size={size} color={color} />;
+  }
+
+  // Using SymbolView
   if (!iconConfig.web) {
     iconConfig.web = iconConfig.android;
   }
@@ -40,13 +48,8 @@ export const Icon = ({ name, size = 24, color, style, weight = "regular", backgr
       tintColor={color}
       resizeMode="scaleAspectFit"
       name={iconConfig}
-      style={[
-        {
-          width: size,
-          height: size,
-        },
-        style,
-      ]}
+      size={size}
+      style={style}
     />
   );
 };
@@ -64,11 +67,20 @@ export class IconSymbols {
   arrival: IconSymbol = { ios: "airplane.arrival", android: "flight_land" };
   departure: IconSymbol = { ios: "airplane.departure", android: "flight_takeoff" };
   star: IconSymbol = { ios: "star.fill", android: "star" };
+  starhalf: IconSymbol = { ios: "star.leadinghalf.fill", android: "star_half" };
+  starEmpty: IconSymbol = { ios: "star", android: "star_border" };
   plus: IconSymbol = { ios: "plus", android: "star" };
+  heartEmpty: IconSymbol = { ios: "heart", android: "heart_plus" };
+  heart: IconSymbol = { ios: "heart.fill", android: "heart_plus" };
   trash: IconSymbol = { ios: "trash.fill", android: "star" };
   globe: IconSymbol = { ios: "globe.fill", android: "star" };
   info: IconSymbol = { ios: "info.circle.fill", android: "info" };
   phone: IconSymbol = { ios: "phone.fill", android: "phone" };
+  share: IconSymbol = { ios: "square.and.arrow.up", android: "share" };
+  book: IconSymbol = { ios: "book.fill", android: "book" };
+  clock: IconSymbol = { ios: "clock.fill", android: "clock_arrow_up" };
+  calendar: IconSymbol = { ios: "calendar", android: "clock_arrow_up" };
+  price: IconSymbol = { ios: "dollarsign", android: "money" };
 
   // Transportations
   plane: IconSymbol = { ios: "airplane.up.forward", android: "flight" };
@@ -78,7 +90,7 @@ export class IconSymbols {
   ship: IconSymbol = { ios: "shippingbox", android: "directions_boat" };
   // ActivityTypes
   ticket: IconSymbol = { ios: "ticket.fill", android: "local_activity" };
-  pin: IconSymbol = { ios: "mappin", android: "pin_drop" };
+  pin: IoniconsName = "location-sharp";
   restaurant: IconSymbol = { ios: "fork.knife", android: "restaurant" };
   coffee: IconSymbol = { ios: "cup.and.heat.waves.fill", android: "coffee" };
   nightlife: IconSymbol = { ios: "wineglass.fill", android: "wine_bar" };

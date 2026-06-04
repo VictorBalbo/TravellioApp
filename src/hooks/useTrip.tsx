@@ -13,7 +13,7 @@ interface TripContextType {
 const TripContext = createContext<TripContextType | undefined>(undefined);
 
 export const TripProvider = ({ children }: { children: ReactNode }) => {
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const [trip, setTrip] = useState<Trip | undefined>(undefined);
   const destinations = useMemo(() => trip?.destinations ?? [], [trip?.destinations]);
   const activities = useMemo(

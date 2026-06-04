@@ -1,0 +1,53 @@
+import { getThemeProperty, useThemeColor } from "@/hooks";
+import { useState } from "react";
+import { Pressable, StyleSheet } from "react-native";
+import { CardView } from "./CardView";
+import { IconSymbols } from "./Icon";
+import { IconTitleValue } from "./IconTitleValue";
+import { TextType, ThemedText } from "./ThemedText";
+
+type Props = {
+  content: string;
+  header?: string;
+  icon?: keyof IconSymbols;
+  numberOfLines?: number;
+};
+
+export function CardSeeMore({ content, header, icon, numberOfLines = 3 }: Props) {
+  const [expanded, setExpanded] = useState(false);
+  const [exceedsLimit, setExceedsLimit] = useState(false);
+  const linkColor = useThemeColor("link");
+
+  return (
+    <CardView style={styles.container}>
+      {/* Invisible full render to count actual lines without truncation */}
+      <ThemedText
+        style={styles.hidden}
+        onTextLayout={(e) => setExceedsLimit(e.nativeEvent.lines.length > numberOfLines)}
+      >
+        {content}
+      </ThemedText>
+      {header && <IconTitleValue icon={icon} value={header} valueType={TextType.Title} />}
+      <ThemedText numberOfLines={expanded ? undefined : numberOfLines}>{content}</ThemedText>
+      {exceedsLimit && (
+        <Pressable onPress={() => setExpanded((v) => !v)}>
+          <ThemedText type={TextType.Footnote} style={{ color: linkColor }}>
+            {expanded ? "See Less" : "See More"}
+          </ThemedText>
+        </Pressable>
+      )}
+    </CardView>
+  );
+}
+
+const smallSpacing = getThemeProperty("smallSpacing");
+const styles = StyleSheet.create({
+  container: {
+    gap: smallSpacing,
+  },
+  hidden: {
+    position: "absolute",
+    opacity: 0,
+    pointerEvents: "none",
+  },
+});

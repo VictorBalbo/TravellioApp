@@ -4,6 +4,7 @@ import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { Icon, IconSymbols } from "./Icon";
 import { PressableView } from "./PressableView";
 import { TextType, ThemedText } from "./ThemedText";
+import { ThemedView } from "./ThemedView";
 
 export enum ButtonType {
   Primary = "primary",
@@ -15,6 +16,7 @@ interface BaseButtonProps {
   onPress: () => void;
   type?: ButtonType;
   style?: StyleProp<ViewStyle>;
+  round?: boolean;
 }
 interface TitleButtonProps extends BaseButtonProps {
   title: string;
@@ -32,6 +34,7 @@ export const ThemedButton = ({
   icon,
   type = ButtonType.Primary,
   style,
+  round = false,
 }: TitleButtonProps | IconButtonProps) => {
   const backgroundAccent = useThemeColor("backgroundAccent");
 
@@ -56,12 +59,34 @@ export const ThemedButton = ({
   const iconName = icon && typeof icon === "string" ? (icon as keyof IconSymbols) : undefined;
   const image = icon && typeof icon === "number" && (icon as number);
 
+  const renderIcon = iconName && <Icon size={20} color={textColor} name={iconName} />;
+  const renderImage = image && <Image source={image} style={{ height: 20, width: 20 }} />;
+
+  if (round) {
+    return (
+      <PressableView onPress={onPress} style={{ alignItems: "center", gap: smallSpacing }}>
+        <ThemedView style={[style, styles.buttonContainer, round ? styles.round : {}, { backgroundColor }]}>
+          {renderIcon}
+          {renderImage}
+        </ThemedView>
+        {title && (
+          <ThemedText type={TextType.Caption} numberOfLines={1}>
+            {title}
+          </ThemedText>
+        )}
+      </PressableView>
+    );
+  }
+
   return (
-    <PressableView onPress={onPress} style={[style, styles.buttonContainer, { backgroundColor }]}>
-      {iconName && <Icon size={20} color={textColor} name={iconName} />}
-      {image && <Image source={image} style={{ height: 20, width: 20 }} />}
+    <PressableView
+      onPress={onPress}
+      style={[style, styles.buttonContainer, round ? styles.round : {}, { backgroundColor }]}
+    >
+      {renderIcon}
+      {renderImage}
       {title && (
-        <ThemedText type={TextType.Headline} style={[styles.title, { color: textColor }]} numberOfLines={1}>
+        <ThemedText type={TextType.Headline} style={{ color: textColor }} numberOfLines={1}>
           {title}
         </ThemedText>
       )}
@@ -80,5 +105,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {},
+  round: {
+    borderRadius: 100,
+    flex: 0,
+  },
 });

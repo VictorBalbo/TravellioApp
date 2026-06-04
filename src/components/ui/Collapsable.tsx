@@ -1,16 +1,16 @@
 import { getThemeProperty, useThemeColor } from "@/hooks";
 import { ReactNode, useRef, useState } from "react";
 import { Animated, Pressable, StyleSheet } from "react-native";
-import { CardView } from "./CardView";
 import { HorizontalDivider } from "./HorizontalDivider";
 import { Icon } from "./Icon";
+import { ThemedView } from "./ThemedView";
 
-type CardCollapsableProps = {
+type CollapsableProps = {
   header: ReactNode;
   body: ReactNode;
 };
 
-export function CardCollapsable({ header, body }: CardCollapsableProps) {
+export function Collapsable({ header, body }: CollapsableProps) {
   const captionColor = useThemeColor("caption");
 
   const [expanded, setExpanded] = useState(false);
@@ -29,6 +29,7 @@ export function CardCollapsable({ header, body }: CardCollapsableProps) {
       }),
       Animated.spring(growAnim, {
         toValue: toExpanded ? 1 : 0,
+        bounciness: 1,
         useNativeDriver: false,
       }),
       Animated.spring(enterAnim, {
@@ -44,7 +45,7 @@ export function CardCollapsable({ header, body }: CardCollapsableProps) {
   });
 
   return (
-    <CardView>
+    <ThemedView>
       <Pressable onPress={toggle} style={styles.header}>
         {header}
         <Animated.View style={{ transform: [{ rotate: arrowRotation }] }}>
@@ -82,7 +83,7 @@ export function CardCollapsable({ header, body }: CardCollapsableProps) {
           {body}
         </Animated.View>
       </Animated.View>
-    </CardView>
+    </ThemedView>
   );
 }
 

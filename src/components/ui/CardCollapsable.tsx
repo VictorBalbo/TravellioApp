@@ -2,7 +2,7 @@ import { getThemeProperty, useThemeColor } from "@/hooks";
 import { ReactNode, useRef, useState } from "react";
 import { Animated, Pressable, StyleSheet } from "react-native";
 import { CardView } from "./CardView";
-import HorizontalDivider from "./HorizontalDivider";
+import { HorizontalDivider } from "./HorizontalDivider";
 import { Icon } from "./Icon";
 
 type CardCollapsableProps = {
@@ -11,7 +11,7 @@ type CardCollapsableProps = {
 };
 
 export function CardCollapsable({ header, body }: CardCollapsableProps) {
-  const helperTextColor = useThemeColor("helperText");
+  const captionColor = useThemeColor("caption");
 
   const [expanded, setExpanded] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -44,11 +44,11 @@ export function CardCollapsable({ header, body }: CardCollapsableProps) {
   });
 
   return (
-    <CardView style={styles.card}>
+    <CardView>
       <Pressable onPress={toggle} style={styles.header}>
         {header}
         <Animated.View style={{ transform: [{ rotate: arrowRotation }] }}>
-          <Icon name="chevronDown" size={20} color={helperTextColor} />
+          <Icon name="chevronDown" size={20} color={captionColor} />
         </Animated.View>
       </Pressable>
 
@@ -59,7 +59,7 @@ export function CardCollapsable({ header, body }: CardCollapsableProps) {
           {
             maxHeight: growAnim.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, 500],
+              outputRange: [0, 5000],
             }),
           },
         ]}
@@ -88,9 +88,6 @@ export function CardCollapsable({ header, body }: CardCollapsableProps) {
 
 const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
-  card: {
-    padding: mediumSpacing,
-  },
   header: {
     flexDirection: "row",
     alignItems: "center",

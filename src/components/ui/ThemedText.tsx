@@ -3,79 +3,82 @@ import { useThemeColor } from "@/hooks";
 import { StyleSheet, Text, type TextProps } from "react-native";
 
 export enum TextType {
+  Display = "display",
   Title = "title",
-  Subtitle = "subtitle",
-  Text = "text",
-  Bold = "bold",
-  Link = "link",
-  Small = "small",
+  Headline = "headline",
+  Body = "body",
+  Footnote = "footnote",
+  Caption = "caption",
 }
 
 export type ThemedTextProps = TextProps & {
   type?: TextType;
+  color?: string;
 };
 
-export const ThemedText = ({ style, type = TextType.Text, ...rest }: ThemedTextProps) => {
-  const textColor = useThemeColor("text");
-  const linkColor = useThemeColor("link");
-  const helperTextColor = useThemeColor("helperText");
-  let color;
+export const ThemedText = ({ style, type = TextType.Body, color, ...rest }: ThemedTextProps) => {
+  const defaultColor = useThemeColor("text");
+  const helperTextColor = useThemeColor("caption");
+  let textColor;
   let typeStyle;
   switch (type) {
+    case TextType.Display:
+      textColor = color ?? defaultColor;
+      typeStyle = styles.display;
+      break;
     case TextType.Title:
-      color = textColor;
+      textColor = color ?? defaultColor;
       typeStyle = styles.title;
       break;
-    case TextType.Subtitle:
-      color = textColor;
-      typeStyle = styles.subtitle;
+    case TextType.Headline:
+      textColor = color ?? defaultColor;
+      typeStyle = styles.headline;
       break;
-    case TextType.Text:
-      color = textColor;
-      typeStyle = styles.default;
+    case TextType.Body:
+      textColor = color ?? defaultColor;
+      typeStyle = styles.body;
       break;
-    case TextType.Bold:
-      color = textColor;
-      typeStyle = styles.bold;
+    case TextType.Footnote:
+      textColor = color ?? helperTextColor;
+      typeStyle = styles.footnote;
       break;
-    case TextType.Link:
-      color = linkColor;
-      typeStyle = styles.link;
-      break;
-    case TextType.Small:
-      color = helperTextColor;
-      typeStyle = styles.small;
+    case TextType.Caption:
+      textColor = color ?? helperTextColor;
+      typeStyle = styles.caption;
       break;
   }
-  return <Text style={[{ color }, typeStyle, style]} {...rest} />;
+  return <Text style={[{ color: textColor }, typeStyle, style]} {...rest} />;
 };
 
 const styles = StyleSheet.create({
+  display: {
+    fontSize: Theme.base.textSize * 2, // Size: 32
+    lineHeight: Theme.base.textSize * 2 * 1.1875, // Height: 38
+    fontWeight: "700", // Bold
+  },
   title: {
-    fontSize: Theme.base.textSize * 2,
-    lineHeight: Theme.base.textSize * 2.5,
-    fontWeight: "bold",
+    fontSize: Theme.base.textSize * 1.5, // Size: 24
+    lineHeight: Theme.base.textSize * 1.5 * 1.25, // Height: 30
+    fontWeight: "700", // Bold
   },
-  subtitle: {
-    fontSize: Theme.base.textSize * 1.25,
-    lineHeight: Theme.base.textSize * 1.5,
-    fontWeight: "bold",
+  headline: {
+    fontSize: Theme.base.textSize, // Size: 16
+    lineHeight: Theme.base.textSize * 1.375, // Height: 22
+    fontWeight: "600", // SemiBold
   },
-  default: {
-    fontSize: Theme.base.textSize,
-    lineHeight: Theme.base.textSize * 1.25,
+  body: {
+    fontSize: Theme.base.textSize, // Size: 16
+    lineHeight: Theme.base.textSize * 1.5, // Height: 24
+    fontWeight: "400", // Normal,
   },
-  bold: {
-    fontSize: Theme.base.textSize,
-    lineHeight: Theme.base.textSize * 1.25,
-    fontWeight: "600",
+  footnote: {
+    fontSize: Theme.base.textSize * 0.875, // Size: 14
+    lineHeight: Theme.base.textSize * 0.875 * 1.5, // Height: 21
+    fontWeight: "400", // Normal
   },
-  link: {
-    fontSize: Theme.base.textSize,
-    lineHeight: Theme.base.textSize * 1.25,
-  },
-  small: {
-    fontSize: Theme.base.textSize * 0.75,
-    lineHeight: Theme.base.textSize * 0.875,
+  caption: {
+    fontSize: Theme.base.textSize * 0.75, // Size: 12
+    lineHeight: Theme.base.textSize * 0.75 * 1.5, // Height: 18
+    fontWeight: "400", // Normal
   },
 });

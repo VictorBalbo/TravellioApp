@@ -14,7 +14,7 @@ type Props = {
 export const ActivitiesItinerary = ({ activities }: Props) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const helperText = useThemeColor("helperText");
+  const captionColor = useThemeColor("caption");
   const unscheduledIdentifier = "###";
   const activitiesByDate = useMemo(
     () =>
@@ -64,7 +64,7 @@ export const ActivitiesItinerary = ({ activities }: Props) => {
     <CardView style={styles.container}>
       {Object.entries(activitiesByDate).map(([date, items], dateIndex) => (
         <ThemedView key={date} style={styles.group}>
-          <ThemedText type={TextType.Small}>
+          <ThemedText type={TextType.Caption}>
             {date === unscheduledIdentifier ? t("unscheduled") : displayDate(new Date(date), "ddd, DD MMM")}
           </ThemedText>
           {items.map((a) => (
@@ -78,13 +78,13 @@ export const ActivitiesItinerary = ({ activities }: Props) => {
                 })
               }
             >
-              <ThemedText type={TextType.Bold}>{a.scheduledAt && displayDate(a.scheduledAt, "HH:mm")}</ThemedText>
-              <Icon name={getIconForActivity(a)} size={20} color={helperText} />
+              <ThemedText type={TextType.Headline}>{a.scheduledAt && displayDate(a.scheduledAt, "HH:mm")}</ThemedText>
+              <Icon name={getIconForActivity(a)} size={20} color={captionColor} />
               <ThemedView style={styles.activityInfo}>
-                <ThemedText type={TextType.Text}>{a.name}</ThemedText>
-                {a.place?.address && <ThemedText type={TextType.Small}>{a.place.address}</ThemedText>}
+                <ThemedText>{a.name}</ThemedText>
+                {a.place?.address && <ThemedText type={TextType.Caption}>{a.place.address}</ThemedText>}
               </ThemedView>
-              <Icon name="chevronRight" size={16} color={helperText} />
+              <Icon name="chevronRight" size={16} color={captionColor} />
             </PressableView>
           ))}
           {dateIndex !== Object.keys(activitiesByDate).length - 1 && <HorizontalDivider />}

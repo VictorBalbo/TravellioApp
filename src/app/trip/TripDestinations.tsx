@@ -27,22 +27,22 @@ export default function TripDestinations() {
             <PressableView onPress={() => onDestinationSelected(d.id)} style={styles.destination}>
               <Icon name="building" />
               <ThemedView style={styles.destinationName}>
-                <ThemedText type={TextType.Bold} numberOfLines={1}>
+                <ThemedText type={TextType.Headline} numberOfLines={1}>
                   {d.place?.name}
                 </ThemedText>
-                <ThemedText type={TextType.Small}>
+                <ThemedText type={TextType.Caption}>
                   {utcDate(d.startDate).format("DD MMM")}
                   {" - "}
                   {utcDate(d.endDate).format("DD MMM")}
                 </ThemedText>
               </ThemedView>
               <ThemedView style={styles.destinationActivities}>
-                <ThemedText type={TextType.Bold}>{d.activities?.length ?? 0}</ThemedText>
-                <ThemedText type={TextType.Small}>{t("activity", { count: d.activities?.length ?? 0 })}</ThemedText>
+                <ThemedText type={TextType.Headline}>{d.activities?.length ?? 0}</ThemedText>
+                <ThemedText type={TextType.Caption}>{t("activity", { count: d.activities?.length ?? 0 })}</ThemedText>
               </ThemedView>
               <ThemedView style={styles.destinationNights}>
-                <ThemedText type={TextType.Bold}>{utcDate(d.endDate).diff(d.startDate, "days")}</ThemedText>
-                <ThemedText type={TextType.Small}>
+                <ThemedText type={TextType.Headline}>{utcDate(d.endDate).diff(d.startDate, "days")}</ThemedText>
+                <ThemedText type={TextType.Caption}>
                   {t("night", {
                     count: utcDate(d.endDate).diff(d.startDate, "days"),
                   })}

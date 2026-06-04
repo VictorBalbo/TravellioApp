@@ -2,7 +2,7 @@ import { getThemeProperty } from "@/hooks";
 import { Fragment, type ReactNode } from "react";
 import { StyleSheet, type ViewProps } from "react-native";
 import { CardView } from "./CardView";
-import HorizontalDivider from "./HorizontalDivider";
+import { HorizontalDivider } from "./HorizontalDivider";
 
 interface CardListProps<T> extends ViewProps {
   data: T[];

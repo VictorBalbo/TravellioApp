@@ -23,7 +23,7 @@ type Props = {
 };
 
 export const ArrivalDepartureOverview = ({ destination, transportation, type }: Props) => {
-  const helperTextColor = useThemeColor("helperText");
+  const captionColor = useThemeColor("caption");
   const { trip } = useTripContext();
   const { t } = useTranslation();
 
@@ -45,18 +45,18 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
       header={
         <ThemedView style={styles.header}>
           <Icon name={type} />
-          <ThemedView style={styles.headerInfo}>
+          <ThemedView>
             <ThemedView style={styles.inlineInfo}>
-              <ThemedText type={TextType.Bold}>
+              <ThemedText type={TextType.Headline}>
                 {t(type === "arrival" ? "arrivalAt" : "departureAt")}{" "}
                 {relevantTime && displayDate(relevantTime, "HH:mm")}
               </ThemedText>
-              <ThemedText type={TextType.Small}>{relevantTime && displayDate(relevantTime, "ddd DD MMM")}</ThemedText>
+              <ThemedText type={TextType.Caption}>{relevantTime && displayDate(relevantTime, "ddd DD MMM")}</ThemedText>
             </ThemedView>
             <ThemedView style={styles.inlineInfo}>
-              <ThemedText type={TextType.Small}>{departure}</ThemedText>
-              <Icon name="arrowRight" size={12} color={helperTextColor} />
-              <ThemedText type={TextType.Small}>{arrival}</ThemedText>
+              <ThemedText type={TextType.Caption}>{departure}</ThemedText>
+              <Icon name="arrowRight" size={12} color={captionColor} />
+              <ThemedText type={TextType.Caption}>{arrival}</ThemedText>
             </ThemedView>
           </ThemedView>
         </ThemedView>
@@ -65,8 +65,8 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
         <ThemedView key={leg.id} style={styles.body}>
           {/* Type, Company, and Service Number */}
           <ThemedView style={styles.inlineInfo}>
-            <Icon name={legTypeIcon(leg.type)} size={16} color={helperTextColor} />
-            <ThemedText type={TextType.Small}>
+            <Icon name={legTypeIcon(leg.type)} size={16} color={captionColor} />
+            <ThemedText type={TextType.Caption}>
               {t(`transportation.${leg.type.toLowerCase()}`)}
               {" · "}
               {leg.company} {leg.serviceNumber}
@@ -74,19 +74,19 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
           </ThemedView>
 
           {/* Departure and Arrival Info */}
-          <ThemedView style={styles.inlineInfo}>
+          <ThemedView style={[styles.inlineInfo, styles.placeNames]}>
             <IconTitleValue
               title={leg.departurePlace.name}
               value={leg.departurePlace.vicinity ?? ""}
               // url={leg.departurePlace.mapsUrl}
-              valueType={TextType.Subtitle}
+              valueType={TextType.Title}
               displayTitleAfterText
             />
             <IconTitleValue
               title={leg.arrivalPlace.name}
               value={leg.arrivalPlace.vicinity ?? ""}
               // url={leg.arrivalPlace.mapsUrl}
-              valueType={TextType.Subtitle}
+              valueType={TextType.Title}
               displayTitleAfterText
               alignText="right"
             />
@@ -97,18 +97,18 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
             <IconTitleValue
               title={leg.departureTime && displayDate(leg.departureTime, "ddd DD MMM")}
               value={(leg.departureTime && displayDate(leg.departureTime, "HH:mm")) ?? ""}
-              valueType={TextType.Bold}
+              valueType={TextType.Headline}
             />
-            <ThemedText type={TextType.Small}> - - - - - </ThemedText>
+            <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
             <ThemedView style={styles.flightDuration}>
-              <Icon name={legTypeIcon(leg.type)} size={12} color={helperTextColor} />
-              <ThemedText type={TextType.Small}>{legDuration(leg.departureTime, leg.arrivalTime)}</ThemedText>
+              <Icon name={legTypeIcon(leg.type)} size={12} color={captionColor} />
+              <ThemedText type={TextType.Caption}>{legDuration(leg.departureTime, leg.arrivalTime)}</ThemedText>
             </ThemedView>
-            <ThemedText type={TextType.Small}> - - - - - </ThemedText>
+            <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
             <IconTitleValue
               title={leg.arrivalTime && displayDate(leg.arrivalTime, "ddd DD MMM")}
               value={(leg.arrivalTime && displayDate(leg.arrivalTime, "HH:mm")) ?? ""}
-              valueType={TextType.Bold}
+              valueType={TextType.Headline}
               alignText="right"
             />
           </ThemedView>
@@ -150,16 +150,12 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
     />
   );
 };
-const smallSpacing = getThemeProperty("smallSpacing");
 const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     gap: mediumSpacing,
     alignItems: "center",
-  },
-  headerInfo: {
-    gap: smallSpacing,
   },
   inlineInfo: {
     flexDirection: "row",
@@ -168,6 +164,9 @@ const styles = StyleSheet.create({
   },
   body: {
     gap: mediumSpacing,
+  },
+  placeNames: {
+    alignItems: "flex-start",
   },
   flightDuration: {
     flexDirection: "column",

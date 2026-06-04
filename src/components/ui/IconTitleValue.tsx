@@ -1,4 +1,4 @@
-import { getThemeProperty } from "@/hooks";
+import { getThemeProperty, useThemeColor } from "@/hooks";
 import { StyleSheet, ViewStyle } from "react-native";
 import { ExternalLink } from "./ExternalLink";
 import { Icon, IconSymbols } from "./Icon";
@@ -22,15 +22,16 @@ export const IconTitleValue = ({
   title,
   url,
   value,
-  valueType = TextType.Text,
+  valueType = TextType.Body,
   displayTitleAfterText,
   alignText = "left",
   spaceTitleValue = false,
   containerStyle,
 }: IconTitleValueProps) => {
+  const capitionColor = useThemeColor("placeholder");
   return (
     <ThemedView style={[styles.container, containerStyle]}>
-      {icon && <Icon name={icon} />}
+      {icon && <Icon name={icon} color={capitionColor} />}
       <ThemedView
         style={[
           styles.titleValue,
@@ -39,7 +40,7 @@ export const IconTitleValue = ({
         ]}
       >
         {title && (
-          <ThemedText type={TextType.Small} style={{ textAlign: alignText }} numberOfLines={2}>
+          <ThemedText type={TextType.Caption} style={{ textAlign: alignText }} numberOfLines={2}>
             {title}
           </ThemedText>
         )}
@@ -62,8 +63,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: mediumSpacing,
     flexShrink: 1,
-    borderColor: "red",
-    borderWidth: 1,
   },
   titleValue: {
     flexGrow: 1,

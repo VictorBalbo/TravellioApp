@@ -4,11 +4,11 @@ import { StyleSheet } from "react-native";
 
 export default function Index() {
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView background style={styles.container}>
       <ThemedText>Edits src/app/index.tsx to edit this screen.</ThemedText>
-      <IconTitleValue value="Value" />
+      {/* <IconTitleValue value="Value" /> */}
       <IconTitleValue icon="info" value="Value" />
-      <IconTitleValue icon="info" value="Value" title="Title" />
+      <IconTitleValue icon="info" value="Values" title="Title" />
     </ThemedView>
   );
 }

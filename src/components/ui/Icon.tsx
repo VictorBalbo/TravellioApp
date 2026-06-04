@@ -1,6 +1,6 @@
-import { getThemeProperty, useThemeColor } from "@/hooks";
+import { useThemeColor } from "@/hooks";
 import { AndroidSymbol, SFSymbol, SymbolView, SymbolWeight } from "expo-symbols";
-import { StyleSheet, ViewStyle } from "react-native";
+import { ViewStyle } from "react-native";
 
 /**
  * Renders a platform-aware symbol icon that resolves to the appropriate
@@ -98,11 +98,3 @@ type IconSymbol = {
   android: AndroidSymbol;
   web?: AndroidSymbol;
 };
-
-const mediumSpacing = getThemeProperty("smallSpacing");
-const styles = StyleSheet.create({
-  backgroundIcons: {
-    borderRadius: mediumSpacing,
-    padding: mediumSpacing,
-  },
-});

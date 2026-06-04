@@ -12,7 +12,7 @@ export function Tag({ text, style, ...otherProps }: TagProps) {
 
   return (
     <ThemedView style={[styles.tag, { backgroundColor }, style]} {...otherProps}>
-      <ThemedText type={TextType.Small}>{text}</ThemedText>
+      <ThemedText type={TextType.Footnote}>{text}</ThemedText>
     </ThemedView>
   );
 }
@@ -23,7 +23,6 @@ const borderRadius = getThemeProperty("borderRadius");
 
 const styles = StyleSheet.create({
   tag: {
-    alignSelf: "flex-start",
     paddingVertical: smallSpacing,
     paddingHorizontal: largeSpacing / 1.5,
     borderRadius: borderRadius * 2,

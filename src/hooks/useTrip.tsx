@@ -1,18 +1,5 @@
-import {
-  Accommodation,
-  Activity,
-  Destination,
-  Transportation,
-  Trip,
-} from "@/models";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { Accommodation, Activity, Destination, Transportation, Trip } from "@/models";
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 
 interface TripContextType {
   trip?: Trip;
@@ -28,28 +15,16 @@ const TripContext = createContext<TripContextType | undefined>(undefined);
 export const TripProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [trip, setTrip] = useState<Trip | undefined>(undefined);
-  const destinations = useMemo(
-    () => trip?.destinations ?? [],
-    [trip?.destinations],
-  );
+  const destinations = useMemo(() => trip?.destinations ?? [], [trip?.destinations]);
   const activities = useMemo(
-    () =>
-      trip?.destinations
-        ?.flatMap((d) => d.activities)
-        .filter((a) => a !== undefined) ?? [],
+    () => trip?.destinations?.flatMap((d) => d.activities).filter((a) => a !== undefined) ?? [],
     [trip?.destinations],
   );
   const accommodations = useMemo(
-    () =>
-      trip?.destinations
-        ?.flatMap((d) => d.accommodations)
-        .filter((a) => a !== undefined) ?? [],
+    () => trip?.destinations?.flatMap((d) => d.accommodations).filter((a) => a !== undefined) ?? [],
     [trip?.destinations],
   );
-  const transportations = useMemo(
-    () => trip?.transportations ?? [],
-    [trip?.transportations],
-  );
+  const transportations = useMemo(() => trip?.transportations ?? [], [trip?.transportations]);
 
   useEffect(() => {
     const envRaw = process.env.EXPO_PUBLIC_TRIP_JSON;
@@ -61,7 +36,9 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     try {
       const parsed = JSON.parse(envRaw as string) as Trip;
       setTrip(parsed);
-    } catch (e) {}
+    } catch (e) {
+      console.warn(e);
+    }
   }, []);
 
   return (

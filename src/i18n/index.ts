@@ -12,10 +12,9 @@ const resources = {
   en: { translation: translationEn },
 };
 
+// eslint-disable-next-line import/no-named-as-default-member
 i18n
-  // pass the i18n instance to react-i18next.
   .use(initReactI18next)
-  // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     compatibilityJSON: "v4",

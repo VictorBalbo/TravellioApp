@@ -25,7 +25,7 @@ export default function PlaceDetails() {
   const [place, setPlace] = useState<Place>();
   const [loading, setLoading] = useState<boolean>(false);
   const { activities } = useTripContext();
-  const activity = useMemo(() => activities?.find((a) => a.placeId == placeId), [activities, placeId]);
+  const activity = useMemo(() => activities?.find((a) => a.placeId === placeId), [activities, placeId]);
 
   const fetchPlace = async () => {
     if (!placeId || place?.id === placeId || loading) {
@@ -55,11 +55,11 @@ export default function PlaceDetails() {
     <HeroView headerImageUrl={TripService.getPhotoForPlace(activity?.place?.images || place.images) ?? ""}>
       <ThemedView style={styles.header}>
         <ThemedText type={TextType.Title}>{activity?.name ?? place.name}</ThemedText>
-        {place.categories?.[0] && <ThemedText type={TextType.Small}>{place.categories[0]}</ThemedText>}
+        {place.categories?.[0] && <ThemedText type={TextType.Caption}>{place.categories[0]}</ThemedText>}
         {place?.rating && (
           <ThemedView style={styles.inlineInfo}>
             <Icon size={14} name="star" />
-            <ThemedText type={TextType.Small}>{place.rating} / 5</ThemedText>
+            <ThemedText type={TextType.Footnote}>{place.rating} / 5</ThemedText>
           </ThemedView>
         )}
         <ThemedView style={styles.inlineInfo}>
@@ -78,7 +78,7 @@ export default function PlaceDetails() {
       <ThemedView background style={styles.body}>
         {place.description && (
           <CardView style={styles.infoCard}>
-            <IconTitleValue icon="info" value={"Description"} valueType={TextType.Bold}></IconTitleValue>
+            <IconTitleValue icon="info" value={"Description"} valueType={TextType.Headline}></IconTitleValue>
             <ThemedText>{place.description}</ThemedText>
           </CardView>
         )}
@@ -86,21 +86,21 @@ export default function PlaceDetails() {
           <CardView style={styles.infoCard}>
             {place.phoneNumber && (
               <ThemedView style={styles.infoSection}>
-                <IconTitleValue icon="phone" value={"Phone"} valueType={TextType.Bold}></IconTitleValue>
+                <IconTitleValue icon="phone" value={"Phone"} valueType={TextType.Headline}></IconTitleValue>
                 <ExternalLink href={`tel:${place.phoneNumber}`} displayText={place.phoneNumber} />
               </ThemedView>
             )}
             {place.phoneNumber && (place.website || place.address) && <HorizontalDivider />}
             {place.website && (
               <ThemedView style={styles.infoSection}>
-                <IconTitleValue icon="globe" value={"Website"} valueType={TextType.Bold}></IconTitleValue>
+                <IconTitleValue icon="globe" value={"Website"} valueType={TextType.Headline}></IconTitleValue>
                 <ExternalLink href={place.website} displayText={sanitizeUrl(place.website)} />
               </ThemedView>
             )}
             {place.website && place.address && <HorizontalDivider />}
             {place.address && (
               <ThemedView style={styles.infoSection}>
-                <IconTitleValue icon="map" value={"Address"} valueType={TextType.Bold}></IconTitleValue>
+                <IconTitleValue icon="map" value={"Address"} valueType={TextType.Headline}></IconTitleValue>
                 {place.mapsUrl && <ExternalLink href={place.mapsUrl} displayText={place.address} />}
                 {!place.mapsUrl && <ThemedText>{place.address}</ThemedText>}
               </ThemedView>

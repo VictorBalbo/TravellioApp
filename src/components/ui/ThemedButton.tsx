@@ -61,7 +61,7 @@ export const ThemedButton = ({
       {iconName && <Icon size={20} color={textColor} name={iconName} />}
       {image && <Image source={image} style={{ height: 20, width: 20 }} />}
       {title && (
-        <ThemedText type={TextType.Bold} style={[styles.title, { color: textColor }]} numberOfLines={1}>
+        <ThemedText type={TextType.Headline} style={[styles.title, { color: textColor }]} numberOfLines={1}>
           {title}
         </ThemedText>
       )}

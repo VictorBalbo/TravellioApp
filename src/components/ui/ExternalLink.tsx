@@ -1,8 +1,9 @@
+import { useThemeColor } from "@/hooks";
 import { ExternalPathString, Link } from "expo-router";
 import { openBrowserAsync } from "expo-web-browser";
 import { type ComponentProps } from "react";
 import { Platform } from "react-native";
-import { TextType, ThemedText } from "./ThemedText";
+import { ThemedText } from "./ThemedText";
 
 type Props = Omit<ComponentProps<typeof Link>, "href"> & {
   href: string;
@@ -11,6 +12,7 @@ type Props = Omit<ComponentProps<typeof Link>, "href"> & {
 };
 
 export function ExternalLink({ href, displayText, inApp = false, children, ...rest }: Props) {
+  const color = useThemeColor("link");
   return (
     <Link
       target="_blank"
@@ -25,7 +27,7 @@ export function ExternalLink({ href, displayText, inApp = false, children, ...re
         }
       }}
     >
-      <ThemedText type={TextType.Link} numberOfLines={1}>
+      <ThemedText color={color} numberOfLines={1}>
         {displayText}
       </ThemedText>
     </Link>

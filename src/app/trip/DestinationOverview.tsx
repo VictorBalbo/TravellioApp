@@ -1,5 +1,12 @@
 import { ActivitiesItinerary, ArrivalDepartureOverview, HeroView } from "@/components";
-import { CardCollapsable, IconTitleValue, TextType, ThemedText, ThemedView } from "@/components/ui";
+import {
+  CardView,
+  Collapsable,
+  IconTitleValue,
+  TextType,
+  ThemedText,
+  ThemedView
+} from "@/components/ui";
 import { dateDiff, displayDate, sanitizeUrl } from "@/helpers";
 import { getThemeProperty, useTripContext } from "@/hooks";
 import { TripService } from "@/services/TripService";
@@ -28,7 +35,7 @@ export default function DestinationOverview() {
   );
 
   return (
-    <HeroView headerImageUrl={TripService.getPhotoForPlace(destination?.place.images)} contentStyle={styles.content}>
+    <HeroView headerImageUrl={TripService.getPhotoForPlace(destination?.place.images)}>
       <ThemedView style={styles.header}>
         <ThemedText type={TextType.Display}>{destination?.place.name}</ThemedText>
         <ThemedView style={styles.inlineInfo}>
@@ -54,46 +61,47 @@ export default function DestinationOverview() {
           <IconTitleValue icon="bed" value="Your Stay" valueType={TextType.Title} />
           {accommodations?.length &&
             accommodations.map((a) => (
-              <CardCollapsable
-                key={a.id}
-                header={
-                  <ThemedView style={{}}>
-                    <IconTitleValue
-                      icon="bed"
-                      value={a.name ?? a.place?.name}
-                      displayTitleAfterText
-                      valueType={TextType.Headline}
-                      title={
-                        a.checkIn &&
-                        a.checkOut &&
-                        `${dateDiff(a.checkOut, a.checkIn) + 1} ${t("night", { count: dateDiff(a.checkOut, a.checkIn) + 1 })} · ` +
-                          `${displayDate(a.checkIn, "DD MMM")}  -  ${displayDate(a.checkOut, "DD MMM")}`
-                      }
-                    />
-                  </ThemedView>
-                }
-                body={
-                  <ThemedView style={styles.mediumSpacingGap}>
-                    <ThemedView style={styles.inlineInfo}>
+              <CardView key={a.id}>
+                <Collapsable
+                  header={
+                    <ThemedView style={{}}>
                       <IconTitleValue
-                        value={(a.checkIn && displayDate(a.checkIn, "DD MMM HH:mm")) ?? ""}
-                        title={t("checkIn")}
-                      />
-                      <IconTitleValue
-                        value={(a.checkOut && displayDate(a.checkOut, "DD MMM HH:mm")) ?? ""}
-                        title={t("checkOut")}
+                        icon="bed"
+                        value={a.name ?? a.place?.name}
+                        displayTitleAfterText
+                        valueType={TextType.Headline}
+                        title={
+                          a.checkIn &&
+                          a.checkOut &&
+                          `${dateDiff(a.checkOut, a.checkIn) + 1} ${t("night", { count: dateDiff(a.checkOut, a.checkIn) + 1 })} · ` +
+                            `${displayDate(a.checkIn, "DD MMM")}  -  ${displayDate(a.checkOut, "DD MMM")}`
+                        }
                       />
                     </ThemedView>
-                    {a.place?.address && (
-                      <IconTitleValue url={a.place?.mapsUrl} value={a.place.address} title={t("address")} />
-                    )}
-                    {a.website && (
-                      <IconTitleValue url={a.website} value={sanitizeUrl(a.website)} title={t("reservation")} />
-                    )}
-                    {a.notes && <IconTitleValue value={a.notes} title={t("notes")} />}
-                  </ThemedView>
-                }
-              />
+                  }
+                  body={
+                    <ThemedView style={styles.mediumSpacingGap}>
+                      <ThemedView style={styles.inlineInfo}>
+                        <IconTitleValue
+                          value={(a.checkIn && displayDate(a.checkIn, "DD MMM HH:mm")) ?? ""}
+                          title={t("checkIn")}
+                        />
+                        <IconTitleValue
+                          value={(a.checkOut && displayDate(a.checkOut, "DD MMM HH:mm")) ?? ""}
+                          title={t("checkOut")}
+                        />
+                      </ThemedView>
+                      {a.place?.address && (
+                        <IconTitleValue url={a.place?.mapsUrl} value={a.place.address} title={t("address")} />
+                      )}
+                      {a.website && (
+                        <IconTitleValue url={a.website} value={sanitizeUrl(a.website)} title={t("reservation")} />
+                      )}
+                      {a.notes && <IconTitleValue value={a.notes} title={t("notes")} />}
+                    </ThemedView>
+                  }
+                />
+              </CardView>
             ))}
         </ThemedView>
 
@@ -122,9 +130,6 @@ export default function DestinationOverview() {
 const largeSpacing = getThemeProperty("largeSpacing");
 const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
-  content: {
-    bottom: 40,
-  },
   header: {
     padding: mediumSpacing,
     zIndex: 10,

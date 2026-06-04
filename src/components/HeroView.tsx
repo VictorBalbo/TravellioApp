@@ -12,6 +12,7 @@ type Props = PropsWithChildren<{
   showHeaderImageGradient?: boolean;
   closeButtonCallback?: () => void;
   contentStyle?: ViewStyle;
+  shiftContentUp?: number;
 }>;
 
 export const HeroView = ({
@@ -20,6 +21,7 @@ export const HeroView = ({
   showHeaderImageGradient = true,
   closeButtonCallback,
   contentStyle,
+  shiftContentUp = 70,
 }: Props) => {
   const background = useThemeColor("background");
   const { bottom } = useSafeAreaInsets();
@@ -44,13 +46,15 @@ export const HeroView = ({
           {showHeaderImageGradient && (
             <LinearGradient
               colors={["transparent", background]}
-              start={{ x: 0, y: 0.6 }}
+              start={{ x: 0, y: 0.5 }}
               end={{ x: 0, y: 1 }}
               style={styles.headerGradient}
             />
           )}
         </ThemedView>
-        <ThemedView style={[{ paddingBottom: bottom }, contentStyle]}>{children}</ThemedView>
+        <ThemedView style={[{ paddingBottom: bottom - shiftContentUp, bottom: shiftContentUp }, contentStyle]}>
+          {children}
+        </ThemedView>
       </ThemedView>
     </KeyboardAvoidingView>
   );

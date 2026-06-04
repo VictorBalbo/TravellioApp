@@ -6,6 +6,8 @@ export interface Activity {
   placeId: string;
   place?: Place;
   type?: ActivityTypes;
+  ticketRequired?: boolean;
+  ticketPurchased?: boolean;
   scheduledAt?: Date;
   price?: Price;
   website?: string;

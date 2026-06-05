@@ -1,17 +1,10 @@
 import { ActivitiesItinerary, ArrivalDepartureOverview, HeroView } from "@/components";
-import {
-  CardView,
-  Collapsable,
-  IconTitleValue,
-  TextType,
-  ThemedText,
-  ThemedView
-} from "@/components/ui";
+import { CardView, Collapsable, IconTitleValue, TextType, ThemedText, ThemedView } from "@/components/ui";
 import { dateDiff, displayDate, sanitizeUrl } from "@/helpers";
-import { getThemeProperty, useTripContext } from "@/hooks";
+import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
 import { TripService } from "@/services/TripService";
 import { useLocalSearchParams } from "expo-router";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
@@ -19,6 +12,7 @@ export default function DestinationOverview() {
   const { t } = useTranslation();
   const { destinationId } = useLocalSearchParams();
   const { destinations, transportations } = useTripContext();
+  const { fitDestination } = useMapContext();
 
   const destination = useMemo(() => destinations?.find((d) => d.id === destinationId), [destinationId, destinations]);
   const accommodations = destination?.accommodations;
@@ -33,6 +27,12 @@ export default function DestinationOverview() {
     () => transportations?.find((t) => destination?.id === t.departureDestinationId),
     [transportations, destination],
   );
+
+  useEffect(() => {
+    if (destination) {
+      fitDestination(destination);
+    }
+  }, [destination, fitDestination]);
 
   return (
     <HeroView headerImageUrl={TripService.getPhotoForPlace(destination?.place.images)}>

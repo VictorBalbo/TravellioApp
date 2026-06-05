@@ -1,6 +1,6 @@
 // app/trip/_layout.tsx
 import { MapView } from "@/components";
-import { getThemeProperty, TripProvider, useThemeColor } from "@/hooks";
+import { getThemeProperty, MapProvider, TripProvider, useThemeColor } from "@/hooks";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Slot, usePathname } from "expo-router";
 import { useEffect, useRef } from "react";
@@ -24,29 +24,31 @@ export default function TripLayout() {
   }, [fadeAnim, pathName]);
 
   return (
-    <TripProvider>
-      <GestureHandlerRootView style={styles.container}>
-        <MapView />
-        <BottomSheet
-          snapPoints={["20%", "50%", "90%"]}
-          enableDynamicSizing={false}
-          backgroundStyle={{ backgroundColor: background }}
-          style={styles.bottomSheet}
-          handleStyle={[
-            styles.handleStyle,
-            // Add transparency to the background
-            { backgroundColor: background + "55" },
-          ]}
-          handleIndicatorStyle={{ backgroundColor: activeTint }}
-        >
-          <BottomSheetScrollView>
-            <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-              <Slot />
-            </Animated.View>
-          </BottomSheetScrollView>
-        </BottomSheet>
-      </GestureHandlerRootView>
-    </TripProvider>
+    <MapProvider>
+      <TripProvider>
+        <GestureHandlerRootView style={styles.container}>
+          <MapView />
+          <BottomSheet
+            snapPoints={["20%", "50%", "90%"]}
+            enableDynamicSizing={false}
+            backgroundStyle={{ backgroundColor: background }}
+            style={styles.bottomSheet}
+            handleStyle={[
+              styles.handleStyle,
+              // Add transparency to the background
+              { backgroundColor: background + "55" },
+            ]}
+            handleIndicatorStyle={{ backgroundColor: activeTint }}
+          >
+            <BottomSheetScrollView>
+              <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+                <Slot />
+              </Animated.View>
+            </BottomSheetScrollView>
+          </BottomSheet>
+        </GestureHandlerRootView>
+      </TripProvider>
+    </MapProvider>
   );
 }
 

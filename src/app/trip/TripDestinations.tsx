@@ -1,12 +1,14 @@
 import { CardView, HorizontalDivider, Icon, PressableView, TextType, ThemedText, ThemedView } from "@/components/ui";
 import { utcDate } from "@/helpers";
-import { getThemeProperty, useTripContext } from "@/hooks";
+import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
 import { useRouter } from "expo-router";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
 export default function TripDestinations() {
   const { trip, destinations } = useTripContext();
+  const { fitDestination } = useMapContext();
 
   const router = useRouter();
   const { t } = useTranslation();
@@ -17,6 +19,10 @@ export default function TripDestinations() {
       params: { destinationId: destinationId },
     });
   };
+
+  useEffect(() => {
+    fitDestination(undefined);
+  }, [fitDestination]);
 
   return (
     <ThemedView style={styles.container}>

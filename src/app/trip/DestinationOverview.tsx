@@ -57,8 +57,8 @@ export default function DestinationOverview() {
 
       <ThemedView style={styles.body}>
         {/* Accommodations */}
-        <ThemedView style={styles.mediumSpacingGap}>
-          <IconTitleValue icon="bed" value="Your Stay" valueType={TextType.Title} />
+        <ThemedView style={styles.sectionTitle}>
+          <IconTitleValue icon="bed" value={t("yourStay")} valueType={TextType.Title} />
           {accommodations?.length &&
             accommodations.map((a) => (
               <CardView key={a.id}>
@@ -106,8 +106,8 @@ export default function DestinationOverview() {
         </ThemedView>
 
         {/* Arrival */}
-        <ThemedView style={styles.mediumSpacingGap}>
-          <IconTitleValue icon="plane" value="Arrival & Departure" valueType={TextType.Title} />
+        <ThemedView style={styles.sectionTitle}>
+          <IconTitleValue icon="plane" value={t("transit")} valueType={TextType.Title} />
           {destination && arrival && (
             <ArrivalDepartureOverview destination={destination} transportation={arrival} type="arrival" />
           )}
@@ -118,8 +118,8 @@ export default function DestinationOverview() {
         </ThemedView>
 
         {/* Activities */}
-        <ThemedView style={styles.mediumSpacingGap}>
-          <IconTitleValue icon="map" value="Activities" valueType={TextType.Title} />
+        <ThemedView style={styles.sectionTitle}>
+          <IconTitleValue icon="map" value={t("activities")} valueType={TextType.Title} />
           {activities && <ActivitiesItinerary activities={activities} />}
         </ThemedView>
       </ThemedView>
@@ -129,17 +129,20 @@ export default function DestinationOverview() {
 
 const largeSpacing = getThemeProperty("largeSpacing");
 const mediumSpacing = getThemeProperty("mediumSpacing");
+const smallSpacing = getThemeProperty("smallSpacing");
 const styles = StyleSheet.create({
   header: {
-    padding: mediumSpacing,
-    zIndex: 10,
+    paddingHorizontal: largeSpacing,
   },
   body: {
-    padding: mediumSpacing,
+    padding: largeSpacing,
     gap: largeSpacing,
   },
   mediumSpacingGap: {
     gap: mediumSpacing,
+  },
+  sectionTitle: {
+    gap: smallSpacing,
   },
   inlineInfo: {
     flexDirection: "row",

@@ -1,13 +1,14 @@
 {
   "night": "Noite",
   "night_other": "Noites",
-
   "activity": "Atividade",
   "activity_other": "Atividades",
-
+  "activities": "Atividades",
   "accommodation": "Acomodação",
   "accommodation_other": "Acomodações",
-  
+  "yourStay": "Sua Estadia",
+  "transit": "Transito",
+  "sdfsdfsdf": "Transito",
   "arrivalAt": "Chegada às",
   "departureAt": "Saída às",
   "transportation": {
@@ -53,5 +54,7 @@
   "notPurchased": "Não comprado",
   "isTicketRequired": "Ingresso Necessário",
   "isTicketBought": "Ingresso Comprado",
-  "price": "Preço"
+  "price": "Preço",
+  "required": "Necessário",
+  "notRequired": "Não Necessário"
 }

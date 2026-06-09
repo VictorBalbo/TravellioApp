@@ -21,9 +21,10 @@ export const HeroView = ({
   showHeaderImageGradient = true,
   closeButtonCallback,
   contentStyle,
-  shiftContentUp = 70,
+  shiftContentUp = 56,
 }: Props) => {
   const background = useThemeColor("background");
+  const borderColor = useThemeColor("border");
   const { bottom } = useSafeAreaInsets();
 
   const router = useRouter();
@@ -36,8 +37,8 @@ export const HeroView = ({
     >
       <ThemedView style={styles.container}>
         <ThemedView style={styles.closeButtonContainer}>
-          <PressableView onPress={onClose} style={styles.closeButton}>
-            <Icon name="close" color={Colors.white} />
+          <PressableView onPress={onClose} style={[styles.closeButton, { borderColor }]}>
+            <Icon name="arrowLeft" color={Colors.white} />
           </PressableView>
         </ThemedView>
 
@@ -74,12 +75,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 1,
     top: largeSpacing * 2,
-    right: largeSpacing,
+    left: largeSpacing,
   },
   closeButton: {
-    backgroundColor: Colors.black + "B2",
+    backgroundColor: Colors.black + "D2",
     borderRadius: borderRadius * borderRadius,
     padding: mediumSpacing,
+    boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.4)",
+    borderWidth: 1,
   },
   headerImage: {
     height: HEADER_HEIGHT,

@@ -60,6 +60,7 @@ export class IconSymbols {
   chevronDown: IconSymbol = { ios: "chevron.down", android: "expand_more" };
   chevronRight: IconSymbol = { ios: "chevron.right", android: "chevron_right" };
   arrowRight: IconSymbol = { ios: "arrow.right", android: "arrow_right" };
+  arrowLeft: IconSymbol = { ios: "arrow.left", android: "arrow_left" };
 
   building: IconSymbol = { ios: "building.2.fill", android: "apartment" };
   bed: IconSymbol = { ios: "bed.double.fill", android: "bed" };

@@ -29,7 +29,7 @@ export default function TripLayout() {
         <GestureHandlerRootView style={styles.container}>
           <MapView />
           <BottomSheet
-            snapPoints={["20%", "50%", "90%"]}
+            snapPoints={["20%", "50%", "93%"]}
             enableDynamicSizing={false}
             backgroundStyle={{ backgroundColor: background }}
             style={styles.bottomSheet}
@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: largeSpacing,
     borderTopRightRadius: largeSpacing,
     overflow: "hidden",
-    marginHorizontal: mediumSpacing,
   },
   handleStyle: {
     position: "absolute",

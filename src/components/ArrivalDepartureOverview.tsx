@@ -14,7 +14,7 @@ import {
   Tag,
   TextType,
   ThemedText,
-  ThemedView
+  ThemedView,
 } from "./ui";
 
 type Props = {
@@ -46,7 +46,7 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
       <Collapsable
         header={
           <ThemedView style={styles.header}>
-            <Icon name={type} />
+            <Icon name={type} color={captionColor} />
             <ThemedView>
               <ThemedView style={styles.inlineInfo}>
                 <ThemedText type={TextType.Headline}>

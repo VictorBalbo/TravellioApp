@@ -1,3 +1,4 @@
+export { AutoCompleteInput } from "./AutoCompleteInput";
 export { CardList } from "./CardList";
 export { CardSeeMore } from "./CardSeeMore";
 export { CardView } from "./CardView";

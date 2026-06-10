@@ -22,7 +22,7 @@ export class MapService {
     rad: number,
     signal: AbortSignal,
   ): Promise<AutoComplete[]> => {
-    const url = `${BASE_URL}/Places/AutoComplete?input=${text}&lat=${lat}&lng=${lng}&radius=${rad}&language=${deviceLang}`;
+    const url = `${BASE_URL}/Places/AutoComplete?text=${text}&lat=${lat}&lng=${lng}&radius=${rad}&language=${deviceLang}`;
     const response = await fetch(url, { signal });
 
     if (!response.ok) {

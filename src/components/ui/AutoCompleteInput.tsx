@@ -60,7 +60,6 @@ export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoComp
   };
 
   const handleSelect = (item: AutoComplete) => {
-    console.log("Selected", item.mainText);
     if (dismissTimer.current) clearTimeout(dismissTimer.current);
     setInput(item.mainText ?? "");
     setResults([]);

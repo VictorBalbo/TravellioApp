@@ -2,11 +2,13 @@ import { getRadiusFromRegion } from "@/helpers";
 import { getThemeProperty, useDebounce, useThemeColor } from "@/hooks";
 import { AutoComplete } from "@/models";
 import { MapService } from "@/services";
-import { useState } from "react";
-import { FlatList, Keyboard, StyleSheet, TextInput, View } from "react-native";
+import { useRef, useState } from "react";
+import { ScrollView, StyleSheet, TextInput, View } from "react-native";
 import { Region } from "react-native-maps";
+import { HorizontalDivider } from "./HorizontalDivider";
 import { PressableView } from "./PressableView";
 import { TextType, ThemedText } from "./ThemedText";
+import { ThemedView } from "./ThemedView";
 
 const debounceTime = 500;
 
@@ -19,6 +21,8 @@ type AutoCompleteInputProps = {
 export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoCompleteInputProps) => {
   const [input, setInput] = useState("");
   const [results, setResults] = useState<AutoComplete[]>([]);
+  const abortRef = useRef<AbortController>(null);
+  const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const background = useThemeColor("background");
   const border = useThemeColor("border");
@@ -31,12 +35,20 @@ export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoComp
       setResults([]);
       return;
     }
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
     try {
-      console.log("Fetching for", trimmedQuery);
       const radius = getRadiusFromRegion(mapRegion);
-      const data = await MapService.getAutoComplete(trimmedQuery, mapRegion.latitude, mapRegion.longitude, radius);
+      const data = await MapService.getAutoComplete(
+        trimmedQuery,
+        mapRegion.latitude,
+        mapRegion.longitude,
+        radius,
+        abortRef.current.signal,
+      );
       setResults(data);
     } catch (e) {
+      if (e instanceof Error && e.name === "AbortError") return;
       setResults([]);
       console.error(e);
     }
@@ -48,10 +60,15 @@ export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoComp
   };
 
   const handleSelect = (item: AutoComplete) => {
-    Keyboard.dismiss();
+    console.log("Selected", item.mainText);
+    if (dismissTimer.current) clearTimeout(dismissTimer.current);
     setInput(item.mainText ?? "");
     setResults([]);
     onSelect(item);
+  };
+
+  const handleBlur = () => {
+    dismissTimer.current = setTimeout(() => setResults([]), 150);
   };
 
   const renderHighlighted = (item: AutoComplete) => {
@@ -72,7 +89,7 @@ export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoComp
   };
 
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.wrapper} onBlur={handleBlur}>
       <TextInput
         value={input}
         onChangeText={handleChangeText}
@@ -81,21 +98,23 @@ export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoComp
         style={[styles.input, { backgroundColor: background, borderColor: border, color: text }]}
       />
       {results.length > 0 && (
-        <FlatList
-          data={results}
-          keyExtractor={(item) => item.placeId ?? item.mainText ?? Math.random().toString()}
-          style={[styles.list, { backgroundColor: background, borderColor: border }]}
-          keyboardShouldPersistTaps="handled"
-          renderItem={({ item, index }) => (
-            <PressableView
-              onPress={() => handleSelect(item)}
-              style={[styles.option, index < results.length - 1 && { borderBottomColor: border, borderBottomWidth: 1 }]}
-            >
-              {renderHighlighted(item)}
-              {item.secondaryText && <ThemedText type={TextType.Footnote}>{item.secondaryText}</ThemedText>}
-            </PressableView>
-          )}
-        />
+        <ScrollView style={[styles.list, { backgroundColor: background }]} keyboardShouldPersistTaps={"always"}>
+          {results.map((item, index) => (
+            <ThemedView key={item.placeId}>
+              <PressableView
+                onPress={() => handleSelect(item)}
+                style={[
+                  styles.option,
+                  index < results.length - 1 && { borderBottomColor: border, borderBottomWidth: 1 },
+                ]}
+              >
+                {renderHighlighted(item)}
+                {item.secondaryText && <ThemedText type={TextType.Footnote}>{item.secondaryText}</ThemedText>}
+              </PressableView>
+              {index !== results.length - 1 && <HorizontalDivider />}
+            </ThemedView>
+          ))}
+        </ScrollView>
       )}
     </View>
   );

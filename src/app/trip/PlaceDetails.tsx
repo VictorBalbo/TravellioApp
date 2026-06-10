@@ -35,25 +35,24 @@ export default function PlaceDetails() {
   const placeOpenStatus = place?.openingHours && getOpenStatus(place?.openingHours);
   const { t } = useTranslation();
 
-  const fetchPlace = async () => {
-    if (!placeId || place?.id === placeId || loading) {
-      return;
-    }
-    try {
-      setLoading(true);
-      const responsePlace = await MapService.getPlaceDetails(placeId);
-      setPlace(responsePlace);
-      console.log(responsePlace.name);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchPlace = async () => {
+      if (!placeId || place?.id === placeId || loading) {
+        return;
+      }
+      try {
+        setLoading(true);
+        const responsePlace = await MapService.getPlaceDetails(placeId);
+        setPlace(responsePlace);
+        console.log(responsePlace.name);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchPlace();
-  }, [placeId]);
+  }, [loading, place?.id, placeId]);
 
   if (!place) {
     console.log("No place", place, placeId);

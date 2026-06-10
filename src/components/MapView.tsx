@@ -9,6 +9,7 @@ import { AutoCompleteInput, ThemedView } from "./ui";
 
 export const MapView = () => {
   const mapRef = useRef<Map | null>(null);
+  const [isMapReady, setIsMapReady] = useState<boolean>();
   const markerRefs = useRef<Record<string, MapMarker | null>>({});
   const { activities, destinations, accommodations, transportations } = useTripContext();
   const [visibleMarkers, setVisibleMarkers] = useState<
@@ -21,17 +22,17 @@ export const MapView = () => {
 
   // Fit all destinations on destination change
   useEffect(() => {
-    if (destinations) {
+    if (destinations && isMapReady) {
       fitMapToMarkers(destinations.map((d) => d.place));
     }
-  }, [destinations]);
+  }, [destinations, isMapReady]);
 
   // Fit all centrilized markers
   useEffect(() => {
-    if (centeredMarkers.length) {
+    if (centeredMarkers.length && isMapReady) {
       fitMapToMarkers(centeredMarkers);
     }
-  }, [centeredMarkers]);
+  }, [centeredMarkers, isMapReady]);
 
   // Show Callout for selected marker
   useEffect(() => {
@@ -98,8 +99,9 @@ export const MapView = () => {
         collapsableChildren={false}
         style={styles.map}
         poiClickEnabled
-        onPoiClick={(e) => console.log(e)}
+        onPoiClick={(e) => console.log("POI", e)}
         onRegionChangeComplete={(r) => setMapRegion(r)}
+        onMapReady={() => setIsMapReady(true)}
       >
         {visibleMarkers.includes("destinations") &&
           destinations?.map((d) => (
@@ -156,7 +158,6 @@ export const MapView = () => {
         <AutoCompleteInput
           mapRegion={mapRegion}
           onSelect={(autoComplete) => {
-            console.log("selected", autoComplete.placeId);
             if (autoComplete.placeId) {
               onSelectPlace(autoComplete.placeId);
             }
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     position: "absolute",
     width: "100%",
-    padding: largeSpacing * 3,
+    paddingHorizontal: largeSpacing * 3,
   },
   map: {
     flex: 1,

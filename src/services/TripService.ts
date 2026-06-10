@@ -2,7 +2,9 @@ export class TripService {
   static getPhotoForPlace = (keys?: string[]) => {
     if (keys?.length) {
       return `https://itin-dev.sfo2.cdn.digitaloceanspaces.com/freeImageSmall/${keys[0]}`;
-    } else return "";
+    } else {
+      return "";
+    }
   };
   static getMediumPhotoForPlace = (keys?: string[]) => {
     if (keys?.length) {

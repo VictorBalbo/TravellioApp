@@ -15,9 +15,15 @@ export class MapService {
     return response.json() as Promise<Place>;
   };
 
-  static getAutoComplete = async (text: string, lat: number, lng: number, rad: number): Promise<AutoComplete[]> => {
+  static getAutoComplete = async (
+    text: string,
+    lat: number,
+    lng: number,
+    rad: number,
+    signal: AbortSignal,
+  ): Promise<AutoComplete[]> => {
     const url = `${BASE_URL}/Places/AutoComplete?input=${text}&lat=${lat}&lng=${lng}&radius=${rad}&language=${deviceLang}`;
-    const response = await fetch(url);
+    const response = await fetch(url, { signal });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch autocomplete: ${response.status}`);

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui";
 import { Colors } from "@/constants/theme";
 import { displayDate, getOpenStatus, sanitizeUrl } from "@/helpers";
-import { getThemeProperty, useTripContext } from "@/hooks";
+import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
 import { Place } from "@/models";
 import { MapService } from "@/services";
 import { TripService } from "@/services/TripService";
@@ -34,6 +34,7 @@ export default function PlaceDetails() {
   const activity = useMemo(() => activities?.find((a) => a.placeId === placeId), [activities, placeId]);
   const placeOpenStatus = place?.openingHours && getOpenStatus(place?.openingHours);
   const { t } = useTranslation();
+  const { focusPlaceMarker } = useMapContext();
 
   useEffect(() => {
     const fetchPlace = async () => {
@@ -44,15 +45,18 @@ export default function PlaceDetails() {
         setLoading(true);
         const responsePlace = await MapService.getPlaceDetails(placeId);
         setPlace(responsePlace);
-        console.log(responsePlace.name);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       } finally {
         setLoading(false);
       }
     };
     fetchPlace();
   }, [loading, place?.id, placeId]);
+
+  useEffect(() => {
+    focusPlaceMarker(place);
+  }, [place, focusPlaceMarker]);
 
   if (!place) {
     console.log("No place", place, placeId);
@@ -223,7 +227,7 @@ export default function PlaceDetails() {
                     }
                     body={place.openingHours.weekday_text.map((d) => (
                       <ThemedView key={d} style={[styles.inlineInfo, { justifyContent: "space-between" }]}>
-                        <ThemedText type={TextType.Footnote}>{d.split(": ")[0]}</ThemedText>
+                        <ThemedText type={TextType.Footnote}>{t(d.split(": ")[0])}</ThemedText>
                         <ThemedText type={TextType.Footnote}>{d.split(": ")[1]}</ThemedText>
                       </ThemedView>
                     ))}
@@ -248,10 +252,12 @@ export default function PlaceDetails() {
           )}
         </ThemedView>
 
-        <ThemedView style={styles.titleCardContainer}>
-          <IconTitleValue value={t("about")} icon="book" valueType={TextType.Title} />
-          {place.description && <CardSeeMore numberOfLines={4} content={place.description} />}
-        </ThemedView>
+        {place.description && (
+          <ThemedView style={styles.titleCardContainer}>
+            <IconTitleValue value={t("about")} icon="book" valueType={TextType.Title} />
+            {place.description && <CardSeeMore numberOfLines={4} content={place.description} />}
+          </ThemedView>
+        )}
       </ThemedView>
     </HeroView>
   );

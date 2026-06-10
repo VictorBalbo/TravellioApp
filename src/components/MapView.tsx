@@ -1,7 +1,6 @@
-import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
+import { getThemeProperty, useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
 import { Place } from "@/models";
-import { useGlobalSearchParams, useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import Map, { MapMarker, Marker, Region } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,23 +8,23 @@ import { AutoCompleteInput, ThemedView } from "./ui";
 
 export const MapView = () => {
   const mapRef = useRef<Map | null>(null);
+  const [mapRegion, setMapRegion] = useState<Region>();
   const [isMapReady, setIsMapReady] = useState<boolean>();
+  const lastMarkerSelectionAt = useRef<number>(0);
   const markerRefs = useRef<Record<string, MapMarker | null>>({});
   const { activities, destinations, accommodations, transportations } = useTripContext();
   const [visibleMarkers, setVisibleMarkers] = useState<
     ("destinations" | "activities" | "accommodations" | "transportations")[]
   >(["destinations", "activities", "accommodations", "transportations"]);
-  const router = useRouter();
-  const params = useGlobalSearchParams();
-  const { centeredMarkers, selectedMarker } = useMapContext();
-  const [mapRegion, setMapRegion] = useState<Region>();
-
-  // Fit all destinations on destination change
-  useEffect(() => {
-    if (destinations && isMapReady) {
-      fitMapToMarkers(destinations.map((d) => d.place));
-    }
-  }, [destinations, isMapReady]);
+  const { goToDestination, goToPlace } = useInternalRouterContext();
+  const { centeredMarkers, selectedMarker, focusedDestinationId } = useMapContext();
+  const isSelectedPlaceNew = useMemo(() => {
+    return (
+      !activities?.find((a) => a.placeId === selectedMarker?.id) &&
+      !accommodations?.find((a) => a.placeId === selectedMarker?.id) &&
+      !destinations?.find((d) => d.placeId === selectedMarker?.id)
+    );
+  }, [activities, accommodations, destinations, selectedMarker?.id]);
 
   // Fit all centrilized markers
   useEffect(() => {
@@ -74,22 +73,13 @@ export const MapView = () => {
     }
   };
 
-  const onSelectDestination = (destinationId: string) => {
-    if (params?.destinationId !== destinationId) {
-      router.push({
-        pathname: "/trip/DestinationOverview",
-        params: { destinationId },
-      });
+  const handleMarkerSelect = (callback: () => void) => {
+    const now = Date.now();
+    if (now - lastMarkerSelectionAt.current < 600) {
+      return;
     }
-  };
-
-  const onSelectPlace = (placeId: string) => {
-    if (params?.placeId !== placeId) {
-      router.push({
-        pathname: "/trip/PlaceDetails",
-        params: { placeId },
-      });
-    }
+    lastMarkerSelectionAt.current = now;
+    callback();
   };
 
   return (
@@ -103,9 +93,24 @@ export const MapView = () => {
         onRegionChangeComplete={(r) => setMapRegion(r)}
         onMapReady={() => setIsMapReady(true)}
       >
+        {selectedMarker && isSelectedPlaceNew && (
+          <Marker
+            tracksViewChanges={false}
+            ref={(ref) => {
+              markerRefs.current[selectedMarker.id] = ref;
+            }}
+            coordinate={{
+              latitude: selectedMarker.coordinates.lat,
+              longitude: selectedMarker.coordinates.lng,
+            }}
+            pinColor="orange"
+            zIndex={4}
+          />
+        )}
         {visibleMarkers.includes("destinations") &&
           destinations?.map((d) => (
             <Marker
+              tracksViewChanges={false}
               key={d.placeId}
               ref={(ref) => {
                 markerRefs.current[d.placeId] = ref;
@@ -115,21 +120,22 @@ export const MapView = () => {
                 longitude: d.place.coordinates.lng,
               }}
               pinColor="blue"
-              zIndex={15}
-              onSelect={() => onSelectDestination(d.id)}
-            ></Marker>
+              zIndex={5}
+              onSelect={() => handleMarkerSelect(() => goToDestination(d.id))}
+            />
           ))}
 
         {visibleMarkers.includes("activities") &&
           activities
-            ?.filter((a) => a.place)
+            ?.filter((a) => a.place && a.destinationId === focusedDestinationId)
             .map((a) => (
               <Marker
+                tracksViewChanges={false}
                 key={a.placeId}
                 ref={(ref) => {
                   markerRefs.current[a.placeId] = ref;
                 }}
-                // onSelect={() => onSelectActivity(a.place.id)}
+                onSelect={() => handleMarkerSelect(() => goToPlace(a.placeId))}
                 coordinate={{
                   latitude: a.place!.coordinates.lat,
                   longitude: a.place!.coordinates.lng,
@@ -141,16 +147,17 @@ export const MapView = () => {
 
         {visibleMarkers.includes("accommodations") &&
           accommodations
-            ?.filter((a) => a.place)
+            ?.filter((a) => a.place && a.destinationId === focusedDestinationId)
             .map((a) => (
               <Marker
+                tracksViewChanges={false}
                 key={a.id}
                 coordinate={{
                   latitude: a.place!.coordinates.lat,
                   longitude: a.place!.coordinates.lng,
                 }}
                 pinColor="green"
-                zIndex={4}
+                zIndex={1}
               />
             ))}
       </Map>
@@ -159,7 +166,7 @@ export const MapView = () => {
           mapRegion={mapRegion}
           onSelect={(autoComplete) => {
             if (autoComplete.placeId) {
-              onSelectPlace(autoComplete.placeId);
+              goToPlace(autoComplete.placeId);
             }
           }}
         />

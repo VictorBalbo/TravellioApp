@@ -56,5 +56,13 @@
   "isTicketBought": "Ingresso Comprado",
   "price": "Preço",
   "required": "Necessário",
-  "notRequired": "Não Necessário"
+  "notRequired": "Não Necessário",
+  "Monday": "Segunda Feira",
+  "Tuesday": "Terça Feira",
+  "Wednesday": "Quarta Feira",
+  "Thursday": "Quinta Feira",
+  "Friday": "Sexta Feira",
+  "Saturday": "Sábado",
+  "Sunday": "Domingo"
+  
 }

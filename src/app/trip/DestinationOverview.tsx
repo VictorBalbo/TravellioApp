@@ -12,7 +12,7 @@ export default function DestinationOverview() {
   const { t } = useTranslation();
   const { destinationId } = useLocalSearchParams();
   const { destinations, transportations } = useTripContext();
-  const { fitDestination } = useMapContext();
+  const { focusDestinationMarkers } = useMapContext();
 
   const destination = useMemo(() => destinations?.find((d) => d.id === destinationId), [destinationId, destinations]);
   const accommodations = destination?.accommodations;
@@ -29,10 +29,8 @@ export default function DestinationOverview() {
   );
 
   useEffect(() => {
-    if (destination) {
-      fitDestination(destination);
-    }
-  }, [destination, fitDestination]);
+    focusDestinationMarkers(destination);
+  }, [destination, focusDestinationMarkers]);
 
   return (
     <HeroView headerImageUrl={TripService.getPhotoForPlace(destination?.place.images)}>

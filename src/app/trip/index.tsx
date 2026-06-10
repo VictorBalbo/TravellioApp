@@ -1,5 +1,5 @@
-import TripDestinations from "./TripDestinations";
+import TripOverview from "./TripOverview";
 
 export default function Index() {
-  return <TripDestinations />;
+  return <TripOverview />;
 }

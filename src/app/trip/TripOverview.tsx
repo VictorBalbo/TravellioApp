@@ -1,28 +1,20 @@
 import { CardView, HorizontalDivider, Icon, PressableView, TextType, ThemedText, ThemedView } from "@/components/ui";
 import { utcDate } from "@/helpers";
-import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
-import { useRouter } from "expo-router";
+import { getThemeProperty, useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
-export default function TripDestinations() {
+export default function TripOverview() {
   const { trip, destinations } = useTripContext();
-  const { fitDestination } = useMapContext();
+  const { focusTripMarkers } = useMapContext();
 
-  const router = useRouter();
+  const { goToDestination } = useInternalRouterContext();
   const { t } = useTranslation();
 
-  const onDestinationSelected = (destinationId: string) => {
-    router.push({
-      pathname: "/trip/DestinationOverview",
-      params: { destinationId: destinationId },
-    });
-  };
-
   useEffect(() => {
-    fitDestination(undefined);
-  }, [fitDestination]);
+    focusTripMarkers(trip);
+  }, [trip?.destinations]);
 
   return (
     <ThemedView style={styles.container}>
@@ -30,7 +22,7 @@ export default function TripDestinations() {
       <CardView style={styles.destinationsCard}>
         {destinations?.map((d, i) => (
           <ThemedView key={i}>
-            <PressableView onPress={() => onDestinationSelected(d.id)} style={styles.destination}>
+            <PressableView onPress={() => goToDestination(d.id)} style={styles.destination}>
               <Icon name="building" />
               <ThemedView style={styles.destinationName}>
                 <ThemedText type={TextType.Headline} numberOfLines={1}>

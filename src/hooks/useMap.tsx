@@ -1,9 +1,11 @@
-import { Destination, Place } from "@/models";
+import { Destination, Place, Trip } from "@/models";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface MapContextType {
-  fitDestination: (destination?: Destination) => void;
-  fitPlace: (place?: Place) => void;
+  focusTripMarkers: (trip?: Trip) => void;
+  focusDestinationMarkers: (destination?: Destination) => void;
+  focusPlaceMarker: (place?: Place) => void;
+  focusedDestinationId?: string;
   centeredMarkers: Place[];
   selectedMarker?: Place;
 }
@@ -15,21 +17,17 @@ interface MapProviderProps {
 export const MapProvider = ({ children }: MapProviderProps) => {
   const [centeredMarkers, setCenteredMarkers] = useState<Place[]>([]);
   const [selectedMarker, setSelectedMarker] = useState<Place>();
+  const [focusedDestinationId, setFocusedDestinationId] = useState<string>();
 
-  const fitPlace = (place?: Place) => {
-    if (place) {
-      setSelectedMarker(place);
-    } else {
-      setSelectedMarker(undefined);
-    }
+  const focusPlaceMarker = (place?: Place) => {
+    setSelectedMarker(place);
   };
 
-  const fitDestination = (destination?: Destination) => {
-    if (!destination) {
-      setCenteredMarkers([]);
-      setSelectedMarker(undefined);
+  const focusDestinationMarkers = (destination?: Destination) => {
+    if (!destination?.place) {
       return;
     }
+    console.log("focusDestinationMarkers", destination.place.name);
     const markers = [destination.place];
     if (destination.activities?.length) {
       const activities = destination.activities.filter((a) => a.place).map((a) => a.place!);
@@ -41,10 +39,28 @@ export const MapProvider = ({ children }: MapProviderProps) => {
     }
     setCenteredMarkers(markers);
     setSelectedMarker(destination.place);
+    setFocusedDestinationId(destination.id);
+  };
+
+  const focusTripMarkers = (trip?: Trip) => {
+    const markers = trip?.destinations?.filter((d) => d.place).map((d) => d.place!) ?? [];
+
+    setCenteredMarkers(markers);
+    setSelectedMarker(undefined);
+    setFocusedDestinationId(undefined);
   };
 
   return (
-    <MapContext.Provider value={{ fitDestination, fitPlace, centeredMarkers, selectedMarker }}>
+    <MapContext.Provider
+      value={{
+        focusTripMarkers,
+        focusDestinationMarkers,
+        focusPlaceMarker,
+        centeredMarkers,
+        selectedMarker,
+        focusedDestinationId,
+      }}
+    >
       {children}
     </MapContext.Provider>
   );

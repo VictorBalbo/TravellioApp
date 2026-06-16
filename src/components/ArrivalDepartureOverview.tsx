@@ -39,8 +39,9 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
       ? trip?.destinations?.find((d) => d.id === transportation.departureDestinationId)
       : trip?.destinations?.find((d) => d.id === transportation.arrivalDestinationId);
   const relevantTime = type === "arrival" ? transportation.arrivalTime : transportation.departureTime;
-  const departure = type === "arrival" ? relevantPlace?.place?.name : destination.place.name;
-  const arrival = type === "arrival" ? destination.place.name : relevantPlace?.place?.name;
+
+  const departure = type === "arrival" ? relevantPlace?.place?.name : destination.name;
+  const arrival = type === "arrival" ? destination.name : relevantPlace?.place?.name;
   return (
     <CardView>
       <Collapsable

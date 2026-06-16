@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   titleCardContainer: {
-    gap: smallSpacing,
+    gap: mediumSpacing,
   },
   notInTripContainer: {
     borderWidth: 1,

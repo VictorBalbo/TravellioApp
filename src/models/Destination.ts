@@ -1,12 +1,16 @@
-import type { Accommodation, Activity, Place } from ".";
+import type { Accommodation, Activity, Coordinates, Place } from ".";
 
 export interface Destination {
-  id: string;
+  id?: string;
   placeId: string;
+  name: string;
+  coordinates: Coordinates;
   startDate: Date;
   endDate: Date;
-  place: Place;
   notes?: string;
+  place?: Place;
+  accommodationsCount?: number;
   accommodations?: Accommodation[];
+  activitiesCount?: number;
   activities?: Activity[];
 }

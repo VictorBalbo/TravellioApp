@@ -127,7 +127,6 @@ export default function DestinationOverview() {
 
 const largeSpacing = getThemeProperty("largeSpacing");
 const mediumSpacing = getThemeProperty("mediumSpacing");
-const smallSpacing = getThemeProperty("smallSpacing");
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: largeSpacing,
@@ -140,7 +139,7 @@ const styles = StyleSheet.create({
     gap: mediumSpacing,
   },
   sectionTitle: {
-    gap: smallSpacing,
+    gap: mediumSpacing,
   },
   inlineInfo: {
     flexDirection: "row",

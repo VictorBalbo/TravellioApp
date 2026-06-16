@@ -1,17 +1,18 @@
-import type { Place, Price } from ".";
+import type { Coordinates, Place, Price } from ".";
 
 export interface Activity {
-  id: string;
+  id?: string;
   name: string;
   placeId: string;
-  place?: Place;
-  type?: ActivityTypes;
+  coordinates: Coordinates;
+  address?: string;
+  scheduledAt?: Date;
   ticketRequired?: boolean;
   ticketPurchased?: boolean;
-  scheduledAt?: Date;
   price?: Price;
   website?: string;
   notes?: string;
+  place?: Place;
 }
 
 export enum ActivityTypes {

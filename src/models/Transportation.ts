@@ -1,24 +1,27 @@
-import type { Place, Price } from ".";
+import type { Coordinates, Destination, Place, Price } from ".";
 
 export interface Transportation {
-  id: string;
+  id?: string;
   price?: Price;
-  arrivalDestinationId: string;
-  arrival: Place;
-  arrivalTime?: Date;
-  departureDestinationId: string;
-  departure: Place;
-  departureTime: Date;
   legs: Leg[];
+  arrivalDestinationId?: string;
+  departureDestinationId?: string;
+  departureTime?: Date;
+  arrivalTime?: Date;
+  arrival?: Destination;
+  departure?: Destination;
 }
 
 export interface Leg {
-  id: string;
+  id?: string;
   departurePlaceId: string;
-  departurePlace: Place;
+  departurePlaceShortName: string;
+  departurePlaceDescription: string;
+  departurePlaceCoordinates: Coordinates;
   arrivalPlaceId: string;
-  arrivalPlace: Place;
-  path?: string;
+  arrivalPlaceShortName: string;
+  arrivalPlaceDescription: string;
+  arrivalPlaceCoordinates: Coordinates;
   type: TransportTypes;
   departureTime?: Date;
   arrivalTime?: Date;
@@ -27,6 +30,8 @@ export interface Leg {
   serviceNumber?: string;
   reservation?: string;
   seat?: string;
+  departurePlace?: Place;
+  arrivalPlace?: Place;
 }
 
 export enum TransportTypes {

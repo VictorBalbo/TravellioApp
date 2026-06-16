@@ -1,14 +1,16 @@
-import type { Place, Price } from ".";
+import type { Coordinates, Place, Price } from ".";
 
 export interface Accommodation {
-  id: string;
+  id?: string;
   name: string;
   placeId: string;
-  place?: Place;
+  coordinates: Coordinates;
+  address?: string;
   checkIn?: Date;
   checkOut?: Date;
   imageUrl?: string;
   website?: string;
   notes?: string;
-  price: Price;
+  price?: Price;
+  place?: Place;
 }

@@ -1,4 +1,5 @@
 import { Accommodation, Activity, Destination, Transportation, Trip } from "@/models";
+import { TripService } from "@/services";
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 
 interface TripContextType {
@@ -27,19 +28,16 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   const transportations = useMemo(() => trip?.transportations ?? [], [trip?.transportations]);
 
   useEffect(() => {
-    const envRaw = process.env.EXPO_PUBLIC_TRIP_JSON;
-
-    if (!envRaw) {
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(envRaw as string) as Trip;
-      setTrip(parsed);
-    } catch (e) {
-      console.warn(e);
-    }
-  }, []);
+    const loadTrip = async (tripId: string) => {
+      if (tripId === trip?.id) {
+        return;
+      }
+      const loadedtrip = await TripService.getTripData(tripId);
+      setTrip(loadedtrip);
+    };
+    const envRaw = process.env.EXPO_PUBLIC_TRIP_ID ?? "";
+    loadTrip(envRaw);
+  }, [trip]);
 
   return (
     <TripContext.Provider

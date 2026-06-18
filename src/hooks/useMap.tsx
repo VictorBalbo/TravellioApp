@@ -1,4 +1,4 @@
-import { Destination, Place, Trip } from "@/models";
+import { Coordinates, Destination, Place, Trip } from "@/models";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface MapContextType {
@@ -6,7 +6,7 @@ interface MapContextType {
   focusDestinationMarkers: (destination?: Destination) => void;
   focusPlaceMarker: (place?: Place) => void;
   focusedDestinationId?: string;
-  centeredMarkers: Place[];
+  centeredMarkers: Coordinates[];
   selectedMarker?: Place;
 }
 const MapContext = createContext<MapContextType | undefined>(undefined);
@@ -15,7 +15,7 @@ interface MapProviderProps {
   children: ReactNode;
 }
 export const MapProvider = ({ children }: MapProviderProps) => {
-  const [centeredMarkers, setCenteredMarkers] = useState<Place[]>([]);
+  const [centeredMarkers, setCenteredMarkers] = useState<Coordinates[]>([]);
   const [selectedMarker, setSelectedMarker] = useState<Place>();
   const [focusedDestinationId, setFocusedDestinationId] = useState<string>();
 
@@ -24,26 +24,30 @@ export const MapProvider = ({ children }: MapProviderProps) => {
   };
 
   const focusDestinationMarkers = (destination?: Destination) => {
-    if (!destination?.place) {
+    if (!destination) {
       return;
     }
-    console.log("focusDestinationMarkers", destination.place.name);
-    const markers = [destination.place];
+    const markers = [destination.coordinates];
     if (destination.activities?.length) {
-      const activities = destination.activities.filter((a) => a.place).map((a) => a.place!);
+      const activities = destination.activities.map((a) => a.coordinates);
       markers.push(...activities);
     }
     if (destination.accommodations?.length) {
-      const accommodations = destination.accommodations.filter((a) => a.place).map((a) => a.place!);
+      const accommodations = destination.accommodations.map((a) => a.coordinates);
       markers.push(...accommodations);
     }
     setCenteredMarkers(markers);
-    setSelectedMarker(destination.place);
+    const destinationPlace: Place = {
+      id: destination.placeId,
+      coordinates: destination.coordinates,
+      name: destination.name,
+    };
+    setSelectedMarker(destinationPlace);
     setFocusedDestinationId(destination.id);
   };
 
   const focusTripMarkers = (trip?: Trip) => {
-    const markers = trip?.destinations?.filter((d) => d.place).map((d) => d.place!) ?? [];
+    const markers = trip?.destinations?.map((d) => d.coordinates) ?? [];
 
     setCenteredMarkers(markers);
     setSelectedMarker(undefined);

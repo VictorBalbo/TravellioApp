@@ -72,7 +72,7 @@ export const ActivitiesItinerary = ({ activities }: Props) => {
               <Icon name={getIconForActivity(a)} size={20} color={captionColor} />
               <ThemedView style={styles.activityInfo}>
                 <ThemedText>{a.name}</ThemedText>
-                {a.place?.address && <ThemedText type={TextType.Caption}>{a.place.address}</ThemedText>}
+                {a.address && <ThemedText type={TextType.Caption}>{a.address}</ThemedText>}
               </ThemedView>
               <Icon name="chevronRight" size={16} color={captionColor} />
             </PressableView>

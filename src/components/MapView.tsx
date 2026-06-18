@@ -1,5 +1,5 @@
 import { getThemeProperty, useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
-import { Place } from "@/models";
+import { Coordinates } from "@/models";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import Map, { MapMarker, Marker, Region } from "react-native-maps";
@@ -25,7 +25,6 @@ export const MapView = () => {
       !destinations?.find((d) => d.placeId === selectedMarker?.id)
     );
   }, [activities, accommodations, destinations, selectedMarker?.id]);
-
   // Fit all centrilized markers
   useEffect(() => {
     if (centeredMarkers.length && isMapReady) {
@@ -49,20 +48,20 @@ export const MapView = () => {
     }
   }, [selectedMarker]);
 
-  const fitMapToMarkers = (markers: Place[]) => {
+  const fitMapToMarkers = (markers: Coordinates[]) => {
     if (mapRef.current && markers.length) {
       if (markers.length === 1) {
         mapRef.current.animateToRegion({
-          latitude: markers[0].coordinates.lat - 0.0075,
-          longitude: markers[0].coordinates.lng,
+          latitude: markers[0].lat - 0.0075,
+          longitude: markers[0].lng,
           latitudeDelta: 0.02,
           longitudeDelta: 0.02,
         });
       } else {
         mapRef.current.fitToCoordinates(
           markers.map((m) => ({
-            latitude: m.coordinates.lat,
-            longitude: m.coordinates.lng,
+            latitude: m.lat,
+            longitude: m.lng,
           })),
           {
             edgePadding: { top: 50, right: 50, bottom: 400, left: 50 },
@@ -116,8 +115,8 @@ export const MapView = () => {
                 markerRefs.current[d.placeId] = ref;
               }}
               coordinate={{
-                latitude: d.place.coordinates.lat,
-                longitude: d.place.coordinates.lng,
+                latitude: d.coordinates.lat,
+                longitude: d.coordinates.lng,
               }}
               pinColor="blue"
               zIndex={5}
@@ -127,7 +126,7 @@ export const MapView = () => {
 
         {visibleMarkers.includes("activities") &&
           activities
-            ?.filter((a) => a.place && a.destinationId === focusedDestinationId)
+            ?.filter((a) => a.destinationId === focusedDestinationId)
             .map((a) => (
               <Marker
                 tracksViewChanges={false}
@@ -137,24 +136,24 @@ export const MapView = () => {
                 }}
                 onSelect={() => handleMarkerSelect(() => goToPlace(a.placeId))}
                 coordinate={{
-                  latitude: a.place!.coordinates.lat,
-                  longitude: a.place!.coordinates.lng,
+                  latitude: a.coordinates.lat,
+                  longitude: a.coordinates.lng,
                 }}
-                pinColor={a.place?.categories?.some((c) => c.includes("Restaurant")) ? "orange" : "red"}
+                pinColor={"red"}
                 zIndex={0}
               />
             ))}
 
         {visibleMarkers.includes("accommodations") &&
           accommodations
-            ?.filter((a) => a.place && a.destinationId === focusedDestinationId)
+            ?.filter((a) => a.destinationId === focusedDestinationId)
             .map((a) => (
               <Marker
                 tracksViewChanges={false}
                 key={a.id}
                 coordinate={{
-                  latitude: a.place!.coordinates.lat,
-                  longitude: a.place!.coordinates.lng,
+                  latitude: a.coordinates.lat,
+                  longitude: a.coordinates.lng,
                 }}
                 pinColor="green"
                 zIndex={1}

@@ -1,4 +1,4 @@
-import type { Accommodation, Activity, Coordinates, Place } from ".";
+import type { Accommodation, Activity, Coordinates } from ".";
 
 export interface Destination {
   id?: string;
@@ -8,9 +8,9 @@ export interface Destination {
   startDate: Date;
   endDate: Date;
   notes?: string;
-  place?: Place;
   accommodationsCount?: number;
   accommodations?: Accommodation[];
   activitiesCount?: number;
   activities?: Activity[];
+  tripId?: string;
 }

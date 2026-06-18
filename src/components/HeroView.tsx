@@ -8,7 +8,7 @@ import { Image, KeyboardAvoidingView, Platform, StyleSheet, ViewStyle } from "re
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Props = PropsWithChildren<{
-  headerImageUrl: string;
+  headerImageUrl?: string;
   showHeaderImageGradient?: boolean;
   closeButtonCallback?: () => void;
   contentStyle?: ViewStyle;
@@ -43,7 +43,8 @@ export const HeroView = ({
         </ThemedView>
 
         <ThemedView>
-          <Image source={{ uri: headerImageUrl }} style={styles.headerImage} />
+          {headerImageUrl && <Image source={{ uri: headerImageUrl }} style={styles.headerImage} />}
+          {!headerImageUrl && <ThemedView style={styles.noImageHeader} />}
           {showHeaderImageGradient && (
             <LinearGradient
               colors={["transparent", background]}
@@ -65,6 +66,7 @@ const borderRadius = getThemeProperty("borderRadius");
 const mediumSpacing = getThemeProperty("mediumSpacing");
 const largeSpacing = getThemeProperty("largeSpacing");
 const HEADER_HEIGHT = 200;
+const NO_IMAGE_HEADER_HEIGHT = 150;
 
 const styles = StyleSheet.create({
   container: {
@@ -87,6 +89,9 @@ const styles = StyleSheet.create({
   headerImage: {
     height: HEADER_HEIGHT,
     width: "100%",
+  },
+  noImageHeader: {
+    height: NO_IMAGE_HEADER_HEIGHT,
   },
   headerGradient: {
     position: "absolute",

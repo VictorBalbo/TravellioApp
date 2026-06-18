@@ -1,4 +1,4 @@
-import type { Coordinates, Place, Price } from ".";
+import type { Coordinates, Price } from ".";
 
 export interface Accommodation {
   id?: string;
@@ -12,5 +12,5 @@ export interface Accommodation {
   website?: string;
   notes?: string;
   price?: Price;
-  place?: Place;
+  destinationId?: string;
 }

@@ -2,6 +2,7 @@ import { dateDiff, displayDate, formatDuration } from "@/helpers/DateHelper";
 import { getThemeProperty, useThemeColor } from "@/hooks";
 import { useTripContext } from "@/hooks/useTrip";
 import { Destination, Transportation, TransportTypes } from "@/models";
+import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 import {
@@ -40,8 +41,8 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
       : trip?.destinations?.find((d) => d.id === transportation.arrivalDestinationId);
   const relevantTime = type === "arrival" ? transportation.arrivalTime : transportation.departureTime;
 
-  const departure = type === "arrival" ? relevantPlace?.place?.name : destination.name;
-  const arrival = type === "arrival" ? destination.name : relevantPlace?.place?.name;
+  const departure = type === "arrival" ? relevantPlace?.name : destination.name;
+  const arrival = type === "arrival" ? destination.name : relevantPlace?.name;
   return (
     <CardView>
       <Collapsable
@@ -81,16 +82,14 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
             {/* Departure and Arrival Info */}
             <ThemedView style={[styles.inlineInfo, styles.placeNames]}>
               <IconTitleValue
-                title={leg.departurePlace.name}
-                value={leg.departurePlace.vicinity ?? ""}
-                // url={leg.departurePlace.mapsUrl}
+                title={leg.departurePlaceDescription}
+                value={leg.departurePlaceShortName}
                 valueType={TextType.Title}
                 displayTitleAfterText
               />
               <IconTitleValue
-                title={leg.arrivalPlace.name}
-                value={leg.arrivalPlace.vicinity ?? ""}
-                // url={leg.arrivalPlace.mapsUrl}
+                title={leg.arrivalPlaceDescription}
+                value={leg.arrivalPlaceShortName}
                 valueType={TextType.Title}
                 displayTitleAfterText
                 alignText="right"
@@ -98,25 +97,31 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
             </ThemedView>
 
             {/* Departure and Arrival Times with Duration */}
-            <ThemedView style={styles.inlineInfo}>
-              <IconTitleValue
-                title={leg.departureTime && displayDate(leg.departureTime, "ddd DD MMM")}
-                value={(leg.departureTime && displayDate(leg.departureTime, "HH:mm")) ?? ""}
-                valueType={TextType.Headline}
-              />
-              <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
-              <ThemedView style={styles.flightDuration}>
-                <Icon name={legTypeIcon(leg.type)} size={12} color={captionColor} />
-                <ThemedText type={TextType.Caption}>{legDuration(leg.departureTime, leg.arrivalTime)}</ThemedText>
+            {(leg.departureTime || leg.arrivalTime) && (
+              <ThemedView style={styles.inlineInfo}>
+                <IconTitleValue
+                  title={leg.departureTime && displayDate(leg.departureTime, "ddd DD MMM")}
+                  value={(leg.departureTime && displayDate(leg.departureTime, "HH:mm")) ?? ""}
+                  valueType={TextType.Headline}
+                />
+                {leg.departureTime && leg.arrivalTime && (
+                  <Fragment>
+                    <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
+                    <ThemedView style={styles.flightDuration}>
+                      <Icon name={legTypeIcon(leg.type)} size={12} color={captionColor} />
+                      <ThemedText type={TextType.Caption}>{legDuration(leg.departureTime, leg.arrivalTime)}</ThemedText>
+                    </ThemedView>
+                    <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
+                  </Fragment>
+                )}
+                <IconTitleValue
+                  title={leg.arrivalTime && displayDate(leg.arrivalTime, "ddd DD MMM")}
+                  value={(leg.arrivalTime && displayDate(leg.arrivalTime, "HH:mm")) ?? ""}
+                  valueType={TextType.Headline}
+                  alignText="right"
+                />
               </ThemedView>
-              <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
-              <IconTitleValue
-                title={leg.arrivalTime && displayDate(leg.arrivalTime, "ddd DD MMM")}
-                value={(leg.arrivalTime && displayDate(leg.arrivalTime, "HH:mm")) ?? ""}
-                valueType={TextType.Headline}
-                alignText="right"
-              />
-            </ThemedView>
+            )}
 
             {/* Company and Service Number */}
             <ThemedView style={styles.inlineInfo}>

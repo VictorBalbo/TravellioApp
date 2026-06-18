@@ -86,7 +86,7 @@ export default function PlaceDetails() {
   };
 
   return (
-    <HeroView headerImageUrl={TripService.getPhotoForPlace(activity?.place?.images || place.images) ?? ""}>
+    <HeroView headerImageUrl={TripService.getPhotoForPlace(place.images) ?? ""}>
       <ThemedView style={styles.header}>
         <ThemedText type={TextType.Display}>{activity?.name ?? place.name}</ThemedText>
         {place?.rating && (

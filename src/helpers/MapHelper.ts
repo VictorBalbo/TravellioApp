@@ -1,7 +1,7 @@
 import { Region } from "react-native-maps";
 
 export const getRadiusFromRegion = (region: Region) => {
-  const { latitude, longitude, latitudeDelta } = region;
+  const { latitude, latitudeDelta } = region;
 
   // 1. Find the coordinates for the top edge of the map viewport
   const topEdgeLat = latitude + latitudeDelta / 2;

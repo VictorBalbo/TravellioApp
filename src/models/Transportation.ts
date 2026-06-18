@@ -1,4 +1,4 @@
-import type { Coordinates, Destination, Place, Price } from ".";
+import type { Coordinates, Destination, Price } from ".";
 
 export interface Transportation {
   id?: string;
@@ -30,8 +30,7 @@ export interface Leg {
   serviceNumber?: string;
   reservation?: string;
   seat?: string;
-  departurePlace?: Place;
-  arrivalPlace?: Place;
+  tripId?: string;
 }
 
 export enum TransportTypes {

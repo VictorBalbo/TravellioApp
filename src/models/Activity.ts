@@ -1,4 +1,4 @@
-import type { Coordinates, Place, Price } from ".";
+import type { Coordinates, Price } from ".";
 
 export interface Activity {
   id?: string;
@@ -12,7 +12,7 @@ export interface Activity {
   price?: Price;
   website?: string;
   notes?: string;
-  place?: Place;
+  destinationId?: string;
 }
 
 export enum ActivityTypes {

@@ -1,10 +1,12 @@
 import { useGlobalSearchParams, useRouter } from "expo-router";
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 interface RouterContextType {
   goToTrip: (tripId?: string) => void;
   goToDestination: (destinationId?: string) => void;
   goToPlace: (placeId?: string) => void;
+  currentTripId?: string;
+  currentDestinationId?: string;
 }
 
 const RouterContext = createContext<RouterContextType | undefined>(undefined);
@@ -15,12 +17,16 @@ interface InternalRouterProviderProps {
 export const InternalRouteProvider = ({ children }: InternalRouterProviderProps) => {
   const router = useRouter();
   const params = useGlobalSearchParams();
+  const [currentTripId, setCurrentTripId] = useState<string>();
+  const [currentDestinationId, setCurrentDestinationId] = useState<string>();
 
   const goToTrip = (tripId?: string) => {
     if (!tripId || params.tripId === tripId) {
       return;
     }
     console.log("goToTrip", tripId);
+    setCurrentTripId(tripId);
+    setCurrentDestinationId(undefined);
     router.push({
       pathname: "/trip/TripOverview",
       params: { tripId },
@@ -32,6 +38,7 @@ export const InternalRouteProvider = ({ children }: InternalRouterProviderProps)
       return;
     }
     console.log("goToDestination", destinationId);
+    setCurrentDestinationId(destinationId);
     router.push({
       pathname: "/trip/DestinationOverview",
       params: { destinationId },
@@ -48,7 +55,11 @@ export const InternalRouteProvider = ({ children }: InternalRouterProviderProps)
       params: { placeId },
     });
   };
-  return <RouterContext.Provider value={{ goToTrip, goToDestination, goToPlace }}>{children}</RouterContext.Provider>;
+  return (
+    <RouterContext.Provider value={{ goToTrip, goToDestination, goToPlace, currentDestinationId, currentTripId }}>
+      {children}
+    </RouterContext.Provider>
+  );
 };
 
 export const useInternalRouterContext = () => {

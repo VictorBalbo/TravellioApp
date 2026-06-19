@@ -16,7 +16,7 @@ import {
 } from "@/components/ui";
 import { Colors } from "@/constants/theme";
 import { displayDate, getOpenStatus, sanitizeUrl } from "@/helpers";
-import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
+import { getThemeProperty, useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
 import { Place } from "@/models";
 import { MapService } from "@/services";
 import { TripService } from "@/services/TripService";
@@ -28,10 +28,12 @@ import { ActivityIndicator, Linking, StyleSheet } from "react-native";
 
 export default function PlaceDetails() {
   const { placeId } = useLocalSearchParams<{ placeId: string }>();
+  const { activities, destinations, setActivity, setDestination, removeActivity, removeDestination } = useTripContext();
   const [place, setPlace] = useState<Place>();
   const [loading, setLoading] = useState<boolean>(false);
-  const { activities } = useTripContext();
   const activity = useMemo(() => activities?.find((a) => a.placeId === placeId), [activities, placeId]);
+  const destination = useMemo(() => destinations?.find((d) => d.placeId === placeId), [destinations, placeId]);
+  const { currentDestinationId, currentTripId } = useInternalRouterContext();
   const placeOpenStatus = place?.openingHours && getOpenStatus(place?.openingHours);
   const { t } = useTranslation();
   const { focusPlaceMarker } = useMapContext();
@@ -85,10 +87,62 @@ export default function PlaceDetails() {
     }
   };
 
+  const saveButtonHandler = async () => {
+    if (place.name === place.vicinity) {
+      saveDestination();
+    } else {
+      saveActivity();
+    }
+  };
+
+  const saveActivity = async () => {
+    if (!currentTripId || !currentDestinationId) {
+      return;
+    }
+
+    if (activity?.id) {
+      console.log("Unsave activity");
+      await TripService.deleteActivity(currentTripId, currentDestinationId, activity.id);
+      removeActivity(currentDestinationId, activity.id);
+    } else {
+      console.log("save activity");
+      const savedActivity = await TripService.setActivity(currentTripId, currentDestinationId, {
+        placeId: place.id,
+        name: place.name,
+        coordinates: place.coordinates,
+        address: place.address,
+        website: place.website,
+      });
+      setActivity(currentDestinationId, savedActivity);
+    }
+  };
+
+  const saveDestination = async () => {
+    if (!currentTripId) {
+      return;
+    }
+
+    if (destination?.id) {
+      console.log("Unsave destination");
+      await TripService.deleteDestination(currentTripId, destination.id);
+      removeDestination(destination.id);
+    } else {
+      console.log("save destination");
+      const savedDestination = await TripService.setDestination(currentTripId, {
+        placeId: place.id,
+        name: place.name,
+        coordinates: place.coordinates,
+        startDate: destinations![destinations!.length - 1].endDate,
+        endDate: destinations![destinations!.length - 1].endDate,
+      });
+      setDestination(savedDestination);
+    }
+  };
+
   return (
     <HeroView headerImageUrl={TripService.getPhotoForPlace(place.images) ?? ""}>
       <ThemedView style={styles.header}>
-        <ThemedText type={TextType.Display}>{activity?.name ?? place.name}</ThemedText>
+        <ThemedText type={TextType.Display}>{activity?.name ?? destination?.name ?? place.name}</ThemedText>
         {place?.rating && (
           <ThemedView style={styles.rating}>
             <ThemedText type={TextType.Footnote} style={{ marginRight: smallSpacing }}>
@@ -104,13 +158,13 @@ export default function PlaceDetails() {
         {place.categories?.[0] && <ThemedText type={TextType.Footnote}>{place.categories[0]}</ThemedText>}
       </ThemedView>
       <ThemedView background style={styles.body}>
-        <ThemedView style={styles.inlineInfo}>
+        <ThemedView style={styles.actionRow}>
           <ThemedButton
-            title={activity ? t("saved") : t("save")}
-            icon={activity ? "heart" : "heartEmpty"}
+            title={(activity ?? destination) ? t("saved") : t("save")}
+            icon={(activity ?? destination) ? "heart" : "heartEmpty"}
             type={ButtonType.Primary}
             round
-            onPress={() => console.log("Save")}
+            onPress={() => saveButtonHandler()}
             style={styles.actionButton}
           />
           {place.mapsUrl && (
@@ -177,7 +231,7 @@ export default function PlaceDetails() {
               <IconTitleValue icon="price" title={t("price")} value={activity.price?.value.toFixed(2) ?? " - "} />
             </CardView>
           )}
-          {!activity && (
+          {!(activity || destination) && (
             <CardView style={styles.notInTripContainer}>
               <IconTitleValue icon="pin" value={t("notInTripYet")} valueType={TextType.Headline} />
               <ThemedButton
@@ -276,6 +330,12 @@ const styles = StyleSheet.create({
   body: {
     padding: largeSpacing,
     gap: largeSpacing,
+  },
+  actionRow: {
+    flexDirection: "row",
+    gap: mediumSpacing,
+    alignItems: "center",
+    justifyContent: "space-around",
   },
   actionButton: {
     width: 50,

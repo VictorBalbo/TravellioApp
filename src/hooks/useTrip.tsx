@@ -4,11 +4,15 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 
 interface TripContextType {
   trip?: Trip;
-  setTrip: (value: Trip) => void;
   activities?: Activity[];
   destinations?: Destination[];
   accommodations?: Accommodation[];
   transportations?: Transportation[];
+  setTrip: (trip: Trip) => void;
+  setDestination: (destination: Destination) => void;
+  removeDestination: (destinationId: string) => void;
+  setActivity: (destinationId: string, activity: Activity) => void;
+  removeActivity: (destinationId: string, activityId: string) => void;
 }
 
 const TripContext = createContext<TripContextType | undefined>(undefined);
@@ -27,6 +31,45 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   );
   const transportations = useMemo(() => trip?.transportations ?? [], [trip?.transportations]);
 
+  const setDestination = (destination: Destination) => {
+    if (!trip) return;
+    const exists = trip.destinations?.some((d) => d.id === destination.id);
+    const updated = exists
+      ? trip.destinations?.map((d) => (d.id === destination.id ? destination : d))
+      : [...(trip.destinations ?? []), destination];
+    setTrip({ ...trip, destinations: updated });
+  };
+
+  const removeDestination = (destinationId: string) => {
+    if (!trip) return;
+    setTrip({ ...trip, destinations: trip.destinations?.filter((d) => d.id !== destinationId) });
+  };
+
+  const setActivity = (destinationId: string, activity: Activity) => {
+    if (!trip) return;
+    setTrip({
+      ...trip,
+      destinations: trip.destinations?.map((d) => {
+        if (d.id !== destinationId) return d;
+        const exists = d.activities?.some((a) => a.id === activity.id);
+        const updated = exists
+          ? d.activities?.map((a) => (a.id === activity.id ? activity : a))
+          : [...(d.activities ?? []), activity];
+        return { ...d, activities: updated };
+      }),
+    });
+  };
+
+  const removeActivity = (destinationId: string, activityId: string) => {
+    if (!trip) return;
+    setTrip({
+      ...trip,
+      destinations: trip.destinations?.map((d) =>
+        d.id !== destinationId ? d : { ...d, activities: d.activities?.filter((a) => a.id !== activityId) },
+      ),
+    });
+  };
+
   useEffect(() => {
     const loadTrip = async (tripId: string) => {
       if (tripId === trip?.id) {
@@ -43,11 +86,15 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
     <TripContext.Provider
       value={{
         trip,
-        setTrip,
         activities,
         destinations,
         accommodations,
         transportations,
+        setTrip,
+        setDestination,
+        removeDestination,
+        setActivity,
+        removeActivity,
       }}
     >
       {children}

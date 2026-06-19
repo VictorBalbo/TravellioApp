@@ -34,18 +34,20 @@ export const MapView = () => {
 
   // Show Callout for selected marker
   useEffect(() => {
-    if (selectedMarker) {
-      const ref = markerRefs.current[selectedMarker.id];
-      if (ref) {
-        ref.showCallout(); // iOS selection behavior
-      }
-    } else {
-      Object.values(markerRefs.current).forEach((ref) => {
+    const calloutMarker = () => {
+      if (selectedMarker) {
+        const ref = markerRefs.current[selectedMarker.id];
         if (ref) {
-          ref.hideCallout(); // iOS selection behavior
+          ref.showCallout(); // iOS selection behavior
         }
-      });
-    }
+      }
+    };
+    calloutMarker();
+
+    // Avoid bug on iOS for selection propagation to different marker
+    setTimeout(() => {
+      calloutMarker();
+    }, 500);
   }, [selectedMarker]);
 
   const fitMapToMarkers = (markers: Coordinates[]) => {
@@ -120,7 +122,7 @@ export const MapView = () => {
               }}
               pinColor="blue"
               zIndex={5}
-              onSelect={() => handleMarkerSelect(() => goToDestination(d.id))}
+              onPress={() => handleMarkerSelect(() => goToDestination(d.id))}
             />
           ))}
 
@@ -134,7 +136,7 @@ export const MapView = () => {
                 ref={(ref) => {
                   markerRefs.current[a.placeId] = ref;
                 }}
-                onSelect={() => handleMarkerSelect(() => goToPlace(a.placeId))}
+                onPress={() => handleMarkerSelect(() => goToPlace(a.placeId))}
                 coordinate={{
                   latitude: a.coordinates.lat,
                   longitude: a.coordinates.lng,

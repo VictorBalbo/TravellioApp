@@ -3,7 +3,7 @@ import { getThemeProperty, useDebounce, useThemeColor } from "@/hooks";
 import { AutoComplete } from "@/models";
 import { MapService } from "@/services";
 import { useRef, useState } from "react";
-import { ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { Keyboard, ScrollView, StyleSheet, TextInput, View } from "react-native";
 import { Region } from "react-native-maps";
 import { HorizontalDivider } from "./HorizontalDivider";
 import { PressableView } from "./PressableView";
@@ -22,7 +22,6 @@ export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoComp
   const [input, setInput] = useState("");
   const [results, setResults] = useState<AutoComplete[]>([]);
   const abortRef = useRef<AbortController>(null);
-  const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const background = useThemeColor("background");
   const border = useThemeColor("border");
@@ -60,14 +59,10 @@ export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoComp
   };
 
   const handleSelect = (item: AutoComplete) => {
-    if (dismissTimer.current) clearTimeout(dismissTimer.current);
+    Keyboard.dismiss();
     setInput(item.mainText ?? "");
     setResults([]);
     onSelect(item);
-  };
-
-  const handleBlur = () => {
-    dismissTimer.current = setTimeout(() => setResults([]), 150);
   };
 
   const renderHighlighted = (item: AutoComplete) => {
@@ -88,13 +83,14 @@ export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoComp
   };
 
   return (
-    <View style={styles.wrapper} onBlur={handleBlur}>
+    <View style={styles.wrapper}>
       <TextInput
         value={input}
         onChangeText={handleChangeText}
         placeholder={placeholder}
         placeholderTextColor={placeholder_color}
         style={[styles.input, { backgroundColor: background, borderColor: border, color: text }]}
+        clearButtonMode="always"
       />
       {results.length > 0 && (
         <ScrollView style={[styles.list, { backgroundColor: background }]} keyboardShouldPersistTaps={"always"}>

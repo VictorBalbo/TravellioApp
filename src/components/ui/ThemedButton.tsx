@@ -65,7 +65,7 @@ export const ThemedButton = ({
   if (round) {
     return (
       <PressableView onPress={onPress} style={{ alignItems: "center", gap: smallSpacing }}>
-        <ThemedView style={[style, styles.buttonContainer, round ? styles.round : {}, { backgroundColor }]}>
+        <ThemedView style={[style, styles.buttonContainer, styles.round, { backgroundColor }]}>
           {renderIcon}
           {renderImage}
         </ThemedView>
@@ -79,10 +79,7 @@ export const ThemedButton = ({
   }
 
   return (
-    <PressableView
-      onPress={onPress}
-      style={[style, styles.buttonContainer, round ? styles.round : {}, { backgroundColor }]}
-    >
+    <PressableView onPress={onPress} style={[styles.buttonContainer, style, { backgroundColor }]}>
       {renderIcon}
       {renderImage}
       {title && (

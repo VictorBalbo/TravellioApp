@@ -1,5 +1,5 @@
 import { ActivitiesItinerary, ArrivalDepartureOverview, HeroView } from "@/components";
-import { CardView, Collapsable, IconTitleValue, TextType, ThemedText, ThemedView } from "@/components/ui";
+import { CardView, Collapsable, IconTitleValue, SectionTitle, TextType, ThemedText, ThemedView } from "@/components/ui";
 import { dateDiff, displayDate, sanitizeUrl } from "@/helpers";
 import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
 import { Place } from "@/models";
@@ -18,8 +18,8 @@ export default function DestinationOverview() {
   const [place, setPlace] = useState<Place>();
 
   const destination = useMemo(() => destinations?.find((d) => d.id === destinationId), [destinationId, destinations]);
-  const accommodations = destination?.accommodations;
-  const activities = destination?.activities;
+  const accommodations = destination?.accommodations ?? [];
+  const activities = destination?.activities ?? [];
 
   const arrival = useMemo(
     () => transportations?.find((t) => destination?.id === t.arrivalDestinationId),
@@ -75,57 +75,62 @@ export default function DestinationOverview() {
 
       <ThemedView style={styles.body}>
         {/* Accommodations */}
-        {(accommodations?.length ?? 0) > 0 && (
-          <ThemedView style={styles.sectionTitle}>
-            <IconTitleValue icon="bed" value={t("yourStay")} valueType={TextType.Title} />
-            {accommodations?.length &&
-              accommodations.map((a) => (
-                <CardView key={a.id}>
-                  <Collapsable
-                    header={
-                      <ThemedView style={{}}>
+        <ThemedView style={styles.sectionTitle}>
+          <SectionTitle icon="bed" value={t("yourStay")} valueType={TextType.Title} />
+          {accommodations.length === 0 && (
+            <CardView style={styles.notInTripContainer}>
+              <ThemedText type={TextType.Body} style={styles.textCenter}>
+                {t("noAccommodation")}
+              </ThemedText>
+            </CardView>
+          )}
+          {accommodations.length > 0 &&
+            accommodations.map((a) => (
+              <CardView key={a.id}>
+                <Collapsable
+                  header={
+                    <ThemedView style={{}}>
+                      <IconTitleValue
+                        icon="bed"
+                        value={a.name}
+                        displayTitleAfterText
+                        valueType={TextType.Headline}
+                        title={
+                          a.checkIn &&
+                          a.checkOut &&
+                          `${dateDiff(a.checkOut, a.checkIn) + 1} ${t("night", { count: dateDiff(a.checkOut, a.checkIn) + 1 })} · ` +
+                            `${displayDate(a.checkIn, "DD MMM")}  -  ${displayDate(a.checkOut, "DD MMM")}`
+                        }
+                      />
+                    </ThemedView>
+                  }
+                  body={
+                    <ThemedView style={styles.mediumSpacingGap}>
+                      <ThemedView style={styles.inlineInfo}>
                         <IconTitleValue
-                          icon="bed"
-                          value={a.name}
-                          displayTitleAfterText
-                          valueType={TextType.Headline}
-                          title={
-                            a.checkIn &&
-                            a.checkOut &&
-                            `${dateDiff(a.checkOut, a.checkIn) + 1} ${t("night", { count: dateDiff(a.checkOut, a.checkIn) + 1 })} · ` +
-                              `${displayDate(a.checkIn, "DD MMM")}  -  ${displayDate(a.checkOut, "DD MMM")}`
-                          }
+                          value={(a.checkIn && displayDate(a.checkIn, "DD MMM HH:mm")) ?? ""}
+                          title={t("checkIn")}
+                        />
+                        <IconTitleValue
+                          value={(a.checkOut && displayDate(a.checkOut, "DD MMM HH:mm")) ?? ""}
+                          title={t("checkOut")}
                         />
                       </ThemedView>
-                    }
-                    body={
-                      <ThemedView style={styles.mediumSpacingGap}>
-                        <ThemedView style={styles.inlineInfo}>
-                          <IconTitleValue
-                            value={(a.checkIn && displayDate(a.checkIn, "DD MMM HH:mm")) ?? ""}
-                            title={t("checkIn")}
-                          />
-                          <IconTitleValue
-                            value={(a.checkOut && displayDate(a.checkOut, "DD MMM HH:mm")) ?? ""}
-                            title={t("checkOut")}
-                          />
-                        </ThemedView>
-                        {a.address && <IconTitleValue value={a.address} title={t("address")} />}
-                        {a.website && (
-                          <IconTitleValue url={a.website} value={sanitizeUrl(a.website)} title={t("reservation")} />
-                        )}
-                        {a.notes && <IconTitleValue value={a.notes} title={t("notes")} />}
-                      </ThemedView>
-                    }
-                  />
-                </CardView>
-              ))}
-          </ThemedView>
-        )}
+                      {a.address && <IconTitleValue value={a.address} title={t("address")} />}
+                      {a.website && (
+                        <IconTitleValue url={a.website} value={sanitizeUrl(a.website)} title={t("reservation")} />
+                      )}
+                      {a.notes && <IconTitleValue value={a.notes} title={t("notes")} />}
+                    </ThemedView>
+                  }
+                />
+              </CardView>
+            ))}
+        </ThemedView>
 
-        {/* Arrival */}
+        {/* Transit */}
         <ThemedView style={styles.sectionTitle}>
-          <IconTitleValue icon="plane" value={t("transit")} valueType={TextType.Title} />
+          <SectionTitle icon="plane" value={t("transit")} valueType={TextType.Title} />
           {destination && arrival && (
             <ArrivalDepartureOverview destination={destination} transportation={arrival} type="arrival" />
           )}
@@ -133,12 +138,27 @@ export default function DestinationOverview() {
           {destination && departure && (
             <ArrivalDepartureOverview destination={destination} transportation={departure} type="departure" />
           )}
+          {!destination ||
+            (!arrival && !departure && (
+              <CardView style={styles.notInTripContainer}>
+                <ThemedText type={TextType.Body} style={styles.textCenter}>
+                  {t("noTransit")}
+                </ThemedText>
+              </CardView>
+            ))}
         </ThemedView>
 
         {/* Activities */}
         <ThemedView style={styles.sectionTitle}>
-          <IconTitleValue icon="map" value={t("activities")} valueType={TextType.Title} />
-          {activities && <ActivitiesItinerary activities={activities} />}
+          <SectionTitle icon="map" value={t("activities")} valueType={TextType.Title} />
+          {activities.length === 0 && (
+            <CardView style={styles.notInTripContainer}>
+              <ThemedText type={TextType.Body} style={styles.textCenter}>
+                {t("noActivities")}
+              </ThemedText>
+            </CardView>
+          )}
+          {activities.length > 0 && <ActivitiesItinerary activities={activities} />}
         </ThemedView>
       </ThemedView>
     </HeroView>
@@ -165,5 +185,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: mediumSpacing,
     alignItems: "center",
+  },
+  notInTripContainer: {
+    borderWidth: 1,
+    borderStyle: "dashed",
+    gap: mediumSpacing,
+  },
+  textCenter: {
+    textAlign: "center",
   },
 });

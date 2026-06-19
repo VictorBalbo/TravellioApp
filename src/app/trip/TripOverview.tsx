@@ -35,8 +35,8 @@ export default function TripOverview() {
                 </ThemedText>
               </ThemedView>
               <ThemedView style={styles.destinationActivities}>
-                <ThemedText type={TextType.Headline}>{d.activitiesCount ?? 0}</ThemedText>
-                <ThemedText type={TextType.Caption}>{t("activity", { count: d.activitiesCount ?? 0 })}</ThemedText>
+                <ThemedText type={TextType.Headline}>{d.activities?.length ?? 0}</ThemedText>
+                <ThemedText type={TextType.Caption}>{t("activity", { count: d.activities?.length ?? 0 })}</ThemedText>
               </ThemedView>
               <ThemedView style={styles.destinationNights}>
                 <ThemedText type={TextType.Headline}>{utcDate(d.endDate).diff(d.startDate, "days")}</ThemedText>

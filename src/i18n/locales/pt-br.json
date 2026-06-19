@@ -48,6 +48,9 @@
   "opensAt": "Abre às",
   "closesAt": "Fecha às",
   "yourTrip": "Sua Viagem",
+  "noAccommodation": "Ainda não há acomodação para este destino",
+  "noTransit": "Ainda não há chegada ou saída para este destino",
+  "noActivities": "Ainda não há atividades para este destino",
   "notInTripYet": "Ainda não está na sua viagem",
   "scheduledFor": "Agendado para",
   "purchased": "Comprado",
@@ -63,6 +66,7 @@
   "Thursday": "Quinta Feira",
   "Friday": "Sexta Feira",
   "Saturday": "Sábado",
-  "Sunday": "Domingo"
+  "Sunday": "Domingo",
+  "unscheduled": "Não agendado"
   
 }

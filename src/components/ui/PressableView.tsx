@@ -51,7 +51,7 @@ export const PressableView = ({ onPress, style, children }: PressableViewProps) 
   };
 
   return (
-    <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut} onPress={onPress} style={styles.container}>
+    <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut} onPress={onPress}>
       <Animated.View
         style={[
           style,
@@ -67,8 +67,4 @@ export const PressableView = ({ onPress, style, children }: PressableViewProps) 
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+const styles = StyleSheet.create({});

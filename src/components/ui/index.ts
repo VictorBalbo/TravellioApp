@@ -6,7 +6,7 @@ export { Collapsable } from "./Collapsable";
 export { ExternalLink } from "./ExternalLink";
 export { HorizontalDivider } from "./HorizontalDivider";
 export { Icon, IconSymbols } from "./Icon";
-export { IconTitleValue } from "./IconTitleValue";
+export { IconCaptionText } from "./IconCaptionText";
 export { PressableView } from "./PressableView";
 export { SectionTitle } from "./SectionTitle";
 export { Tag } from "./Tag";

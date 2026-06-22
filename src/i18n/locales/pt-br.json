@@ -8,7 +8,6 @@
   "accommodation_other": "Acomodações",
   "yourStay": "Sua Estadia",
   "transit": "Transito",
-  "sdfsdfsdf": "Transito",
   "arrivalAt": "Chegada às",
   "departureAt": "Saída às",
   "transportation": {
@@ -60,13 +59,14 @@
   "price": "Preço",
   "required": "Necessário",
   "notRequired": "Não Necessário",
-  "Monday": "Segunda Feira",
-  "Tuesday": "Terça Feira",
-  "Wednesday": "Quarta Feira",
-  "Thursday": "Quinta Feira",
-  "Friday": "Sexta Feira",
-  "Saturday": "Sábado",
-  "Sunday": "Domingo",
+  "weekday": {
+    "monday": "Segunda Feira",
+    "tuesday": "Terça Feira",
+    "wednesday": "Quarta Feira",
+    "thursday": "Quinta Feira",
+    "friday": "Sexta Feira",
+    "saturday": "Sábado",
+    "sunday": "Domingo"
+  },
   "unscheduled": "Não agendado"
-  
 }

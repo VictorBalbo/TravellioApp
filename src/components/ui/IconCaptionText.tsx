@@ -5,49 +5,41 @@ import { Icon, IconSymbols } from "./Icon";
 import { TextType, ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 
-interface IconTitleValueProps {
+interface IconCaptionTextProps {
   icon?: keyof IconSymbols;
-  title?: string;
+  caption?: string;
   url?: string;
-  value: string;
-  valueType?: TextType;
-  displayTitleAfterText?: boolean;
+  text: string;
+  textType?: TextType;
+  invertCaptionText?: boolean;
   alignText?: "center" | "left" | "right";
-  spaceTitleValue?: boolean;
   containerStyle?: ViewStyle;
 }
 
-export const IconTitleValue = ({
+export const IconCaptionText = ({
   icon,
-  title,
+  caption,
   url,
-  value,
-  valueType = TextType.Body,
-  displayTitleAfterText,
+  text,
+  textType = TextType.Body,
+  invertCaptionText,
   alignText = "left",
-  spaceTitleValue = false,
   containerStyle,
-}: IconTitleValueProps) => {
-  const capitionColor = useThemeColor("placeholder");
+}: IconCaptionTextProps) => {
+  const iconColor = useThemeColor("caption");
   return (
     <ThemedView style={[styles.container, containerStyle]}>
-      {icon && <Icon name={icon} color={capitionColor} />}
-      <ThemedView
-        style={[
-          styles.titleValue,
-          displayTitleAfterText ? { flexDirection: "column-reverse" } : {},
-          spaceTitleValue ? { gap: smallSpacing } : {},
-        ]}
-      >
-        {title && (
+      {icon && <Icon name={icon} color={iconColor} />}
+      <ThemedView style={[styles.titleValue, invertCaptionText ? { flexDirection: "column-reverse" } : {}]}>
+        {caption && (
           <ThemedText type={TextType.Caption} style={{ textAlign: alignText }} numberOfLines={2}>
-            {title}
+            {caption}
           </ThemedText>
         )}
-        {url && <ExternalLink href={url} displayText={value} numberOfLines={1} style={{ textAlign: alignText }} />}
+        {url && <ExternalLink href={url} displayText={text} numberOfLines={1} style={{ textAlign: alignText }} />}
         {!url && (
-          <ThemedText type={valueType} numberOfLines={1} selectable style={{ textAlign: alignText }}>
-            {value}
+          <ThemedText type={textType} numberOfLines={1} selectable style={{ textAlign: alignText }}>
+            {text}
           </ThemedText>
         )}
       </ThemedView>
@@ -55,7 +47,6 @@ export const IconTitleValue = ({
   );
 };
 
-const smallSpacing = getThemeProperty("smallSpacing");
 const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
   container: {
@@ -69,5 +60,3 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
 });
-
-export default IconTitleValue;

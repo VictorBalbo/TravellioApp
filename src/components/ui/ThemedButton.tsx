@@ -9,6 +9,7 @@ import { ThemedView } from "./ThemedView";
 export enum ButtonType {
   Primary = "primary",
   Secondary = "secondary",
+  Tertiary = "tertiary",
   Delete = "delete",
 }
 
@@ -37,13 +38,17 @@ export const ThemedButton = ({
   round = false,
 }: TitleButtonProps | IconButtonProps) => {
   const backgroundAccent = useThemeColor("backgroundAccent");
+  const activeTint = useThemeColor("link");
 
   let backgroundColor;
   let textColor;
   switch (type) {
     case ButtonType.Secondary:
       backgroundColor = backgroundAccent;
-      textColor = Colors.white;
+      textColor = activeTint;
+      break;
+    case ButtonType.Tertiary:
+      textColor = activeTint;
       break;
     case ButtonType.Delete:
       backgroundColor = Colors.red;

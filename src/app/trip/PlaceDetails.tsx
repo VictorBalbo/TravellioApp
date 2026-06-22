@@ -7,8 +7,8 @@ import {
   ExternalLink,
   HorizontalDivider,
   Icon,
+  IconCaptionText,
   IconSymbols,
-  IconTitleValue,
   TextType,
   ThemedButton,
   ThemedText,
@@ -199,41 +199,41 @@ export default function PlaceDetails() {
           )}
         </ThemedView>
         <ThemedView style={styles.titleCardContainer}>
-          <IconTitleValue value={t("yourTrip")} icon="pin" valueType={TextType.Title} />
+          <IconCaptionText text={t("yourTrip")} icon="pin" textType={TextType.Title} />
           {activity && (
             <CardView style={styles.infoCard}>
-              <IconTitleValue
+              <IconCaptionText
                 icon="calendar"
-                title={t("scheduledFor")}
-                value={activity.scheduledAt ? displayDate(activity.scheduledAt, "ddd DD MMM • HH:mm") : " - "}
+                caption={t("scheduledFor")}
+                text={activity.scheduledAt ? displayDate(activity.scheduledAt, "ddd DD MMM • HH:mm") : " - "}
               />
               {activity.ticketRequired !== undefined && (
                 <Fragment>
                   <HorizontalDivider />
-                  <IconTitleValue
+                  <IconCaptionText
                     icon="calendar"
-                    title={t("isTicketRequired")}
-                    value={activity.ticketRequired ? t("required") : t("notRequired")}
+                    caption={t("isTicketRequired")}
+                    text={activity.ticketRequired ? t("required") : t("notRequired")}
                   />
                 </Fragment>
               )}
               {activity.ticketRequired === true && (
                 <Fragment>
                   <HorizontalDivider />
-                  <IconTitleValue
+                  <IconCaptionText
                     icon="calendar"
-                    title={t("isTicketBought")}
-                    value={activity.ticketPurchased ? t("purchased") : t("notPurchased")}
+                    caption={t("isTicketBought")}
+                    text={activity.ticketPurchased ? t("purchased") : t("notPurchased")}
                   />
                 </Fragment>
               )}
               <HorizontalDivider />
-              <IconTitleValue icon="price" title={t("price")} value={activity.price?.value.toFixed(2) ?? " - "} />
+              <IconCaptionText icon="price" caption={t("price")} text={activity.price?.value.toFixed(2) ?? " - "} />
             </CardView>
           )}
           {!(activity || destination) && (
             <CardView style={styles.notInTripContainer}>
-              <IconTitleValue icon="pin" value={t("notInTripYet")} valueType={TextType.Headline} />
+              <IconCaptionText icon="pin" text={t("notInTripYet")} textType={TextType.Headline} />
               <ThemedButton
                 onPress={() => {}}
                 title={t("add")}
@@ -245,12 +245,12 @@ export default function PlaceDetails() {
         </ThemedView>
 
         <ThemedView style={styles.titleCardContainer}>
-          <IconTitleValue value={t("details")} icon="info" valueType={TextType.Title} />
+          <IconCaptionText text={t("details")} icon="info" textType={TextType.Title} />
           {(place.address || place.phoneNumber || place.website) && (
             <CardView style={styles.infoCard}>
               {place.address && (
                 <ThemedView>
-                  <IconTitleValue icon="map" value={t("address")} valueType={TextType.Headline} />
+                  <IconCaptionText icon="map" text={t("address")} textType={TextType.Headline} />
                   {place.mapsUrl && <ExternalLink href={place.mapsUrl} displayText={place.address} />}
                   {!place.mapsUrl && <ThemedText>{place.address}</ThemedText>}
                 </ThemedView>
@@ -261,7 +261,7 @@ export default function PlaceDetails() {
                   <Collapsable
                     header={
                       <ThemedView>
-                        <IconTitleValue icon="clock" value={t("openingHours")} valueType={TextType.Headline} />
+                        <IconCaptionText icon="clock" text={t("openingHours")} textType={TextType.Headline} />
                         <ThemedView style={styles.inlineInfo}>
                           {placeOpenStatus?.isOpen === true && (
                             <ThemedText color={Colors.green}>{t("openNow")}</ThemedText>
@@ -281,7 +281,9 @@ export default function PlaceDetails() {
                     }
                     body={place.openingHours.weekday_text.map((d) => (
                       <ThemedView key={d} style={[styles.inlineInfo, { justifyContent: "space-between" }]}>
-                        <ThemedText type={TextType.Footnote}>{t(d.split(": ")[0])}</ThemedText>
+                        <ThemedText type={TextType.Footnote}>
+                          {t("weekday." + d.split(": ")[0].toLowerCase())}
+                        </ThemedText>
                         <ThemedText type={TextType.Footnote}>{d.split(": ")[1]}</ThemedText>
                       </ThemedView>
                     ))}
@@ -291,14 +293,14 @@ export default function PlaceDetails() {
               {place.openingHours && (place.website || place.phoneNumber) && <HorizontalDivider />}
               {place.phoneNumber && (
                 <ThemedView>
-                  <IconTitleValue icon="phone" value={t("phone")} valueType={TextType.Headline} />
+                  <IconCaptionText icon="phone" text={t("phone")} textType={TextType.Headline} />
                   <ExternalLink href={`tel:${place.phoneNumber}`} displayText={place.phoneNumber} />
                 </ThemedView>
               )}
               {place.phoneNumber && place.website && <HorizontalDivider />}
               {place.website && (
                 <ThemedView>
-                  <IconTitleValue icon="globe" value={t("website")} valueType={TextType.Headline} />
+                  <IconCaptionText icon="globe" text={t("website")} textType={TextType.Headline} />
                   <ExternalLink href={place.website} displayText={sanitizeUrl(place.website)} />
                 </ThemedView>
               )}
@@ -308,7 +310,7 @@ export default function PlaceDetails() {
 
         {place.description && (
           <ThemedView style={styles.titleCardContainer}>
-            <IconTitleValue value={t("about")} icon="book" valueType={TextType.Title} />
+            <IconCaptionText text={t("about")} icon="book" textType={TextType.Title} />
             {place.description && <CardSeeMore numberOfLines={4} content={place.description} />}
           </ThemedView>
         )}

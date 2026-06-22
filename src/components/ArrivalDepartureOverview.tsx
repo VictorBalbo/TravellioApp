@@ -10,8 +10,8 @@ import {
   Collapsable,
   HorizontalDivider,
   Icon,
+  IconCaptionText,
   IconSymbols,
-  IconTitleValue,
   Tag,
   TextType,
   ThemedText,
@@ -52,7 +52,7 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
             <ThemedView>
               <ThemedView style={styles.inlineInfo}>
                 <ThemedText type={TextType.Headline}>
-                  {t(type === "arrival" ? "arrivalAt" : "departureAt")}{" "}
+                  {type === "arrival" ? t("arrivalAt") : t("departureAt")}{" "}
                   {relevantTime && displayDate(relevantTime, "HH:mm")}
                 </ThemedText>
                 <ThemedText type={TextType.Caption}>
@@ -81,17 +81,19 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
 
             {/* Departure and Arrival Info */}
             <ThemedView style={[styles.inlineInfo, styles.placeNames]}>
-              <IconTitleValue
-                title={leg.departurePlaceDescription}
-                value={leg.departurePlaceShortName}
-                valueType={TextType.Title}
-                displayTitleAfterText
+              <IconCaptionText
+                caption={leg.departurePlaceDescription}
+                text={leg.departurePlaceShortName}
+                textType={TextType.Title}
+                invertCaptionText
+                containerStyle={{ flex: 1 }}
               />
-              <IconTitleValue
-                title={leg.arrivalPlaceDescription}
-                value={leg.arrivalPlaceShortName}
-                valueType={TextType.Title}
-                displayTitleAfterText
+              <IconCaptionText
+                caption={leg.arrivalPlaceDescription}
+                text={leg.arrivalPlaceShortName}
+                textType={TextType.Title}
+                invertCaptionText
+                containerStyle={{ flex: 1 }}
                 alignText="right"
               />
             </ThemedView>
@@ -99,10 +101,10 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
             {/* Departure and Arrival Times with Duration */}
             {(leg.departureTime || leg.arrivalTime) && (
               <ThemedView style={styles.inlineInfo}>
-                <IconTitleValue
-                  title={leg.departureTime && displayDate(leg.departureTime, "ddd DD MMM")}
-                  value={(leg.departureTime && displayDate(leg.departureTime, "HH:mm")) ?? ""}
-                  valueType={TextType.Headline}
+                <IconCaptionText
+                  caption={leg.departureTime && displayDate(leg.departureTime, "ddd DD MMM")}
+                  text={(leg.departureTime && displayDate(leg.departureTime, "HH:mm")) ?? ""}
+                  textType={TextType.Headline}
                 />
                 {leg.departureTime && leg.arrivalTime && (
                   <Fragment>
@@ -114,10 +116,10 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
                     <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
                   </Fragment>
                 )}
-                <IconTitleValue
-                  title={leg.arrivalTime && displayDate(leg.arrivalTime, "ddd DD MMM")}
-                  value={(leg.arrivalTime && displayDate(leg.arrivalTime, "HH:mm")) ?? ""}
-                  valueType={TextType.Headline}
+                <IconCaptionText
+                  caption={leg.arrivalTime && displayDate(leg.arrivalTime, "ddd DD MMM")}
+                  text={(leg.arrivalTime && displayDate(leg.arrivalTime, "HH:mm")) ?? ""}
+                  textType={TextType.Headline}
                   alignText="right"
                 />
               </ThemedView>
@@ -125,17 +127,17 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
 
             {/* Company and Service Number */}
             <ThemedView style={styles.inlineInfo}>
-              <IconTitleValue value={leg.company ?? " - "} title={t("transportation.company")} />
-              <IconTitleValue
-                value={leg.serviceNumber ?? " - "}
-                title={t(`transportation.serviceNumber.${leg.type.toLowerCase()}`)}
+              <IconCaptionText text={leg.company ?? " - "} caption={t("transportation.company")} />
+              <IconCaptionText
+                text={leg.serviceNumber ?? " - "}
+                caption={t(`transportation.serviceNumber.${leg.type.toLowerCase()}`)}
               />
             </ThemedView>
 
             {/* Seat and Reservation */}
             <ThemedView style={styles.inlineInfo}>
-              <IconTitleValue value={leg.seat ?? " - "} title={t("transportation.seat")} />
-              <IconTitleValue value={leg.reservation ?? " - "} title={t("reservation")} />
+              <IconCaptionText text={leg.seat ?? " - "} caption={t("transportation.seat")} />
+              <IconCaptionText text={leg.reservation ?? " - "} caption={t("reservation")} />
             </ThemedView>
 
             {/* Connection Time */}

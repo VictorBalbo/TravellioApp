@@ -1,5 +1,13 @@
 import { ActivitiesItinerary, ArrivalDepartureOverview, HeroView } from "@/components";
-import { CardView, Collapsable, IconTitleValue, SectionTitle, TextType, ThemedText, ThemedView } from "@/components/ui";
+import {
+  CardView,
+  Collapsable,
+  IconCaptionText,
+  SectionTitle,
+  TextType,
+  ThemedText,
+  ThemedView,
+} from "@/components/ui";
 import { dateDiff, displayDate, sanitizeUrl } from "@/helpers";
 import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
 import { Place } from "@/models";
@@ -42,7 +50,6 @@ export default function DestinationOverview() {
       }
       try {
         const responsePlace = await MapService.getPlaceDetails(destination.placeId as string);
-        console.log("fetich destination");
         setPlace(responsePlace);
       } catch (e) {
         console.error(e);
@@ -76,7 +83,7 @@ export default function DestinationOverview() {
       <ThemedView style={styles.body}>
         {/* Accommodations */}
         <ThemedView style={styles.sectionTitle}>
-          <SectionTitle icon="bed" value={t("yourStay")} valueType={TextType.Title} />
+          <SectionTitle value={t("yourStay")} valueType={TextType.Title} />
           {accommodations.length === 0 && (
             <CardView style={styles.notInTripContainer}>
               <ThemedText type={TextType.Body} style={styles.textCenter}>
@@ -89,13 +96,13 @@ export default function DestinationOverview() {
               <CardView key={a.id}>
                 <Collapsable
                   header={
-                    <ThemedView style={{}}>
-                      <IconTitleValue
+                    <ThemedView>
+                      <IconCaptionText
                         icon="bed"
-                        value={a.name}
-                        displayTitleAfterText
-                        valueType={TextType.Headline}
-                        title={
+                        text={a.name}
+                        invertCaptionText
+                        textType={TextType.Headline}
+                        caption={
                           a.checkIn &&
                           a.checkOut &&
                           `${dateDiff(a.checkOut, a.checkIn) + 1} ${t("night", { count: dateDiff(a.checkOut, a.checkIn) + 1 })} · ` +
@@ -107,20 +114,20 @@ export default function DestinationOverview() {
                   body={
                     <ThemedView style={styles.mediumSpacingGap}>
                       <ThemedView style={styles.inlineInfo}>
-                        <IconTitleValue
-                          value={(a.checkIn && displayDate(a.checkIn, "DD MMM HH:mm")) ?? ""}
-                          title={t("checkIn")}
+                        <IconCaptionText
+                          text={(a.checkIn && displayDate(a.checkIn, "DD MMM HH:mm")) ?? ""}
+                          caption={t("checkIn")}
                         />
-                        <IconTitleValue
-                          value={(a.checkOut && displayDate(a.checkOut, "DD MMM HH:mm")) ?? ""}
-                          title={t("checkOut")}
+                        <IconCaptionText
+                          text={(a.checkOut && displayDate(a.checkOut, "DD MMM HH:mm")) ?? ""}
+                          caption={t("checkOut")}
                         />
                       </ThemedView>
-                      {a.address && <IconTitleValue value={a.address} title={t("address")} />}
+                      {a.address && <IconCaptionText text={a.address} caption={t("address")} />}
                       {a.website && (
-                        <IconTitleValue url={a.website} value={sanitizeUrl(a.website)} title={t("reservation")} />
+                        <IconCaptionText url={a.website} text={sanitizeUrl(a.website)} caption={t("reservation")} />
                       )}
-                      {a.notes && <IconTitleValue value={a.notes} title={t("notes")} />}
+                      {a.notes && <IconCaptionText text={a.notes} caption={t("notes")} />}
                     </ThemedView>
                   }
                 />
@@ -130,7 +137,7 @@ export default function DestinationOverview() {
 
         {/* Transit */}
         <ThemedView style={styles.sectionTitle}>
-          <SectionTitle icon="plane" value={t("transit")} valueType={TextType.Title} />
+          <SectionTitle value={t("transit")} valueType={TextType.Title} />
           {destination && arrival && (
             <ArrivalDepartureOverview destination={destination} transportation={arrival} type="arrival" />
           )}

@@ -6,12 +6,7 @@ export type ThemedViewProps = ViewProps & {
   background?: boolean;
 };
 
-export function ThemedView({
-  style,
-  softBackground,
-  background,
-  ...otherProps
-}: ThemedViewProps) {
+export function ThemedView({ style, softBackground, background, ...otherProps }: ThemedViewProps) {
   let backgroundColor;
   const defaultBackgroundColor = useThemeColor("background");
   const defaultBackgroundSoftColor = useThemeColor("backgroundSoft");

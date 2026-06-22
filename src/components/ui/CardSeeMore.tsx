@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { CardView } from "./CardView";
 import { IconSymbols } from "./Icon";
-import { IconTitleValue } from "./IconTitleValue";
+import { IconCaptionText } from "./IconCaptionText";
 import { TextType, ThemedText } from "./ThemedText";
 
 type Props = {
@@ -27,7 +27,7 @@ export function CardSeeMore({ content, header, icon, numberOfLines = 3 }: Props)
       >
         {content}
       </ThemedText>
-      {header && <IconTitleValue icon={icon} value={header} valueType={TextType.Title} />}
+      {header && <IconCaptionText icon={icon} text={header} textType={TextType.Title} />}
       <ThemedText numberOfLines={expanded ? undefined : numberOfLines}>{content}</ThemedText>
       {exceedsLimit && (
         <Pressable onPress={() => setExpanded((v) => !v)}>

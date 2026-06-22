@@ -28,11 +28,11 @@ npm run lint       # ESLint
 
 All variables are prefixed `EXPO_PUBLIC_` and defined in `.env.local`:
 
-| Variable | Purpose |
-|---|---|
-| `EXPO_PUBLIC_TRIP_JSON` | Full trip JSON blob used for local development (loaded by `TripProvider` on mount) |
-| `EXPO_PUBLIC_API_URL` | Backend API base URL (e.g. `http://192.168.x.x:5000/api`) |
-| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Google Maps API key |
+| Variable                          | Purpose                                                                            |
+| --------------------------------- | ---------------------------------------------------------------------------------- |
+| `EXPO_PUBLIC_TRIP_JSON`           | Full trip JSON blob used for local development (loaded by `TripProvider` on mount) |
+| `EXPO_PUBLIC_API_URL`             | Backend API base URL (e.g. `http://192.168.x.x:5000/api`)                          |
+| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Google Maps API key                                                                |
 
 ## Project structure
 
@@ -83,6 +83,7 @@ src/
 ### Trip tab layout
 
 The `/trip` route wraps all sub-screens in a shared layout (`trip/_layout.tsx`) that provides:
+
 1. A fullscreen `MapView` behind everything
 2. A `BottomSheet` (snap points 20 % / 50 % / 93 %) whose scroll view renders the current `<Slot />`
 3. Three React context providers: `InternalRouteProvider` → `MapProvider` → `TripProvider`
@@ -97,12 +98,12 @@ Navigation within the trip tab goes through `useInternalRouterContext` (`goToDes
 
 ### Map markers
 
-| Color | Type |
-|---|---|
-| Blue | Destination cities |
+| Color        | Type                                                  |
+| ------------ | ----------------------------------------------------- |
+| Blue         | Destination cities                                    |
 | Red / Orange | Activities (orange if category contains "Restaurant") |
-| Green | Accommodations |
-| Orange pin | Newly searched place (not yet in trip) |
+| Green        | Accommodations                                        |
+| Orange pin   | Newly searched place (not yet in trip)                |
 
 Activity and accommodation markers are only shown when a destination is focused (`focusedDestinationId` is set).
 
@@ -124,26 +125,27 @@ Place details (coordinates, address, images, opening hours, etc.) are fetched on
 
 All components are theme-aware via `useThemeColor` / `getThemeProperty`.
 
-| Component | Purpose |
-|---|---|
-| `ThemedView` | Base view with optional `background` prop for background fill |
-| `ThemedText` | Text with `TextType` variant (Display, Title, Headline, Caption, Footnote) |
-| `ThemedButton` | Button with `ButtonType` (Primary/Secondary) and optional icon; supports `round` pill shape |
-| `CardView` | Rounded card with background accent fill |
-| `Collapsable` | Expand/collapse container with `header` and `body` slots |
-| `CardSeeMore` | Text with a "see more / see less" toggle (uses `numberOfLines`) |
-| `IconTitleValue` | Icon + stacked title + value layout used throughout detail screens |
-| `Icon` | Symbol icon mapped by name string (see `IconSymbols` type) |
-| `Tag` | Pill badge |
-| `PressableView` | Touchable wrapper |
-| `HorizontalDivider` | Thin divider with optional `centerContent` |
-| `AutoCompleteInput` | Search input that calls `MapService.getAutoComplete` with debouncing and abort signal |
-| `ExternalLink` | Tappable link that opens in-app browser or system handler |
-| `CardList` | Scrollable card list |
+| Component           | Purpose                                                                                     |
+| ------------------- | ------------------------------------------------------------------------------------------- |
+| `ThemedView`        | Base view with optional `background` prop for background fill                               |
+| `ThemedText`        | Text with `TextType` variant (Display, Title, Headline, Caption, Footnote)                  |
+| `ThemedButton`      | Button with `ButtonType` (Primary/Secondary) and optional icon; supports `round` pill shape |
+| `CardView`          | Rounded card with background accent fill                                                    |
+| `Collapsable`       | Expand/collapse container with `header` and `body` slots                                    |
+| `CardSeeMore`       | Text with a "see more / see less" toggle (uses `numberOfLines`)                             |
+| `IconCaptionText`   | Icon + stacked title + value layout used throughout detail screens                          |
+| `Icon`              | Symbol icon mapped by name string (see `IconSymbols` type)                                  |
+| `Tag`               | Pill badge                                                                                  |
+| `PressableView`     | Touchable wrapper                                                                           |
+| `HorizontalDivider` | Thin divider with optional `centerContent`                                                  |
+| `AutoCompleteInput` | Search input that calls `MapService.getAutoComplete` with debouncing and abort signal       |
+| `ExternalLink`      | Tappable link that opens in-app browser or system handler                                   |
+| `CardList`          | Scrollable card list                                                                        |
 
 ## Theme system
 
 `src/constants/theme.ts` exports:
+
 - `Colors` — raw hex palette
 - `Theme` — `ThemeScheme` with `light`, `dark`, and `base` objects
 - `ColorScheme` keys: `background`, `backgroundSoft`, `backgroundAccent`, `text`, `caption`, `placeholder`, `divider`, `border`, `link`, `activeTint`, `inactiveTint`

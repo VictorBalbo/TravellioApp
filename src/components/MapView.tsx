@@ -164,6 +164,7 @@ export const MapView = () => {
       </Map>
       <SafeAreaView style={styles.searchContainer} edges={{ top: "maximum" }}>
         <AutoCompleteInput
+          placeholder="Search for a place"
           mapRegion={mapRegion}
           onSelect={(autoComplete) => {
             if (autoComplete.placeId) {

@@ -13,7 +13,7 @@ interface SectionTitleProps {
 }
 
 export const SectionTitle = ({ icon, value, valueType = TextType.Title, containerStyle }: SectionTitleProps) => {
-  const capitionColor = useThemeColor("placeholder");
+  const capitionColor = useThemeColor("caption");
   return (
     <ThemedView style={[styles.container, containerStyle]}>
       {icon && <Icon name={icon} color={capitionColor} />}
@@ -24,6 +24,7 @@ export const SectionTitle = ({ icon, value, valueType = TextType.Title, containe
       </ThemedView>
       <ThemedButton
         title="Add"
+        icon="plus"
         type={ButtonType.Secondary}
         onPress={() => console.log("click")}
         style={styles.button}

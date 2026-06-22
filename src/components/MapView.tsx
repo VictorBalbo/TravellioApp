@@ -16,7 +16,7 @@ export const MapView = () => {
   const [visibleMarkers, setVisibleMarkers] = useState<
     ("destinations" | "activities" | "accommodations" | "transportations")[]
   >(["destinations", "activities", "accommodations", "transportations"]);
-  const { goToDestination, goToPlace } = useInternalRouterContext();
+  const { goToDestination, goToPlace, goToAccommodation } = useInternalRouterContext();
   const { centeredMarkers, selectedMarker, focusedDestinationId } = useMapContext();
   const isSelectedPlaceNew = useMemo(() => {
     return (
@@ -153,6 +153,7 @@ export const MapView = () => {
               <Marker
                 tracksViewChanges={false}
                 key={a.id}
+                onPress={() => handleMarkerSelect(() => goToAccommodation(a.id))}
                 coordinate={{
                   latitude: a.coordinates.lat,
                   longitude: a.coordinates.lng,

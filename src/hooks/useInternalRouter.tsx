@@ -5,6 +5,7 @@ interface RouterContextType {
   goToTrip: (tripId?: string) => void;
   goToDestination: (destinationId?: string) => void;
   goToPlace: (placeId?: string) => void;
+  goToAccommodation: (accommodationId?: string) => void;
   currentTripId?: string;
   currentDestinationId?: string;
 }
@@ -55,8 +56,21 @@ export const InternalRouteProvider = ({ children }: InternalRouterProviderProps)
       params: { placeId },
     });
   };
+
+  const goToAccommodation = (accommodationId?: string) => {
+    if (!accommodationId || params.accommodationId === accommodationId) {
+      return;
+    }
+    console.log("goToAccommodation", accommodationId);
+    router.navigate({
+      pathname: "/trip/AccommodationDetails",
+      params: { accommodationId },
+    });
+  };
   return (
-    <RouterContext.Provider value={{ goToTrip, goToDestination, goToPlace, currentDestinationId, currentTripId }}>
+    <RouterContext.Provider
+      value={{ goToTrip, goToDestination, goToPlace, goToAccommodation, currentDestinationId, currentTripId }}
+    >
       {children}
     </RouterContext.Provider>
   );

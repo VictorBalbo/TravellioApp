@@ -15,7 +15,7 @@ import {
   ThemedView,
 } from "@/components/ui";
 import { Colors } from "@/constants/theme";
-import { displayDate, getOpenStatus, sanitizeUrl } from "@/helpers";
+import { displayDate, getCurrencySymbol, getOpenStatus, sanitizeUrl } from "@/helpers";
 import { getThemeProperty, useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
 import { Place } from "@/models";
 import { MapService } from "@/services";
@@ -228,7 +228,15 @@ export default function PlaceDetails() {
                 </Fragment>
               )}
               <HorizontalDivider />
-              <IconCaptionText icon="price" caption={t("price")} text={activity.price?.value.toFixed(2) ?? " - "} />
+              <IconCaptionText
+                icon="money"
+                caption={t("price")}
+                text={
+                  activity.price
+                    ? `${getCurrencySymbol(activity.price?.currency)} ${activity.price?.value.toFixed(2)}`
+                    : " - "
+                }
+              />
             </CardView>
           )}
           {!(activity || destination) && (

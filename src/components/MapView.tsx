@@ -153,6 +153,9 @@ export const MapView = () => {
               <Marker
                 tracksViewChanges={false}
                 key={a.id}
+                ref={(ref) => {
+                  markerRefs.current[a.placeId] = ref;
+                }}
                 onPress={() => handleMarkerSelect(() => goToAccommodation(a.id))}
                 coordinate={{
                   latitude: a.coordinates.lat,

@@ -1,6 +1,7 @@
 import { HeroView } from "@/components";
 import {
   ButtonType,
+  CardSeeMore,
   CardView,
   HorizontalDivider,
   IconCaptionText,
@@ -9,10 +10,10 @@ import {
   ThemedText,
   ThemedView,
 } from "@/components/ui";
-import { dateDiff, displayDate } from "@/helpers";
-import { getThemeProperty, useTripContext } from "@/hooks";
+import { dateDiff, displayDate, getCurrencySymbol } from "@/helpers";
+import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
 import { useLocalSearchParams } from "expo-router";
-import { Fragment, useMemo } from "react";
+import { Fragment, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
@@ -20,6 +21,7 @@ export default function AccommodationDetails() {
   const { t } = useTranslation();
   const { accommodationId } = useLocalSearchParams();
   const { accommodations } = useTripContext();
+  const { focusPlaceMarker } = useMapContext();
   const accommodation = useMemo(
     () => accommodations?.find((d) => d.id === accommodationId),
     [accommodationId, accommodations],
@@ -28,6 +30,18 @@ export default function AccommodationDetails() {
   function openBrowser(website: string | undefined): void {
     throw new Error("Function not implemented.");
   }
+
+  useEffect(() => {
+    if (!accommodation) {
+      return;
+    }
+
+    focusPlaceMarker({
+      id: accommodation.placeId,
+      coordinates: accommodation.coordinates,
+      name: accommodation.name,
+    });
+  }, [accommodation, focusPlaceMarker]);
 
   return (
     <HeroView headerImageUrl={accommodation?.imageUrl}>
@@ -61,7 +75,7 @@ export default function AccommodationDetails() {
               style={styles.actionButton}
             />
           )}
-          {accommodation?.address && (
+          {accommodation?.website && (
             <ThemedButton
               title={t("reservation")}
               icon={"globe"}
@@ -76,13 +90,13 @@ export default function AccommodationDetails() {
           <IconCaptionText text={t("yourTrip")} icon="pin" textType={TextType.Title} />
           <CardView style={styles.infoCard}>
             <IconCaptionText
-              icon="calendar"
+              icon="personArrive"
               caption={t("checkIn")}
               text={accommodation?.checkIn ? displayDate(accommodation.checkIn, "ddd DD MMM • HH:mm") : " - "}
             />
-            {accommodation?.checkIn && accommodation?.checkOut && <HorizontalDivider />}
+            <HorizontalDivider />
             <IconCaptionText
-              icon="calendar"
+              icon="personDeparture"
               caption={t("checkOut")}
               text={accommodation?.checkOut ? displayDate(accommodation.checkOut, "ddd DD MMM • HH:mm") : " - "}
             />
@@ -102,13 +116,38 @@ export default function AccommodationDetails() {
                 />
               </Fragment>
             )}
+            {accommodation?.address && (
+              <Fragment>
+                <HorizontalDivider />
+                <IconCaptionText icon="map" caption={t("address")} text={accommodation.address} textNumberOfLines={2} />
+              </Fragment>
+            )}
+            {accommodation?.price && (
+              <Fragment>
+                <HorizontalDivider />
+                <IconCaptionText
+                  icon="money"
+                  caption={t("price")}
+                  text={`${getCurrencySymbol(accommodation.price.currency)} ${accommodation.price.value.toFixed(2)}`}
+                />
+              </Fragment>
+            )}
           </CardView>
         </ThemedView>
+
+        {accommodation?.notes && (
+          <ThemedView style={styles.titleCardContainer}>
+            <IconCaptionText text={t("notes")} icon="book" textType={TextType.Title} />
+            <CardSeeMore numberOfLines={4} content={accommodation.notes} />
+          </ThemedView>
+        )}
       </ThemedView>
     </HeroView>
   );
 }
 const largeSpacing = getThemeProperty("largeSpacing");
+const mediumSpacing = getThemeProperty("mediumSpacing");
+const smallSpacing = getThemeProperty("smallSpacing");
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: largeSpacing,
@@ -126,6 +165,10 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
   },
-  titleCardContainer: {},
-  infoCard: {},
+  titleCardContainer: {
+    gap: smallSpacing,
+  },
+  infoCard: {
+    gap: mediumSpacing,
+  },
 });

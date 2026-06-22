@@ -1,15 +1,16 @@
 import { ActivitiesItinerary, ArrivalDepartureOverview, HeroView } from "@/components";
 import {
   CardView,
-  Collapsable,
+  Icon,
   IconCaptionText,
+  PressableView,
   SectionTitle,
   TextType,
   ThemedText,
   ThemedView,
 } from "@/components/ui";
-import { dateDiff, displayDate, sanitizeUrl } from "@/helpers";
-import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
+import { dateDiff, displayDate } from "@/helpers";
+import { getThemeProperty, useInternalRouterContext, useMapContext, useThemeColor, useTripContext } from "@/hooks";
 import { Place } from "@/models";
 import { MapService } from "@/services";
 import { TripService } from "@/services/TripService";
@@ -20,6 +21,7 @@ import { StyleSheet } from "react-native";
 
 export default function DestinationOverview() {
   const { t } = useTranslation();
+  const internalRouter = useInternalRouterContext();
   const { destinationId } = useLocalSearchParams();
   const { destinations, transportations } = useTripContext();
   const { focusDestinationMarkers } = useMapContext();
@@ -59,6 +61,8 @@ export default function DestinationOverview() {
     fetchPlace();
   }, [destination?.placeId, place?.id]);
 
+  const captionColor = useThemeColor("caption");
+
   return (
     <HeroView headerImageUrl={TripService.getPhotoForPlace(place?.images)}>
       <ThemedView style={styles.header}>
@@ -94,43 +98,23 @@ export default function DestinationOverview() {
           {accommodations.length > 0 &&
             accommodations.map((a) => (
               <CardView key={a.id}>
-                <Collapsable
-                  header={
-                    <ThemedView>
-                      <IconCaptionText
-                        icon="bed"
-                        text={a.name}
-                        invertCaptionText
-                        textType={TextType.Headline}
-                        caption={
-                          a.checkIn &&
-                          a.checkOut &&
-                          `${dateDiff(a.checkOut, a.checkIn) + 1} ${t("night", { count: dateDiff(a.checkOut, a.checkIn) + 1 })} · ` +
-                            `${displayDate(a.checkIn, "DD MMM")}  -  ${displayDate(a.checkOut, "DD MMM")}`
-                        }
-                      />
-                    </ThemedView>
-                  }
-                  body={
-                    <ThemedView style={styles.mediumSpacingGap}>
-                      <ThemedView style={styles.inlineInfo}>
-                        <IconCaptionText
-                          text={(a.checkIn && displayDate(a.checkIn, "DD MMM HH:mm")) ?? ""}
-                          caption={t("checkIn")}
-                        />
-                        <IconCaptionText
-                          text={(a.checkOut && displayDate(a.checkOut, "DD MMM HH:mm")) ?? ""}
-                          caption={t("checkOut")}
-                        />
-                      </ThemedView>
-                      {a.address && <IconCaptionText text={a.address} caption={t("address")} />}
-                      {a.website && (
-                        <IconCaptionText url={a.website} text={sanitizeUrl(a.website)} caption={t("reservation")} />
-                      )}
-                      {a.notes && <IconCaptionText text={a.notes} caption={t("notes")} />}
-                    </ThemedView>
-                  }
-                />
+                <PressableView onPress={() => internalRouter.goToAccommodation(a.id)}>
+                  <ThemedView style={{ flexDirection: "row", alignItems: "center" }}>
+                    <IconCaptionText
+                      icon="bed"
+                      text={a.name}
+                      invertCaptionText
+                      textType={TextType.Headline}
+                      caption={
+                        a.checkIn &&
+                        a.checkOut &&
+                        `${dateDiff(a.checkOut, a.checkIn) + 1} ${t("night", { count: dateDiff(a.checkOut, a.checkIn) + 1 })} · ` +
+                          `${displayDate(a.checkIn, "DD MMM")}  -  ${displayDate(a.checkOut, "DD MMM")}`
+                      }
+                    />
+                    <Icon name="chevronRight" size={16} color={captionColor} />
+                  </ThemedView>
+                </PressableView>
               </CardView>
             ))}
         </ThemedView>
@@ -157,7 +141,7 @@ export default function DestinationOverview() {
 
         {/* Activities */}
         <ThemedView style={styles.sectionTitle}>
-          <SectionTitle icon="map" value={t("activities")} valueType={TextType.Title} />
+          <SectionTitle icon="map" value={t("activity_other")} valueType={TextType.Title} />
           {activities.length === 0 && (
             <CardView style={styles.notInTripContainer}>
               <ThemedText type={TextType.Body} style={styles.textCenter}>

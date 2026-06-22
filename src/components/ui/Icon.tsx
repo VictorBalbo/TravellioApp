@@ -81,7 +81,9 @@ export class IconSymbols {
   book: IconSymbol = { ios: "book.fill", android: "book" };
   clock: IconSymbol = { ios: "clock.fill", android: "clock_arrow_up" };
   calendar: IconSymbol = { ios: "calendar", android: "clock_arrow_up" };
-  price: IconSymbol = { ios: "dollarsign", android: "money" };
+  personArrive: IconSymbol = { ios: "figure.walk.arrival", android: "clock_arrow_up" };
+  personDeparture: IconSymbol = { ios: "figure.walk.departure", android: "clock_arrow_up" };
+  money: IconSymbol = { ios: "dollarsign", android: "money" };
 
   // Transportations
   plane: IconSymbol = { ios: "airplane.up.forward", android: "flight" };

@@ -12,6 +12,7 @@ export interface Activity {
   price?: Price;
   website?: string;
   notes?: string;
+  type?: ActivityTypes;
   destinationId?: string;
 }
 

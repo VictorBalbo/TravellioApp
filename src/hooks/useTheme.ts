@@ -1,4 +1,4 @@
-import { BaseScheme, ColorScheme, Theme } from "@/constants/theme";
+import { ColorScheme, Theme } from "@/constants/theme";
 import { useColorScheme } from "react-native";
 
 const defaultColorScheme = "light";
@@ -6,10 +6,6 @@ const defaultColorScheme = "light";
 export function useThemeColor(propertyName: keyof ColorScheme) {
   const currentTheme = useTheme();
   return Theme[currentTheme][propertyName];
-}
-
-export function getThemeProperty(propertyName: keyof BaseScheme) {
-  return Theme.base[propertyName];
 }
 
 function useTheme() {

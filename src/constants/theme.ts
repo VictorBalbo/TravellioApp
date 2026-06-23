@@ -86,4 +86,23 @@ export const Theme: ThemeScheme = {
     borderRadius: 16,
     textSize: 16,
   },
-};
+} as const;
+
+export const spacing = {
+  smallExtra: 4,
+  small: 8,
+  medium: 12,
+  large: 16,
+  largeExtra: 32,
+} as const;
+
+export const radius = {
+  small: 8,
+  medium: 16,
+  large: 32,
+  full: 9999,
+} as const;
+
+export const fontSize = {
+  medium: 16,
+} as const;

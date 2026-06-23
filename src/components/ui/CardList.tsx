@@ -1,6 +1,6 @@
-import { getThemeProperty } from "@/hooks";
+import { baseStyle } from "@/constants";
 import { Fragment, type ReactNode } from "react";
-import { StyleSheet, type ViewProps } from "react-native";
+import { type ViewProps } from "react-native";
 import { CardView } from "./CardView";
 import { HorizontalDivider } from "./HorizontalDivider";
 
@@ -12,7 +12,7 @@ interface CardListProps<T> extends ViewProps {
 
 export function CardList<T>({ data, renderItem, renderHeader, style, ...otherProps }: CardListProps<T>) {
   return (
-    <CardView style={[cardStyle.card, style]} {...otherProps}>
+    <CardView style={[baseStyle.smallGap, style]} {...otherProps}>
       {renderHeader && renderHeader()}
       {data.map((item, index) => (
         <Fragment key={index}>
@@ -23,13 +23,3 @@ export function CardList<T>({ data, renderItem, renderHeader, style, ...otherPro
     </CardView>
   );
 }
-const mediumSpacing = getThemeProperty("mediumSpacing");
-const borderRadius = getThemeProperty("borderRadius");
-
-const cardStyle = StyleSheet.create({
-  card: {
-    padding: mediumSpacing,
-    borderRadius: borderRadius,
-    gap: mediumSpacing,
-  },
-});

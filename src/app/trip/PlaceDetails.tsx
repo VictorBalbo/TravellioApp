@@ -14,9 +14,10 @@ import {
   ThemedText,
   ThemedView,
 } from "@/components/ui";
-import { Colors } from "@/constants/theme";
+import { baseStyle } from "@/constants";
+import { Colors, spacing } from "@/constants/theme";
 import { displayDate, getCurrencySymbol, getOpenStatus, sanitizeUrl } from "@/helpers";
-import { getThemeProperty, useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
+import { useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
 import { Place } from "@/models";
 import { MapService } from "@/services";
 import { TripService } from "@/services/TripService";
@@ -141,24 +142,24 @@ export default function PlaceDetails() {
 
   return (
     <HeroView headerImageUrl={TripService.getPhotoForPlace(place.images) ?? ""}>
-      <ThemedView style={styles.header}>
+      <ThemedView style={baseStyle.viewHeader}>
         <ThemedText type={TextType.Display}>{activity?.name ?? destination?.name ?? place.name}</ThemedText>
         {place?.rating && (
-          <ThemedView style={styles.rating}>
-            <ThemedText type={TextType.Footnote} style={{ marginRight: smallSpacing }}>
-              {place.rating}
-            </ThemedText>
-            <Icon size={14} name={getStarIconForRating(0, place.rating)} color={Colors.yellow} />
-            <Icon size={14} name={getStarIconForRating(1, place.rating)} color={Colors.yellow} />
-            <Icon size={14} name={getStarIconForRating(2, place.rating)} color={Colors.yellow} />
-            <Icon size={14} name={getStarIconForRating(3, place.rating)} color={Colors.yellow} />
-            <Icon size={14} name={getStarIconForRating(4, place.rating)} color={Colors.yellow} />
+          <ThemedView style={baseStyle.inlineSectionGap}>
+            <ThemedText type={TextType.Footnote}>{place.rating}</ThemedText>
+            <ThemedView style={styles.ratingStars}>
+              <Icon size={14} name={getStarIconForRating(0, place.rating)} color={Colors.yellow} />
+              <Icon size={14} name={getStarIconForRating(1, place.rating)} color={Colors.yellow} />
+              <Icon size={14} name={getStarIconForRating(2, place.rating)} color={Colors.yellow} />
+              <Icon size={14} name={getStarIconForRating(3, place.rating)} color={Colors.yellow} />
+              <Icon size={14} name={getStarIconForRating(4, place.rating)} color={Colors.yellow} />
+            </ThemedView>
           </ThemedView>
         )}
         {place.categories?.[0] && <ThemedText type={TextType.Footnote}>{place.categories[0]}</ThemedText>}
       </ThemedView>
-      <ThemedView background style={styles.body}>
-        <ThemedView style={styles.actionRow}>
+      <ThemedView background style={baseStyle.viewBody}>
+        <ThemedView style={[baseStyle.inlineSectionGap, { gap: spacing.largeExtra }]}>
           <ThemedButton
             title={(activity ?? destination) ? t("saved") : t("save")}
             icon={(activity ?? destination) ? "heart" : "heartEmpty"}
@@ -198,10 +199,10 @@ export default function PlaceDetails() {
             />
           )}
         </ThemedView>
-        <ThemedView style={styles.titleCardContainer}>
+        <ThemedView style={baseStyle.titleSectionGap}>
           <IconCaptionText text={t("yourTrip")} icon="pin" textType={TextType.Title} />
           {activity && (
-            <CardView style={styles.infoCard}>
+            <CardView style={baseStyle.smallGap}>
               <IconCaptionText
                 icon="calendar"
                 caption={t("scheduledFor")}
@@ -252,10 +253,10 @@ export default function PlaceDetails() {
           )}
         </ThemedView>
 
-        <ThemedView style={styles.titleCardContainer}>
+        <ThemedView style={baseStyle.titleSectionGap}>
           <IconCaptionText text={t("details")} icon="info" textType={TextType.Title} />
           {(place.address || place.phoneNumber || place.website) && (
-            <CardView style={styles.infoCard}>
+            <CardView style={baseStyle.smallGap}>
               {place.address && (
                 <ThemedView>
                   <IconCaptionText icon="map" text={t("address")} textType={TextType.Headline} />
@@ -270,7 +271,7 @@ export default function PlaceDetails() {
                     header={
                       <ThemedView>
                         <IconCaptionText icon="clock" text={t("openingHours")} textType={TextType.Headline} />
-                        <ThemedView style={styles.inlineInfo}>
+                        <ThemedView style={baseStyle.inlineSectionGap}>
                           {placeOpenStatus?.isOpen === true && (
                             <ThemedText color={Colors.green}>{t("openNow")}</ThemedText>
                           )}
@@ -288,7 +289,7 @@ export default function PlaceDetails() {
                       </ThemedView>
                     }
                     body={place.openingHours.weekday_text.map((d) => (
-                      <ThemedView key={d} style={[styles.inlineInfo, { justifyContent: "space-between" }]}>
+                      <ThemedView key={d} style={baseStyle.inlineSectionSpaceBetween}>
                         <ThemedText type={TextType.Footnote}>
                           {t("weekday." + d.split(": ")[0].toLowerCase())}
                         </ThemedText>
@@ -317,7 +318,7 @@ export default function PlaceDetails() {
         </ThemedView>
 
         {place.description && (
-          <ThemedView style={styles.titleCardContainer}>
+          <ThemedView style={baseStyle.titleSectionGap}>
             <IconCaptionText text={t("about")} icon="book" textType={TextType.Title} />
             {place.description && <CardSeeMore numberOfLines={4} content={place.description} />}
           </ThemedView>
@@ -326,45 +327,19 @@ export default function PlaceDetails() {
     </HeroView>
   );
 }
-const largeSpacing = getThemeProperty("largeSpacing");
-const mediumSpacing = getThemeProperty("mediumSpacing");
-const smallSpacing = getThemeProperty("smallSpacing");
+
 const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: largeSpacing,
-  },
-  rating: {
+  ratingStars: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  body: {
-    padding: largeSpacing,
-    gap: largeSpacing,
-  },
-  actionRow: {
-    flexDirection: "row",
-    gap: mediumSpacing,
-    alignItems: "center",
-    justifyContent: "space-around",
   },
   actionButton: {
     width: 50,
     height: 50,
   },
-  titleCardContainer: {
-    gap: mediumSpacing,
-  },
   notInTripContainer: {
     borderWidth: 1,
     borderStyle: "dashed",
-    gap: mediumSpacing,
-  },
-  inlineInfo: {
-    flexDirection: "row",
-    gap: mediumSpacing,
-    alignItems: "center",
-  },
-  infoCard: {
-    gap: mediumSpacing,
+    gap: spacing.small,
   },
 });

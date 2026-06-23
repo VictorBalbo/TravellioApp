@@ -1,5 +1,5 @@
 import { PropsWithChildren, useRef } from "react";
-import { Animated, Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { Animated, Pressable, StyleProp, ViewStyle } from "react-native";
 
 type PressableViewProps = PropsWithChildren<{
   onPress: () => void;
@@ -66,5 +66,3 @@ export const PressableView = ({ onPress, style, children }: PressableViewProps) 
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({});

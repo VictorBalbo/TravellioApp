@@ -10,8 +10,9 @@ import {
   ThemedText,
   ThemedView,
 } from "@/components/ui";
+import { baseStyle, spacing } from "@/constants";
 import { dateDiff, displayDate, getCurrencySymbol } from "@/helpers";
-import { getThemeProperty, useMapContext, useTripContext } from "@/hooks";
+import { useMapContext, useTripContext } from "@/hooks";
 import { useLocalSearchParams } from "expo-router";
 import { Fragment, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -45,9 +46,9 @@ export default function AccommodationDetails() {
 
   return (
     <HeroView headerImageUrl={accommodation?.imageUrl}>
-      <ThemedView style={styles.header}>
+      <ThemedView style={baseStyle.viewHeader}>
         <ThemedText type={TextType.Display}>{accommodation?.name}</ThemedText>
-        <ThemedView style={styles.inlineInfo}>
+        <ThemedView style={baseStyle.inlineSectionGap}>
           <ThemedText type={TextType.Headline}>
             {accommodation?.checkIn && displayDate(accommodation.checkIn, "DD MMM")}
             {" - "}
@@ -63,7 +64,7 @@ export default function AccommodationDetails() {
           )}
         </ThemedView>
       </ThemedView>
-      <ThemedView style={styles.body}>
+      <ThemedView style={baseStyle.viewBody}>
         <ThemedView style={styles.actionRow}>
           {accommodation?.address && (
             <ThemedButton
@@ -86,9 +87,9 @@ export default function AccommodationDetails() {
             />
           )}
         </ThemedView>
-        <ThemedView style={styles.titleCardContainer}>
+        <ThemedView style={baseStyle.titleSectionGap}>
           <IconCaptionText text={t("yourTrip")} icon="pin" textType={TextType.Title} />
-          <CardView style={styles.infoCard}>
+          <CardView style={baseStyle.smallGap}>
             <IconCaptionText
               icon="personArrive"
               caption={t("checkIn")}
@@ -136,7 +137,7 @@ export default function AccommodationDetails() {
         </ThemedView>
 
         {accommodation?.notes && (
-          <ThemedView style={styles.titleCardContainer}>
+          <ThemedView style={baseStyle.titleSectionGap}>
             <IconCaptionText text={t("notes")} icon="book" textType={TextType.Title} />
             <CardSeeMore numberOfLines={4} content={accommodation.notes} />
           </ThemedView>
@@ -145,30 +146,14 @@ export default function AccommodationDetails() {
     </HeroView>
   );
 }
-const largeSpacing = getThemeProperty("largeSpacing");
-const mediumSpacing = getThemeProperty("mediumSpacing");
-const smallSpacing = getThemeProperty("smallSpacing");
+
 const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: largeSpacing,
-  },
-  inlineInfo: {},
-  body: {
-    padding: largeSpacing,
-    gap: largeSpacing,
-  },
   actionRow: {
     flexDirection: "row",
-    gap: largeSpacing,
+    gap: spacing.large,
   },
   actionButton: {
     width: 50,
     height: 50,
-  },
-  titleCardContainer: {
-    gap: smallSpacing,
-  },
-  infoCard: {
-    gap: mediumSpacing,
   },
 });

@@ -1,5 +1,6 @@
-import { Colors } from "@/constants/theme";
-import { getThemeProperty, useThemeColor } from "@/hooks";
+import { baseStyle } from "@/constants";
+import { Colors, radius, spacing } from "@/constants/theme";
+import { useThemeColor } from "@/hooks";
 import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { Icon, IconSymbols } from "./Icon";
 import { PressableView } from "./PressableView";
@@ -64,15 +65,12 @@ export const ThemedButton = ({
   const iconName = icon && typeof icon === "string" ? (icon as keyof IconSymbols) : undefined;
   const image = icon && typeof icon === "number" && (icon as number);
 
-  const renderIcon = iconName && <Icon size={20} color={textColor} name={iconName} />;
-  const renderImage = image && <Image source={image} style={{ height: 20, width: 20 }} />;
-
   if (round) {
     return (
-      <PressableView onPress={onPress} style={{ alignItems: "center", gap: smallSpacing }}>
+      <PressableView onPress={onPress} style={[baseStyle.columnSectionCentered, baseStyle.smallGap]}>
         <ThemedView style={[style, styles.buttonContainer, styles.round, { backgroundColor }]}>
-          {renderIcon}
-          {renderImage}
+          {iconName && <Icon size={24} color={textColor} name={iconName} />}
+          {image && <Image source={image} style={{ height: 24, width: 24 }} />}
         </ThemedView>
         {title && (
           <ThemedText type={TextType.Caption} numberOfLines={1}>
@@ -84,9 +82,12 @@ export const ThemedButton = ({
   }
 
   return (
-    <PressableView onPress={onPress} style={[styles.buttonContainer, style, { backgroundColor }]}>
-      {renderIcon}
-      {renderImage}
+    <PressableView
+      onPress={onPress}
+      style={[style, baseStyle.inlineSectionGap, styles.buttonContainer, { backgroundColor }]}
+    >
+      {iconName && <Icon size={20} color={textColor} name={iconName} />}
+      {image && <Image source={image} style={{ height: 20, width: 20 }} />}
       {title && (
         <ThemedText type={TextType.Headline} style={{ color: textColor }} numberOfLines={1}>
           {title}
@@ -96,19 +97,14 @@ export const ThemedButton = ({
   );
 };
 
-const mediumSpacing = getThemeProperty("mediumSpacing");
-const smallSpacing = getThemeProperty("smallSpacing");
 const styles = StyleSheet.create({
   buttonContainer: {
-    borderRadius: mediumSpacing,
-    padding: mediumSpacing,
-    gap: smallSpacing,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    borderRadius: radius.small,
+    padding: spacing.small,
+    gap: spacing.smallExtra,
   },
   round: {
-    borderRadius: 100,
-    flex: 0,
+    borderRadius: radius.full,
+    padding: spacing.large,
   },
 });

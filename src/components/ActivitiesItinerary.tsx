@@ -1,10 +1,20 @@
+import { baseStyle, spacing } from "@/constants";
 import { displayDate } from "@/helpers";
-import { getThemeProperty, useInternalRouterContext, useThemeColor } from "@/hooks";
+import { useInternalRouterContext, useThemeColor } from "@/hooks";
 import { Activity, ActivityTypes } from "@/models";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { StyleSheet } from "react-native";
-import { CardView, HorizontalDivider, Icon, IconSymbols, PressableView, TextType, ThemedText, ThemedView } from "./ui";
+import {
+  CardView,
+  HorizontalDivider,
+  Icon,
+  IconCaptionText,
+  IconSymbols,
+  PressableView,
+  TextType,
+  ThemedText,
+  ThemedView,
+} from "./ui";
 
 type Props = {
   activities: Activity[];
@@ -60,44 +70,30 @@ export const ActivitiesItinerary = ({ activities }: Props) => {
   };
 
   return (
-    <CardView style={styles.container}>
+    <CardView>
       {Object.entries(activitiesByDate).map(([date, items], dateIndex) => (
-        <ThemedView key={date} style={styles.group}>
+        <ThemedView key={date}>
           <ThemedText type={TextType.Caption}>
             {date === unscheduledIdentifier ? t("unscheduled") : displayDate(new Date(date), "ddd, DD MMM")}
           </ThemedText>
           {items.map((a) => (
-            <PressableView key={a.id} style={styles.inlineInfo} onPress={() => goToPlace(a.placeId)}>
+            <PressableView key={a.id} style={baseStyle.inlineSectionGap} onPress={() => goToPlace(a.placeId)}>
               <ThemedText type={TextType.Headline}>{a.scheduledAt && displayDate(a.scheduledAt, "HH:mm")}</ThemedText>
-              <Icon name={getIconForActivity(a)} size={20} color={captionColor} />
-              <ThemedView style={styles.activityInfo}>
-                <ThemedText>{a.name}</ThemedText>
-                {a.address && <ThemedText type={TextType.Caption}>{a.address}</ThemedText>}
-              </ThemedView>
+              <IconCaptionText
+                icon={getIconForActivity(a)}
+                iconSize={20}
+                text={a.name}
+                caption={a.address}
+                invertCaptionText
+              />
               <Icon name="chevronRight" size={16} color={captionColor} />
             </PressableView>
           ))}
-          {dateIndex !== Object.keys(activitiesByDate).length - 1 && <HorizontalDivider />}
+          {dateIndex !== Object.keys(activitiesByDate).length - 1 && (
+            <HorizontalDivider marginVertical={spacing.small} />
+          )}
         </ThemedView>
       ))}
     </CardView>
   );
 };
-
-const mediumSpacing = getThemeProperty("mediumSpacing");
-const styles = StyleSheet.create({
-  container: {
-    gap: mediumSpacing,
-  },
-  group: {
-    gap: mediumSpacing,
-  },
-  inlineInfo: {
-    flexDirection: "row",
-    gap: mediumSpacing,
-    alignItems: "center",
-  },
-  activityInfo: {
-    flex: 1,
-  },
-});

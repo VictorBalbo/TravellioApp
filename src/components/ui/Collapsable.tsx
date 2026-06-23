@@ -1,6 +1,7 @@
-import { getThemeProperty, useThemeColor } from "@/hooks";
+import { baseStyle, spacing } from "@/constants";
+import { useThemeColor } from "@/hooks";
 import { ReactNode, useRef, useState } from "react";
-import { Animated, Pressable, StyleSheet } from "react-native";
+import { Animated, Pressable } from "react-native";
 import { HorizontalDivider } from "./HorizontalDivider";
 import { Icon } from "./Icon";
 import { ThemedView } from "./ThemedView";
@@ -46,7 +47,7 @@ export function Collapsable({ header, body }: CollapsableProps) {
 
   return (
     <ThemedView>
-      <Pressable onPress={toggle} style={styles.header}>
+      <Pressable onPress={toggle} style={baseStyle.inlineSectionSpaceBetween}>
         {header}
         <Animated.View style={{ transform: [{ rotate: arrowRotation }] }}>
           <Icon name="chevronDown" size={20} color={captionColor} />
@@ -55,15 +56,12 @@ export function Collapsable({ header, body }: CollapsableProps) {
 
       {/* Outer wrapper grows via maxHeight */}
       <Animated.View
-        style={[
-          styles.body,
-          {
-            maxHeight: growAnim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 5000],
-            }),
-          },
-        ]}
+        style={{
+          maxHeight: growAnim.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 5000],
+          }),
+        }}
       >
         {/* Inner content fades and slides in from above */}
         <Animated.View
@@ -79,23 +77,10 @@ export function Collapsable({ header, body }: CollapsableProps) {
             ],
           }}
         >
-          <HorizontalDivider marginVertical={styles.divider.marginVertical} />
+          <HorizontalDivider marginVertical={spacing.small} />
           {body}
         </Animated.View>
       </Animated.View>
     </ThemedView>
   );
 }
-
-const mediumSpacing = getThemeProperty("mediumSpacing");
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  divider: {
-    marginVertical: mediumSpacing,
-  },
-  body: {},
-});

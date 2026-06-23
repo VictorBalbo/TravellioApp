@@ -1,6 +1,7 @@
-import { CardView, HorizontalDivider, Icon, PressableView, TextType, ThemedText, ThemedView } from "@/components/ui";
-import { utcDate } from "@/helpers";
-import { getThemeProperty, useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
+import { CardList, Icon, PressableView, TextType, ThemedText, ThemedView } from "@/components/ui";
+import { baseStyle, spacing } from "@/constants";
+import { dateDiff, displayDate, utcDate } from "@/helpers";
+import { useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
@@ -16,13 +17,28 @@ export default function TripOverview() {
     focusTripMarkers(trip);
   }, [focusTripMarkers, trip]);
 
+  const tripDuration = trip?.endDate && trip?.startDate && dateDiff(trip.endDate, trip.startDate);
+
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type={TextType.Title}>{trip?.name}</ThemedText>
-      <CardView style={styles.destinationsCard}>
-        {destinations?.map((d, i) => (
-          <ThemedView key={i}>
-            <PressableView onPress={() => goToDestination(d.id)} style={styles.destination}>
+    <ThemedView style={{ paddingVertical: spacing.large }}>
+      <ThemedView style={baseStyle.viewHeader}>
+        <ThemedText type={TextType.Display}>{trip?.name}</ThemedText>
+        <ThemedText type={TextType.Headline}>
+          {trip?.startDate && displayDate(trip.startDate, "DD MMM")}
+          {" - "}
+          {trip?.endDate && displayDate(trip.endDate, "DD MMM")}
+        </ThemedText>
+        {tripDuration && (
+          <ThemedText type={TextType.Footnote}>
+            {tripDuration} {t("night", { count: tripDuration })}{" "}
+          </ThemedText>
+        )}
+      </ThemedView>
+      <ThemedView style={baseStyle.viewBody}>
+        <CardList
+          data={destinations ?? []}
+          renderItem={(d) => (
+            <PressableView onPress={() => goToDestination(d.id)} style={baseStyle.inlineSectionGap}>
               <Icon name="building" />
               <ThemedView style={styles.destinationName}>
                 <ThemedText type={TextType.Headline} numberOfLines={1}>
@@ -47,29 +63,14 @@ export default function TripOverview() {
                 </ThemedText>
               </ThemedView>
             </PressableView>
-            {i !== destinations.length - 1 && <HorizontalDivider marginVertical={mediumSpacing} />}
-          </ThemedView>
-        ))}
-      </CardView>
+          )}
+        />
+      </ThemedView>
     </ThemedView>
   );
 }
-const largeSpacing = getThemeProperty("largeSpacing");
-const mediumSpacing = getThemeProperty("mediumSpacing");
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: largeSpacing,
-    overflow: "hidden",
-  },
-  destinationsCard: {
-    marginVertical: mediumSpacing,
-  },
-  destination: {
-    flexDirection: "row",
-    gap: mediumSpacing,
-    alignItems: "center",
-  },
   destinationName: {
     flex: 2,
     alignItems: "flex-start",

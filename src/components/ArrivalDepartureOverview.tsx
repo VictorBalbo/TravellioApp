@@ -1,5 +1,6 @@
+import { baseStyle, spacing } from "@/constants";
 import { dateDiff, displayDate, formatDuration } from "@/helpers/DateHelper";
-import { getThemeProperty, useThemeColor } from "@/hooks";
+import { useThemeColor } from "@/hooks";
 import { useTripContext } from "@/hooks/useTrip";
 import { Destination, Transportation, TransportTypes } from "@/models";
 import { Fragment } from "react";
@@ -47,10 +48,10 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
     <CardView>
       <Collapsable
         header={
-          <ThemedView style={styles.header}>
+          <ThemedView style={baseStyle.inlineSectionGap}>
             <Icon name={type} color={captionColor} />
             <ThemedView>
-              <ThemedView style={styles.inlineInfo}>
+              <ThemedView style={baseStyle.inlineSectionGap}>
                 <ThemedText type={TextType.Headline}>
                   {type === "arrival" ? t("arrivalAt") : t("departureAt")}{" "}
                   {relevantTime && displayDate(relevantTime, "HH:mm")}
@@ -59,7 +60,7 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
                   {relevantTime && displayDate(relevantTime, "ddd DD MMM")}
                 </ThemedText>
               </ThemedView>
-              <ThemedView style={styles.inlineInfo}>
+              <ThemedView style={baseStyle.inlineSectionGap}>
                 <ThemedText type={TextType.Caption}>{departure}</ThemedText>
                 <Icon name="arrowRight" size={12} color={captionColor} />
                 <ThemedText type={TextType.Caption}>{arrival}</ThemedText>
@@ -68,10 +69,10 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
           </ThemedView>
         }
         body={transportation.legs.map((leg, index) => (
-          <ThemedView key={leg.id} style={styles.body}>
+          <ThemedView key={leg.id} style={baseStyle.smallGap}>
             {/* Type, Company, and Service Number */}
-            <ThemedView style={styles.inlineInfo}>
-              <Icon name={legTypeIcon(leg.type)} size={16} color={captionColor} />
+            <ThemedView style={baseStyle.inlineSectionGap}>
+              <Icon name={legTypeIcon(leg.type)} size={14} color={captionColor} />
               <ThemedText type={TextType.Caption}>
                 {t(`transportation.${leg.type.toLowerCase()}`)}
                 {" · "}
@@ -80,27 +81,27 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
             </ThemedView>
 
             {/* Departure and Arrival Info */}
-            <ThemedView style={[styles.inlineInfo, styles.placeNames]}>
+            <ThemedView style={baseStyle.inlineSectionSpaceBetween}>
               <IconCaptionText
                 caption={leg.departurePlaceDescription}
                 text={leg.departurePlaceShortName}
                 textType={TextType.Title}
                 invertCaptionText
-                containerStyle={{ flex: 1 }}
+                containerStyle={{ maxWidth: "50%" }}
               />
               <IconCaptionText
                 caption={leg.arrivalPlaceDescription}
                 text={leg.arrivalPlaceShortName}
                 textType={TextType.Title}
                 invertCaptionText
-                containerStyle={{ flex: 1 }}
+                containerStyle={{ maxWidth: "50%" }}
                 alignText="right"
               />
             </ThemedView>
 
             {/* Departure and Arrival Times with Duration */}
             {(leg.departureTime || leg.arrivalTime) && (
-              <ThemedView style={styles.inlineInfo}>
+              <ThemedView style={baseStyle.inlineSectionSpaceBetween}>
                 <IconCaptionText
                   caption={leg.departureTime && displayDate(leg.departureTime, "ddd DD MMM")}
                   text={(leg.departureTime && displayDate(leg.departureTime, "HH:mm")) ?? ""}
@@ -109,7 +110,7 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
                 {leg.departureTime && leg.arrivalTime && (
                   <Fragment>
                     <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
-                    <ThemedView style={styles.flightDuration}>
+                    <ThemedView style={baseStyle.columnSectionCentered}>
                       <Icon name={legTypeIcon(leg.type)} size={12} color={captionColor} />
                       <ThemedText type={TextType.Caption}>{legDuration(leg.departureTime, leg.arrivalTime)}</ThemedText>
                     </ThemedView>
@@ -126,23 +127,28 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
             )}
 
             {/* Company and Service Number */}
-            <ThemedView style={styles.inlineInfo}>
-              <IconCaptionText text={leg.company ?? " - "} caption={t("transportation.company")} />
+            <ThemedView style={{ flexDirection: "row", alignItems: "center", gap: "8" }}>
+              <IconCaptionText
+                text={leg.company ?? " - "}
+                caption={t("transportation.company")}
+                containerStyle={{ maxWidth: "50%" }}
+              />
               <IconCaptionText
                 text={leg.serviceNumber ?? " - "}
                 caption={t(`transportation.serviceNumber.${leg.type.toLowerCase()}`)}
+                containerStyle={{ maxWidth: "50%" }}
               />
             </ThemedView>
 
             {/* Seat and Reservation */}
-            <ThemedView style={styles.inlineInfo}>
+            <ThemedView style={baseStyle.inlineSectionGap}>
               <IconCaptionText text={leg.seat ?? " - "} caption={t("transportation.seat")} />
               <IconCaptionText text={leg.reservation ?? " - "} caption={t("reservation")} />
             </ThemedView>
 
             {/* Connection Time */}
             {index !== transportation.legs.length - 1 && (
-              <ThemedView style={styles.inlineInfo}>
+              <ThemedView style={baseStyle.inlineSectionGap}>
                 <HorizontalDivider
                   centerContent={
                     <Tag
@@ -163,30 +169,10 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
     </CardView>
   );
 };
-const mediumSpacing = getThemeProperty("mediumSpacing");
+
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    gap: mediumSpacing,
-    alignItems: "center",
-  },
-  inlineInfo: {
-    flexDirection: "row",
-    gap: mediumSpacing,
-    alignItems: "center",
-  },
-  body: {
-    gap: mediumSpacing,
-  },
-  placeNames: {
-    alignItems: "flex-start",
-  },
-  flightDuration: {
-    flexDirection: "column",
-    alignItems: "center",
-  },
   connectionDuration: {
     alignSelf: "center",
-    marginVertical: mediumSpacing,
+    marginVertical: spacing.small,
   },
 });

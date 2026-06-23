@@ -1,4 +1,5 @@
-import { getThemeProperty, useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
+import { spacing } from "@/constants";
+import { useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
 import { Coordinates } from "@/models";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
@@ -12,10 +13,7 @@ export const MapView = () => {
   const [isMapReady, setIsMapReady] = useState<boolean>();
   const lastMarkerSelectionAt = useRef<number>(0);
   const markerRefs = useRef<Record<string, MapMarker | null>>({});
-  const { activities, destinations, accommodations, transportations } = useTripContext();
-  const [visibleMarkers, setVisibleMarkers] = useState<
-    ("destinations" | "activities" | "accommodations" | "transportations")[]
-  >(["destinations", "activities", "accommodations", "transportations"]);
+  const { activities, destinations, accommodations } = useTripContext();
   const { goToDestination, goToPlace, goToAccommodation } = useInternalRouterContext();
   const { centeredMarkers, selectedMarker, focusedDestinationId } = useMapContext();
   const isSelectedPlaceNew = useMemo(() => {
@@ -108,63 +106,60 @@ export const MapView = () => {
             zIndex={4}
           />
         )}
-        {visibleMarkers.includes("destinations") &&
-          destinations?.map((d) => (
+        {destinations?.map((d) => (
+          <Marker
+            tracksViewChanges={false}
+            key={d.placeId}
+            ref={(ref) => {
+              markerRefs.current[d.placeId] = ref;
+            }}
+            coordinate={{
+              latitude: d.coordinates.lat,
+              longitude: d.coordinates.lng,
+            }}
+            pinColor="blue"
+            zIndex={5}
+            onPress={() => handleMarkerSelect(() => goToDestination(d.id))}
+          />
+        ))}
+
+        {activities
+          ?.filter((a) => a.destinationId === focusedDestinationId)
+          .map((a) => (
             <Marker
               tracksViewChanges={false}
-              key={d.placeId}
+              key={a.placeId}
               ref={(ref) => {
-                markerRefs.current[d.placeId] = ref;
+                markerRefs.current[a.placeId] = ref;
               }}
+              onPress={() => handleMarkerSelect(() => goToPlace(a.placeId))}
               coordinate={{
-                latitude: d.coordinates.lat,
-                longitude: d.coordinates.lng,
+                latitude: a.coordinates.lat,
+                longitude: a.coordinates.lng,
               }}
-              pinColor="blue"
-              zIndex={5}
-              onPress={() => handleMarkerSelect(() => goToDestination(d.id))}
+              pinColor={"red"}
+              zIndex={0}
             />
           ))}
 
-        {visibleMarkers.includes("activities") &&
-          activities
-            ?.filter((a) => a.destinationId === focusedDestinationId)
-            .map((a) => (
-              <Marker
-                tracksViewChanges={false}
-                key={a.placeId}
-                ref={(ref) => {
-                  markerRefs.current[a.placeId] = ref;
-                }}
-                onPress={() => handleMarkerSelect(() => goToPlace(a.placeId))}
-                coordinate={{
-                  latitude: a.coordinates.lat,
-                  longitude: a.coordinates.lng,
-                }}
-                pinColor={"red"}
-                zIndex={0}
-              />
-            ))}
-
-        {visibleMarkers.includes("accommodations") &&
-          accommodations
-            ?.filter((a) => a.destinationId === focusedDestinationId)
-            .map((a) => (
-              <Marker
-                tracksViewChanges={false}
-                key={a.id}
-                ref={(ref) => {
-                  markerRefs.current[a.placeId] = ref;
-                }}
-                onPress={() => handleMarkerSelect(() => goToAccommodation(a.id))}
-                coordinate={{
-                  latitude: a.coordinates.lat,
-                  longitude: a.coordinates.lng,
-                }}
-                pinColor="green"
-                zIndex={1}
-              />
-            ))}
+        {accommodations
+          ?.filter((a) => a.destinationId === focusedDestinationId)
+          .map((a) => (
+            <Marker
+              tracksViewChanges={false}
+              key={a.id}
+              ref={(ref) => {
+                markerRefs.current[a.placeId] = ref;
+              }}
+              onPress={() => handleMarkerSelect(() => goToAccommodation(a.id))}
+              coordinate={{
+                latitude: a.coordinates.lat,
+                longitude: a.coordinates.lng,
+              }}
+              pinColor="green"
+              zIndex={1}
+            />
+          ))}
       </Map>
       <SafeAreaView style={styles.searchContainer} edges={{ top: "maximum" }}>
         <AutoCompleteInput
@@ -181,7 +176,6 @@ export const MapView = () => {
   );
 };
 
-const largeSpacing = getThemeProperty("largeSpacing");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -191,7 +185,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     position: "absolute",
     width: "100%",
-    paddingHorizontal: largeSpacing * 3,
+    paddingHorizontal: spacing.largeExtra,
   },
   map: {
     flex: 1,

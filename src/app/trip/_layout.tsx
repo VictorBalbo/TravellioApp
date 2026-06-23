@@ -1,6 +1,7 @@
 // app/trip/_layout.tsx
 import { MapView } from "@/components";
-import { getThemeProperty, MapProvider, TripProvider, useThemeColor } from "@/hooks";
+import { radius, spacing } from "@/constants";
+import { MapProvider, TripProvider, useThemeColor } from "@/hooks";
 import { InternalRouteProvider } from "@/hooks/useInternalRouter";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Slot, usePathname } from "expo-router";
@@ -55,21 +56,18 @@ export default function TripLayout() {
   );
 }
 
-const largeSpacing = getThemeProperty("largeSpacing");
-const mediumSpacing = getThemeProperty("mediumSpacing");
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   bottomSheet: {
-    borderTopLeftRadius: largeSpacing,
-    borderTopRightRadius: largeSpacing,
+    borderTopLeftRadius: radius.large,
+    borderTopRightRadius: radius.large,
     overflow: "hidden",
   },
   handleStyle: {
     position: "absolute",
     width: "100%",
-    padding: mediumSpacing,
+    padding: spacing.small,
   },
 });

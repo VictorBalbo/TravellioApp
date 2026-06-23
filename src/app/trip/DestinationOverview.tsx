@@ -9,8 +9,9 @@ import {
   ThemedText,
   ThemedView,
 } from "@/components/ui";
+import { baseStyle, spacing } from "@/constants";
 import { dateDiff, displayDate } from "@/helpers";
-import { getThemeProperty, useInternalRouterContext, useMapContext, useThemeColor, useTripContext } from "@/hooks";
+import { useInternalRouterContext, useMapContext, useThemeColor, useTripContext } from "@/hooks";
 import { Place } from "@/models";
 import { MapService } from "@/services";
 import { TripService } from "@/services/TripService";
@@ -65,9 +66,9 @@ export default function DestinationOverview() {
 
   return (
     <HeroView headerImageUrl={TripService.getPhotoForPlace(place?.images)}>
-      <ThemedView style={styles.header}>
+      <ThemedView style={baseStyle.viewHeader}>
         <ThemedText type={TextType.Display}>{destination?.name}</ThemedText>
-        <ThemedView style={styles.inlineInfo}>
+        <ThemedView style={baseStyle.inlineSectionGap}>
           <ThemedText type={TextType.Headline}>
             {destination?.startDate && displayDate(destination.startDate, "DD MMM")}
             {" - "}
@@ -84,9 +85,9 @@ export default function DestinationOverview() {
         </ThemedView>
       </ThemedView>
 
-      <ThemedView style={styles.body}>
+      <ThemedView style={baseStyle.viewBody}>
         {/* Accommodations */}
-        <ThemedView style={styles.sectionTitle}>
+        <ThemedView style={baseStyle.titleSectionGap}>
           <SectionTitle value={t("yourStay")} valueType={TextType.Title} />
           {accommodations.length === 0 && (
             <CardView style={styles.notInTripContainer}>
@@ -99,7 +100,7 @@ export default function DestinationOverview() {
             accommodations.map((a) => (
               <CardView key={a.id}>
                 <PressableView onPress={() => internalRouter.goToAccommodation(a.id)}>
-                  <ThemedView style={{ flexDirection: "row", alignItems: "center" }}>
+                  <ThemedView style={baseStyle.inlineSectionSpaceBetween}>
                     <IconCaptionText
                       icon="bed"
                       text={a.name}
@@ -120,7 +121,7 @@ export default function DestinationOverview() {
         </ThemedView>
 
         {/* Transit */}
-        <ThemedView style={styles.sectionTitle}>
+        <ThemedView style={baseStyle.titleSectionGap}>
           <SectionTitle value={t("transit")} valueType={TextType.Title} />
           {destination && arrival && (
             <ArrivalDepartureOverview destination={destination} transportation={arrival} type="arrival" />
@@ -140,7 +141,7 @@ export default function DestinationOverview() {
         </ThemedView>
 
         {/* Activities */}
-        <ThemedView style={styles.sectionTitle}>
+        <ThemedView style={baseStyle.titleSectionGap}>
           <SectionTitle icon="map" value={t("activity_other")} valueType={TextType.Title} />
           {activities.length === 0 && (
             <CardView style={styles.notInTripContainer}>
@@ -156,31 +157,11 @@ export default function DestinationOverview() {
   );
 }
 
-const largeSpacing = getThemeProperty("largeSpacing");
-const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: largeSpacing,
-  },
-  body: {
-    padding: largeSpacing,
-    gap: largeSpacing,
-  },
-  mediumSpacingGap: {
-    gap: mediumSpacing,
-  },
-  sectionTitle: {
-    gap: mediumSpacing,
-  },
-  inlineInfo: {
-    flexDirection: "row",
-    gap: mediumSpacing,
-    alignItems: "center",
-  },
   notInTripContainer: {
     borderWidth: 1,
     borderStyle: "dashed",
-    gap: mediumSpacing,
+    gap: spacing.small,
   },
   textCenter: {
     textAlign: "center",

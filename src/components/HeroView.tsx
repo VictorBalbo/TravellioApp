@@ -1,6 +1,6 @@
 import { Icon, PressableView, ThemedView } from "@/components/ui";
-import { Colors } from "@/constants/theme";
-import { getThemeProperty, useThemeColor } from "@/hooks";
+import { Colors, radius, spacing } from "@/constants/theme";
+import { useThemeColor } from "@/hooks";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import type { PropsWithChildren } from "react";
@@ -62,9 +62,6 @@ export const HeroView = ({
   );
 };
 
-const borderRadius = getThemeProperty("borderRadius");
-const mediumSpacing = getThemeProperty("mediumSpacing");
-const largeSpacing = getThemeProperty("largeSpacing");
 const HEADER_HEIGHT = 200;
 const NO_IMAGE_HEADER_HEIGHT = 150;
 
@@ -76,13 +73,13 @@ const styles = StyleSheet.create({
   closeButtonContainer: {
     position: "absolute",
     zIndex: 1,
-    top: largeSpacing * 2,
-    left: largeSpacing,
+    top: spacing.largeExtra,
+    left: spacing.large,
   },
   closeButton: {
     backgroundColor: Colors.black + "D2",
-    borderRadius: borderRadius * borderRadius,
-    padding: mediumSpacing,
+    borderRadius: radius.full,
+    padding: spacing.small,
     boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.4)",
     borderWidth: 1,
   },

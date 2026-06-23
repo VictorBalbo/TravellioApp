@@ -1,5 +1,6 @@
 import { ThemedView } from "@/components/ui/ThemedView";
-import { getThemeProperty, useThemeColor } from "@/hooks";
+import { baseStyle } from "@/constants";
+import { useThemeColor } from "@/hooks";
 import React from "react";
 import { StyleSheet } from "react-native";
 
@@ -27,7 +28,7 @@ export const HorizontalDivider = ({
   }
 
   return (
-    <ThemedView style={[styles.row, { marginVertical, marginBottom }]}>
+    <ThemedView style={[baseStyle.inlineSectionGap, { marginVertical, marginBottom }]}>
       <ThemedView style={[styles.line, { backgroundColor: color, height: thickness }]} />
       {centerContent}
       <ThemedView style={[styles.line, { backgroundColor: color, height: thickness }]} />
@@ -35,16 +36,9 @@ export const HorizontalDivider = ({
   );
 };
 
-const mediumSpacing = getThemeProperty("mediumSpacing");
 const styles = StyleSheet.create({
   divider: {
     width: "100%",
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    gap: mediumSpacing,
   },
   line: {
     flex: 1,

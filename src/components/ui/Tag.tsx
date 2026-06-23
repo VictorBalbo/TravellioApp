@@ -1,4 +1,5 @@
-import { getThemeProperty, useThemeColor } from "@/hooks";
+import { radius, spacing } from "@/constants";
+import { useThemeColor } from "@/hooks";
 import { StyleSheet, type ViewProps } from "react-native";
 import { TextType, ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
@@ -17,14 +18,10 @@ export function Tag({ text, style, ...otherProps }: TagProps) {
   );
 }
 
-const smallSpacing = getThemeProperty("smallSpacing");
-const largeSpacing = getThemeProperty("largeSpacing");
-const borderRadius = getThemeProperty("borderRadius");
-
 const styles = StyleSheet.create({
   tag: {
-    paddingVertical: smallSpacing,
-    paddingHorizontal: largeSpacing / 1.5,
-    borderRadius: borderRadius * 2,
+    borderRadius: radius.full,
+    paddingHorizontal: spacing.medium,
+    paddingVertical: spacing.smallExtra,
   },
 });

@@ -1,5 +1,6 @@
+import { fontSize, radius, spacing } from "@/constants";
 import { getRadiusFromRegion } from "@/helpers";
-import { getThemeProperty, useDebounce, useThemeColor } from "@/hooks";
+import { useDebounce, useThemeColor } from "@/hooks";
 import { AutoComplete } from "@/models";
 import { MapService } from "@/services";
 import { useRef, useState } from "react";
@@ -114,35 +115,28 @@ export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoComp
     </View>
   );
 };
-const borderRadius = getThemeProperty("borderRadius");
-const largeSpacing = getThemeProperty("largeSpacing");
-const mediumSpacing = getThemeProperty("mediumSpacing");
-const textSize = getThemeProperty("textSize");
 
 const styles = StyleSheet.create({
   wrapper: {
     position: "relative",
     zIndex: 10,
+    gap: spacing.small,
   },
   input: {
-    height: 44,
     borderWidth: 1,
-    borderRadius: borderRadius,
-    paddingHorizontal: largeSpacing,
-    fontSize: textSize,
+    borderRadius: radius.small,
+    paddingHorizontal: spacing.large,
+    paddingVertical: spacing.medium,
+    fontSize: fontSize.medium,
   },
   list: {
-    position: "absolute",
-    top: 50,
-    left: 0,
-    right: 0,
     borderWidth: 1,
-    borderRadius: borderRadius,
-    maxHeight: 220,
+    borderRadius: radius.small,
+    maxHeight: 225,
     overflow: "hidden",
   },
   option: {
-    paddingHorizontal: largeSpacing,
-    paddingVertical: mediumSpacing,
+    paddingHorizontal: spacing.large,
+    paddingVertical: spacing.small,
   },
 });

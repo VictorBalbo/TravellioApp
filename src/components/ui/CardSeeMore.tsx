@@ -1,4 +1,5 @@
-import { getThemeProperty, useThemeColor } from "@/hooks";
+import { spacing } from "@/constants";
+import { useThemeColor } from "@/hooks";
 import { useState } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { CardView } from "./CardView";
@@ -40,10 +41,9 @@ export function CardSeeMore({ content, header, icon, numberOfLines = 3 }: Props)
   );
 }
 
-const smallSpacing = getThemeProperty("smallSpacing");
 const styles = StyleSheet.create({
   container: {
-    gap: smallSpacing,
+    gap: spacing.smallExtra,
   },
   hidden: {
     position: "absolute",

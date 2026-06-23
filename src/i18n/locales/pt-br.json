@@ -9,6 +9,8 @@
   "transit": "Transito",
   "arrivalAt": "Chegada às",
   "departureAt": "Saída às",
+  "arrivalIn": "Chegada em",
+  "departureIn": "Saída de",
   "transportation": {
     "plane": "Avião",
     "train": "Trem",

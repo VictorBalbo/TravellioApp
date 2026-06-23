@@ -166,7 +166,6 @@ export default function PlaceDetails() {
             type={ButtonType.Primary}
             round
             onPress={() => saveButtonHandler()}
-            style={styles.actionButton}
           />
           {place.mapsUrl && (
             <ThemedButton
@@ -175,7 +174,6 @@ export default function PlaceDetails() {
               type={ButtonType.Secondary}
               round
               onPress={() => openBrowser(place.mapsUrl)}
-              style={styles.actionButton}
             />
           )}
           {place.phoneNumber && (
@@ -185,7 +183,6 @@ export default function PlaceDetails() {
               type={ButtonType.Secondary}
               round
               onPress={() => openBrowser(`tel:${place.phoneNumber}`)}
-              style={styles.actionButton}
             />
           )}
           {place.website && (
@@ -195,7 +192,6 @@ export default function PlaceDetails() {
               type={ButtonType.Secondary}
               round
               onPress={() => openBrowser(place.website)}
-              style={styles.actionButton}
             />
           )}
         </ThemedView>
@@ -332,10 +328,6 @@ const styles = StyleSheet.create({
   ratingStars: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  actionButton: {
-    width: 50,
-    height: 50,
   },
   notInTripContainer: {
     borderWidth: 1,

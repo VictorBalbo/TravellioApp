@@ -70,10 +70,9 @@ export default function AccommodationDetails() {
             <ThemedButton
               title={t("directions")}
               icon={"map"}
-              type={ButtonType.Secondary}
+              type={ButtonType.Primary}
               round
               onPress={() => openBrowser(accommodation.address)}
-              style={styles.actionButton}
             />
           )}
           {accommodation?.website && (
@@ -83,7 +82,6 @@ export default function AccommodationDetails() {
               type={ButtonType.Secondary}
               round
               onPress={() => openBrowser(accommodation.website)}
-              style={styles.actionButton}
             />
           )}
         </ThemedView>
@@ -151,9 +149,5 @@ const styles = StyleSheet.create({
   actionRow: {
     flexDirection: "row",
     gap: spacing.large,
-  },
-  actionButton: {
-    width: 50,
-    height: 50,
   },
 });

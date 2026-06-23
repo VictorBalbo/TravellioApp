@@ -84,7 +84,7 @@ export const ThemedButton = ({
   return (
     <PressableView
       onPress={onPress}
-      style={[style, baseStyle.inlineSectionGap, styles.buttonContainer, { backgroundColor }]}
+      style={[baseStyle.inlineSectionGap, styles.buttonContainer, style, { backgroundColor }]}
     >
       {iconName && <Icon size={20} color={textColor} name={iconName} />}
       {image && <Image source={image} style={{ height: 20, width: 20 }} />}

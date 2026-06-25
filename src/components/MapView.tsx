@@ -38,6 +38,12 @@ export const MapView = () => {
         if (ref) {
           ref.showCallout(); // iOS selection behavior
         }
+      } else {
+        Object.values(markerRefs.current).forEach((ref) => {
+          if (ref) {
+            ref.hideCallout(); // iOS selection behavior
+          }
+        });
       }
     };
     calloutMarker();

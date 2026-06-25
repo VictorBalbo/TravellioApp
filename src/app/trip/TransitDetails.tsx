@@ -9,14 +9,15 @@ import {
   ThemedText,
   ThemedView,
 } from "@/components/ui";
-import { baseStyle } from "@/constants";
-import { displayDate } from "@/helpers";
+import { baseStyle, spacing } from "@/constants";
+import { displayDate, getCurrencySymbol } from "@/helpers";
 import { dateDiff, formatDuration } from "@/helpers/DateHelper";
 import { useThemeColor, useTripContext } from "@/hooks";
 import { TransportTypes } from "@/models";
 import { useLocalSearchParams } from "expo-router";
 import { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { StyleSheet } from "react-native";
 
 type LocalSeachProps = {
   transportationId: string;
@@ -62,90 +63,133 @@ export default function TransitDetails() {
       </ThemedView>
 
       <ThemedView style={baseStyle.viewBody}>
-        {transportation?.legs.map((leg) => (
-          <CardView key={leg.id} style={baseStyle.smallGap}>
-            {/* Type, Company, and Service Number */}
-            <ThemedView style={baseStyle.inlineSectionGap}>
-              <Icon name={legTypeIcon(leg.type)} size={14} color={captionColor} />
-              <ThemedText type={TextType.Caption}>
-                {t(`transportation.${leg.type.toLowerCase()}`)}
-                {" · "}
-                {leg.company} {leg.serviceNumber}
-              </ThemedText>
-            </ThemedView>
-            <HorizontalDivider />
+        {transportation?.legs.map((leg, index) => (
+          <ThemedView key={leg.id}>
+            <CardView style={baseStyle.smallGap}>
+              {/* Type, Company, and Service Number */}
+              <ThemedView style={baseStyle.inlineSectionGap}>
+                <Icon name={legTypeIcon(leg.type)} size={14} color={captionColor} />
+                <ThemedText type={TextType.Caption}>
+                  {t(`transportation.${leg.type.toLowerCase()}`)}
+                  {" · "}
+                  {leg.company} {leg.serviceNumber}
+                </ThemedText>
+              </ThemedView>
+              <HorizontalDivider />
 
-            {/* Departure and Arrival Info */}
-            <ThemedView style={baseStyle.inlineSectionSpaceBetween}>
-              <IconCaptionText
-                caption={leg.departurePlaceDescription}
-                text={leg.departurePlaceShortName}
-                textType={TextType.Title}
-                invertCaptionText
-                containerStyle={{ maxWidth: "50%" }}
-              />
-              <IconCaptionText
-                caption={leg.arrivalPlaceDescription}
-                text={leg.arrivalPlaceShortName}
-                textType={TextType.Title}
-                invertCaptionText
-                containerStyle={{ maxWidth: "50%" }}
-                alignText="right"
-              />
-            </ThemedView>
-
-            {/* Departure and Arrival Times with Duration */}
-            {(leg.departureTime || leg.arrivalTime) && (
+              {/* Departure and Arrival Info */}
               <ThemedView style={baseStyle.inlineSectionSpaceBetween}>
                 <IconCaptionText
-                  caption={leg.departureTime && displayDate(leg.departureTime, "ddd DD MMM")}
-                  text={(leg.departureTime && displayDate(leg.departureTime, "HH:mm")) ?? ""}
-                  textType={TextType.Headline}
+                  caption={leg.departurePlaceDescription}
+                  text={leg.departurePlaceShortName}
+                  textType={TextType.Title}
                   invertCaptionText
+                  containerStyle={styles.inlineTwoColumns}
                 />
-                {leg.departureTime && leg.arrivalTime && (
-                  <Fragment>
-                    <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
-                    <ThemedView style={baseStyle.columnSectionCentered}>
-                      <Icon name={legTypeIcon(leg.type)} size={12} color={captionColor} />
-                      <ThemedText type={TextType.Caption}>{legDuration(leg.departureTime, leg.arrivalTime)}</ThemedText>
-                    </ThemedView>
-                    <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
-                  </Fragment>
-                )}
                 <IconCaptionText
-                  caption={leg.arrivalTime && displayDate(leg.arrivalTime, "ddd DD MMM")}
-                  text={(leg.arrivalTime && displayDate(leg.arrivalTime, "HH:mm")) ?? ""}
-                  textType={TextType.Headline}
+                  caption={leg.arrivalPlaceDescription}
+                  text={leg.arrivalPlaceShortName}
+                  textType={TextType.Title}
                   invertCaptionText
+                  containerStyle={styles.inlineTwoColumns}
                   alignText="right"
                 />
               </ThemedView>
+
+              {/* Departure and Arrival Times with Duration */}
+              {(leg.departureTime || leg.arrivalTime) && (
+                <ThemedView style={baseStyle.inlineSectionSpaceBetween}>
+                  <IconCaptionText
+                    caption={leg.departureTime && displayDate(leg.departureTime, "ddd DD MMM")}
+                    text={(leg.departureTime && displayDate(leg.departureTime, "HH:mm")) ?? ""}
+                    textType={TextType.Headline}
+                    invertCaptionText
+                  />
+                  {leg.departureTime && leg.arrivalTime && (
+                    <Fragment>
+                      <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
+                      <ThemedView style={baseStyle.columnSectionCentered}>
+                        <Icon name={legTypeIcon(leg.type)} size={12} color={captionColor} />
+                        <ThemedText type={TextType.Caption}>
+                          {legDuration(leg.departureTime, leg.arrivalTime)}
+                        </ThemedText>
+                      </ThemedView>
+                      <ThemedText type={TextType.Caption}> - - - - - </ThemedText>
+                    </Fragment>
+                  )}
+                  <IconCaptionText
+                    caption={leg.arrivalTime && displayDate(leg.arrivalTime, "ddd DD MMM")}
+                    text={(leg.arrivalTime && displayDate(leg.arrivalTime, "HH:mm")) ?? ""}
+                    textType={TextType.Headline}
+                    invertCaptionText
+                    alignText="right"
+                  />
+                </ThemedView>
+              )}
+              <HorizontalDivider />
+
+              {/* Company and Service Number */}
+              <ThemedView style={{ flexDirection: "row", alignItems: "center", gap: "8" }}>
+                <IconCaptionText
+                  text={leg.company ?? " - "}
+                  caption={t("transportation.company")}
+                  containerStyle={styles.inlineTwoColumns}
+                />
+                <IconCaptionText
+                  text={leg.serviceNumber ?? " - "}
+                  caption={t(`transportation.serviceNumber.${leg.type.toLowerCase()}`)}
+                  containerStyle={styles.inlineTwoColumns}
+                />
+              </ThemedView>
+
+              {/* Seat and Reservation */}
+              <ThemedView style={baseStyle.inlineSectionGap}>
+                <IconCaptionText text={leg.seat ?? " - "} caption={t("transportation.seat")} />
+                <IconCaptionText text={leg.reservation ?? " - "} caption={t("reservation")} />
+              </ThemedView>
+
+              {/* Price */}
+              {leg.price && (
+                <Fragment>
+                  <HorizontalDivider />
+                  <IconCaptionText
+                    caption={t("price")}
+                    text={`${getCurrencySymbol(leg.price.currency)} ${leg.price.value.toFixed(2)}`}
+                  />
+                </Fragment>
+              )}
+            </CardView>
+            {/* Connection Time */}
+            {index !== transportation.legs.length - 1 && (
+              <ThemedView style={baseStyle.inlineSectionGap}>
+                <HorizontalDivider
+                  marginTop={spacing.large}
+                  centerTagValue={
+                    legDuration(leg.arrivalTime, transportation.legs[index + 1]?.departureTime) +
+                    " " +
+                    t("transportation.connection")
+                  }
+                />
+              </ThemedView>
             )}
-            <HorizontalDivider />
-
-            {/* Company and Service Number */}
-            <ThemedView style={{ flexDirection: "row", alignItems: "center", gap: "8" }}>
-              <IconCaptionText
-                text={leg.company ?? " - "}
-                caption={t("transportation.company")}
-                containerStyle={{ maxWidth: "50%" }}
-              />
-              <IconCaptionText
-                text={leg.serviceNumber ?? " - "}
-                caption={t(`transportation.serviceNumber.${leg.type.toLowerCase()}`)}
-                containerStyle={{ maxWidth: "50%" }}
-              />
-            </ThemedView>
-
-            {/* Seat and Reservation */}
-            <ThemedView style={baseStyle.inlineSectionGap}>
-              <IconCaptionText text={leg.seat ?? " - "} caption={t("transportation.seat")} />
-              <IconCaptionText text={leg.reservation ?? " - "} caption={t("reservation")} />
-            </ThemedView>
-          </CardView>
+          </ThemedView>
         ))}
+
+        {transportation?.price && (
+          <CardView>
+            <IconCaptionText
+              caption={t("totalPrice")}
+              text={`${getCurrencySymbol(transportation.price.currency)} ${transportation.price.value.toFixed(2)}`}
+            />
+          </CardView>
+        )}
       </ThemedView>
     </HeroView>
   );
 }
+
+const styles = StyleSheet.create({
+  inlineTwoColumns: {
+    maxWidth: "50%",
+  },
+});

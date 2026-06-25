@@ -58,6 +58,7 @@
   "isTicketRequired": "Ingresso Necessário",
   "isTicketBought": "Ingresso Comprado",
   "price": "Preço",
+  "totalPrice": "Preço Total",
   "required": "Necessário",
   "notRequired": "Não Necessário",
   "weekday": {

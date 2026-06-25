@@ -3,34 +3,37 @@ import { baseStyle } from "@/constants";
 import { useThemeColor } from "@/hooks";
 import React from "react";
 import { StyleSheet } from "react-native";
+import { Tag } from "./Tag";
 
 interface HorizontalDividerProps {
   thickness?: number;
   marginVertical?: number;
   marginBottom?: number;
-  centerContent?: React.ReactNode;
+  marginTop?: number;
+  centerTagValue?: string;
 }
 
 export const HorizontalDivider = ({
   thickness = 1,
   marginVertical,
+  marginTop,
   marginBottom,
-  centerContent,
+  centerTagValue,
 }: HorizontalDividerProps) => {
   const color = useThemeColor("border");
 
-  if (!centerContent) {
+  if (!centerTagValue) {
     return (
       <ThemedView
-        style={[styles.divider, { backgroundColor: color, height: thickness, marginVertical, marginBottom }]}
+        style={[styles.divider, { backgroundColor: color, height: thickness, marginVertical, marginBottom, marginTop }]}
       />
     );
   }
 
   return (
-    <ThemedView style={[baseStyle.inlineSectionGap, { marginVertical, marginBottom }]}>
+    <ThemedView style={[baseStyle.inlineSectionGap, { marginVertical, marginBottom, marginTop }]}>
       <ThemedView style={[styles.line, { backgroundColor: color, height: thickness }]} />
-      {centerContent}
+      <Tag text={centerTagValue} />
       <ThemedView style={[styles.line, { backgroundColor: color, height: thickness }]} />
     </ThemedView>
   );

@@ -3,12 +3,13 @@ import { Colors, radius, spacing } from "@/constants/theme";
 import { useThemeColor } from "@/hooks";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import type { PropsWithChildren } from "react";
-import { Image, KeyboardAvoidingView, Platform, StyleSheet, ViewStyle } from "react-native";
+import { Fragment, type PropsWithChildren } from "react";
+import { Image, ImageSourcePropType, KeyboardAvoidingView, Platform, StyleSheet, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Props = PropsWithChildren<{
   headerImageUrl?: string;
+  headerImageAsset?: ImageSourcePropType;
   showHeaderImageGradient?: boolean;
   closeButtonCallback?: () => void;
   contentStyle?: ViewStyle;
@@ -18,6 +19,7 @@ type Props = PropsWithChildren<{
 export const HeroView = ({
   children,
   headerImageUrl,
+  headerImageAsset,
   showHeaderImageGradient = true,
   closeButtonCallback,
   contentStyle,
@@ -29,6 +31,7 @@ export const HeroView = ({
 
   const router = useRouter();
   const onClose = closeButtonCallback ?? (() => router.back());
+  const hasImage = !!headerImageUrl || !!headerImageAsset;
 
   return (
     <KeyboardAvoidingView
@@ -43,16 +46,20 @@ export const HeroView = ({
         </ThemedView>
 
         <ThemedView>
-          {headerImageUrl && <Image source={{ uri: headerImageUrl }} style={styles.headerImage} />}
-          {!headerImageUrl && <ThemedView style={styles.noImageHeader} />}
-          {showHeaderImageGradient && (
-            <LinearGradient
-              colors={["transparent", background]}
-              start={{ x: 0, y: 0.5 }}
-              end={{ x: 0, y: 1 }}
-              style={styles.headerGradient}
-            />
+          {hasImage && (
+            <Fragment>
+              <Image source={headerImageUrl ? { uri: headerImageUrl } : headerImageAsset} style={styles.headerImage} />
+              {showHeaderImageGradient && (
+                <LinearGradient
+                  colors={["transparent", background]}
+                  start={{ x: 0, y: 0.5 }}
+                  end={{ x: 0, y: 1 }}
+                  style={styles.headerGradient}
+                />
+              )}
+            </Fragment>
           )}
+          {!hasImage && <ThemedView style={styles.noImageHeader} />}
         </ThemedView>
         <ThemedView style={[{ paddingBottom: bottom - shiftContentUp, bottom: shiftContentUp }, contentStyle]}>
           {children}

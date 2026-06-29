@@ -48,8 +48,26 @@ export default function TransitDetails() {
     return formatDuration(dateDiff(arrivalTime, departureTime, "minutes"));
   };
 
+  const getPlaceholderImage = () => {
+    const firstLeg = transportation?.legs?.[0];
+    switch (firstLeg?.type) {
+      case TransportTypes.Train:
+        return require("@/assets/images/TransportationPlaceholders/train.png");
+      case TransportTypes.Plane:
+        return require("@/assets/images/TransportationPlaceholders/airplane.png");
+      case TransportTypes.Bus:
+        return require("@/assets/images/TransportationPlaceholders/bus.png");
+      case TransportTypes.Car:
+        return require("@/assets/images/TransportationPlaceholders/car.png");
+      case TransportTypes.Ship:
+        return require("@/assets/images/TransportationPlaceholders/ship.png");
+      default:
+        return;
+    }
+  };
+
   return (
-    <HeroView>
+    <HeroView headerImageAsset={getPlaceholderImage()}>
       <ThemedView style={baseStyle.viewHeader}>
         <ThemedText type={TextType.Display}>
           {transitReference === "arrival" ? t("arrivalIn") : t("departureIn")}{" "}

@@ -1,4 +1,4 @@
-import { PropsWithChildren, useRef } from "react";
+import { PropsWithChildren, useState } from "react";
 import { Animated, Pressable, StyleProp, ViewStyle } from "react-native";
 
 type PressableViewProps = PropsWithChildren<{
@@ -6,20 +6,9 @@ type PressableViewProps = PropsWithChildren<{
   style?: StyleProp<ViewStyle>;
 }>;
 
-/**
- * A touchable container that animates press interaction using scale and opacity.
- *
- * This component wraps its children in a `Pressable` and an animated view,
- * applying a subtle shrink and fade effect when pressed and restoring the
- * appearance on release.
- *
- * Props:
- * - `onPress`: callback fired when the user completes a press gesture.
- * - `style`: optional style overrides for the outer pressable container.
- */
 export const PressableView = ({ onPress, style, children }: PressableViewProps) => {
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const opacityAnim = useRef(new Animated.Value(1)).current;
+  const [scaleAnim] = useState(() => new Animated.Value(1));
+  const [opacityAnim] = useState(() => new Animated.Value(1));
 
   const handlePressIn = () => {
     Animated.parallel([

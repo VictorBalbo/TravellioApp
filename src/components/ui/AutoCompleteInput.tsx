@@ -92,6 +92,7 @@ export const AutoCompleteInput = ({ mapRegion, placeholder, onSelect }: AutoComp
         placeholderTextColor={placeholder_color}
         style={[styles.input, { backgroundColor: background, borderColor: border, color: text }]}
         clearButtonMode="always"
+        autoComplete="off"
       />
       {results.length > 0 && (
         <ScrollView style={[styles.list, { backgroundColor: background }]} keyboardShouldPersistTaps={"always"}>

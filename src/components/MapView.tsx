@@ -11,7 +11,6 @@ export const MapView = () => {
   const mapRef = useRef<Map | null>(null);
   const [mapRegion, setMapRegion] = useState<Region>();
   const [isMapReady, setIsMapReady] = useState<boolean>();
-  const lastMarkerSelectionAt = useRef<number>(0);
   const markerRefs = useRef<Record<string, MapMarker | null>>({});
   const { activities, destinations, accommodations } = useTripContext();
   const { goToDestination, goToPlace, goToAccommodation } = useInternalRouterContext();
@@ -23,6 +22,31 @@ export const MapView = () => {
       !destinations?.find((d) => d.placeId === selectedMarker?.id)
     );
   }, [activities, accommodations, destinations, selectedMarker?.id]);
+
+  const fitMapToMarkers = (markers: Coordinates[]) => {
+    if (mapRef.current && markers.length) {
+      if (markers.length === 1) {
+        mapRef.current.animateToRegion({
+          latitude: markers[0].lat - 0.0075,
+          longitude: markers[0].lng,
+          latitudeDelta: 0.02,
+          longitudeDelta: 0.02,
+        });
+      } else {
+        mapRef.current.fitToCoordinates(
+          markers.map((m) => ({
+            latitude: m.lat,
+            longitude: m.lng,
+          })),
+          {
+            edgePadding: { top: 50, right: 50, bottom: 400, left: 50 },
+            animated: true,
+          },
+        );
+      }
+    }
+  };
+
   // Fit all centrilized markers
   useEffect(() => {
     if (centeredMarkers.length && isMapReady) {
@@ -53,39 +77,6 @@ export const MapView = () => {
       calloutMarker();
     }, 500);
   }, [selectedMarker]);
-
-  const fitMapToMarkers = (markers: Coordinates[]) => {
-    if (mapRef.current && markers.length) {
-      if (markers.length === 1) {
-        mapRef.current.animateToRegion({
-          latitude: markers[0].lat - 0.0075,
-          longitude: markers[0].lng,
-          latitudeDelta: 0.02,
-          longitudeDelta: 0.02,
-        });
-      } else {
-        mapRef.current.fitToCoordinates(
-          markers.map((m) => ({
-            latitude: m.lat,
-            longitude: m.lng,
-          })),
-          {
-            edgePadding: { top: 50, right: 50, bottom: 400, left: 50 },
-            animated: true,
-          },
-        );
-      }
-    }
-  };
-
-  const handleMarkerSelect = (callback: () => void) => {
-    const now = Date.now();
-    if (now - lastMarkerSelectionAt.current < 600) {
-      return;
-    }
-    lastMarkerSelectionAt.current = now;
-    callback();
-  };
 
   return (
     <ThemedView style={styles.container}>
@@ -125,7 +116,7 @@ export const MapView = () => {
             }}
             pinColor="blue"
             zIndex={5}
-            onPress={() => handleMarkerSelect(() => goToDestination(d.id))}
+            onPress={() => goToDestination(d.id)}
           />
         ))}
 
@@ -138,7 +129,7 @@ export const MapView = () => {
               ref={(ref) => {
                 markerRefs.current[a.placeId] = ref;
               }}
-              onPress={() => handleMarkerSelect(() => goToPlace(a.placeId))}
+              onPress={() => goToPlace(a.placeId)}
               coordinate={{
                 latitude: a.coordinates.lat,
                 longitude: a.coordinates.lng,
@@ -157,7 +148,7 @@ export const MapView = () => {
               ref={(ref) => {
                 markerRefs.current[a.placeId] = ref;
               }}
-              onPress={() => handleMarkerSelect(() => goToAccommodation(a.id))}
+              onPress={() => goToAccommodation(a.id)}
               coordinate={{
                 latitude: a.coordinates.lat,
                 longitude: a.coordinates.lng,

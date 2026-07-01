@@ -1,6 +1,6 @@
 import { baseStyle, spacing } from "@/constants";
 import { useThemeColor } from "@/hooks";
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Animated, Pressable } from "react-native";
 import { HorizontalDivider } from "./HorizontalDivider";
 import { Icon } from "./Icon";
@@ -15,9 +15,9 @@ export function Collapsable({ header, body }: CollapsableProps) {
   const captionColor = useThemeColor("caption");
 
   const [expanded, setExpanded] = useState(false);
-  const rotateAnim = useRef(new Animated.Value(0)).current;
-  const growAnim = useRef(new Animated.Value(0)).current;
-  const enterAnim = useRef(new Animated.Value(0)).current;
+  const [rotateAnim] = useState(() => new Animated.Value(0));
+  const [growAnim] = useState(() => new Animated.Value(0));
+  const [enterAnim] = useState(() => new Animated.Value(0));
 
   const toggle = () => {
     const toExpanded = !expanded;

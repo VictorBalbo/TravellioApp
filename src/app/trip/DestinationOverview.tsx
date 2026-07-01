@@ -109,7 +109,7 @@ export default function DestinationOverview() {
                       caption={
                         a.checkIn &&
                         a.checkOut &&
-                        `${dateDiff(a.checkOut, a.checkIn) + 1} ${t("night", { count: dateDiff(a.checkOut, a.checkIn) + 1 })} · ` +
+                        `${dateDiff(a.checkOut, a.checkIn) + 1} ${t("night", { count: dateDiff(a.checkOut, a.checkIn) + 1 })} • ` +
                           `${displayDate(a.checkIn, "DD MMM")}  -  ${displayDate(a.checkOut, "DD MMM")}`
                       }
                     />

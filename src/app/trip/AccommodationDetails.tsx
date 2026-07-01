@@ -91,13 +91,13 @@ export default function AccommodationDetails() {
             <IconCaptionText
               icon="personArrive"
               caption={t("checkIn")}
-              text={accommodation?.checkIn ? displayDate(accommodation.checkIn, "ddd DD MMM • HH:mm") : " - "}
+              text={accommodation?.checkIn ? displayDate(accommodation.checkIn, "ddd, DD MMM • HH:mm") : " - "}
             />
             <HorizontalDivider />
             <IconCaptionText
               icon="personDeparture"
               caption={t("checkOut")}
-              text={accommodation?.checkOut ? displayDate(accommodation.checkOut, "ddd DD MMM • HH:mm") : " - "}
+              text={accommodation?.checkOut ? displayDate(accommodation.checkOut, "ddd, DD MMM • HH:mm") : " - "}
             />
             {accommodation?.checkIn && accommodation?.checkOut && (
               <Fragment>

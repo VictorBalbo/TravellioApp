@@ -202,7 +202,7 @@ export default function PlaceDetails() {
               <IconCaptionText
                 icon="calendar"
                 caption={t("scheduledFor")}
-                text={activity.scheduledAt ? displayDate(activity.scheduledAt, "ddd DD MMM • HH:mm") : " - "}
+                text={activity.scheduledAt ? displayDate(activity.scheduledAt, "ddd, DD MMM • HH:mm") : " - "}
               />
               {activity.ticketRequired !== undefined && (
                 <Fragment>

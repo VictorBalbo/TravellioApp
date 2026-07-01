@@ -89,13 +89,13 @@ export default function TransitDetails() {
                 <Icon name={legTypeIcon(leg.type)} size={14} color={captionColor} />
                 <ThemedText type={TextType.Caption}>
                   {t(`transportation.${leg.type.toLowerCase()}`)}
-                  {" · "}
+                  {" • "}
                   {leg.company} {leg.serviceNumber}
                 </ThemedText>
               </ThemedView>
               <HorizontalDivider />
 
-              {/* Departure and Arrival Info */}
+              {/* Departure and Arrival Place Names */}
               <ThemedView style={baseStyle.inlineSectionSpaceBetween}>
                 <IconCaptionText
                   caption={leg.departurePlaceDescription}
@@ -118,7 +118,7 @@ export default function TransitDetails() {
               {(leg.departureTime || leg.arrivalTime) && (
                 <ThemedView style={baseStyle.inlineSectionSpaceBetween}>
                   <IconCaptionText
-                    caption={leg.departureTime && displayDate(leg.departureTime, "ddd DD MMM")}
+                    caption={leg.departureTime && displayDate(leg.departureTime, "ddd, DD MMM")}
                     text={(leg.departureTime && displayDate(leg.departureTime, "HH:mm")) ?? ""}
                     textType={TextType.Headline}
                     invertCaptionText
@@ -136,7 +136,7 @@ export default function TransitDetails() {
                     </Fragment>
                   )}
                   <IconCaptionText
-                    caption={leg.arrivalTime && displayDate(leg.arrivalTime, "ddd DD MMM")}
+                    caption={leg.arrivalTime && displayDate(leg.arrivalTime, "ddd, DD MMM")}
                     text={(leg.arrivalTime && displayDate(leg.arrivalTime, "HH:mm")) ?? ""}
                     textType={TextType.Headline}
                     invertCaptionText

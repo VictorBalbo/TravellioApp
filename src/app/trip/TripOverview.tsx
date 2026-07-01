@@ -1,6 +1,6 @@
 import { CardList, Icon, PressableView, TextType, ThemedText, ThemedView } from "@/components/ui";
 import { baseStyle, spacing } from "@/constants";
-import { dateDiff, displayDate, utcDate } from "@/helpers";
+import { dateDiff, displayDate } from "@/helpers";
 import { useInternalRouterContext, useMapContext, useTripContext } from "@/hooks";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -45,9 +45,9 @@ export default function TripOverview() {
                   {d.name}
                 </ThemedText>
                 <ThemedText type={TextType.Caption}>
-                  {utcDate(d.startDate).format("DD MMM")}
+                  {displayDate(d.startDate, "DD MMM")}
                   {" - "}
-                  {utcDate(d.endDate).format("DD MMM")}
+                  {displayDate(d.endDate, "DD MMM")}
                 </ThemedText>
               </ThemedView>
               <ThemedView style={styles.destinationActivities}>
@@ -55,10 +55,10 @@ export default function TripOverview() {
                 <ThemedText type={TextType.Caption}>{t("activity", { count: d.activities?.length ?? 0 })}</ThemedText>
               </ThemedView>
               <ThemedView style={styles.destinationNights}>
-                <ThemedText type={TextType.Headline}>{utcDate(d.endDate).diff(d.startDate, "days")}</ThemedText>
+                <ThemedText type={TextType.Headline}>{dateDiff(d.endDate, d.startDate, "days")}</ThemedText>
                 <ThemedText type={TextType.Caption}>
                   {t("night", {
-                    count: utcDate(d.endDate).diff(d.startDate, "days"),
+                    count: dateDiff(d.endDate, d.startDate, "days"),
                   })}
                 </ThemedText>
               </ThemedView>

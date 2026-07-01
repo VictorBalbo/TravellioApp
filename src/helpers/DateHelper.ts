@@ -1,11 +1,20 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { getLocales } from "expo-localization";
 
 dayjs.extend(utc);
 
+const locales = getLocales();
+const deviceLanguage = locales[0].languageCode ?? "en";
+
 export const utcDate = (date: Date) => dayjs(date);
 
-export const displayDate = (date: Date, format: string) => dayjs(date).utc().format(format);
+export const displayDate = (date: Date, format: string, locale?: string) =>
+  dayjs(date)
+    .utc()
+    .locale(deviceLanguage)
+    .format(format)
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 
 export const isSameDay = (date1?: Date, date2?: Date) => date1 && date2 && utcDate(date1).isSame(utcDate(date2), "day");
 

@@ -36,7 +36,7 @@ export const ArrivalDepartureOverview = ({ destination, transportation, type }: 
               {type === "arrival" ? t("arrivalAt") : t("departureAt")}{" "}
               {relevantTime && displayDate(relevantTime, "HH:mm")}
             </ThemedText>
-            <ThemedText type={TextType.Caption}>{relevantTime && displayDate(relevantTime, "ddd DD MMM")}</ThemedText>
+            <ThemedText type={TextType.Caption}>{relevantTime && displayDate(relevantTime, "ddd, DD MMM")}</ThemedText>
           </ThemedView>
           <ThemedView style={baseStyle.inlineSectionGap}>
             <ThemedText type={TextType.Caption}>{departure}</ThemedText>

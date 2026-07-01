@@ -4,6 +4,7 @@ import { useInternalRouterContext, useThemeColor } from "@/hooks";
 import { Activity, ActivityTypes } from "@/models";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { StyleSheet } from "react-native";
 import {
   CardView,
   HorizontalDivider,
@@ -78,7 +79,9 @@ export const ActivitiesItinerary = ({ activities }: Props) => {
           </ThemedText>
           {items.map((a) => (
             <PressableView key={a.id} style={baseStyle.inlineSectionGap} onPress={() => goToPlace(a.placeId)}>
-              <ThemedText type={TextType.Headline}>{a.scheduledAt && displayDate(a.scheduledAt, "HH:mm")}</ThemedText>
+              <ThemedText type={TextType.Headline} style={styles.activityTime}>
+                {a.scheduledAt && displayDate(a.scheduledAt, "HH:mm")}
+              </ThemedText>
               <IconCaptionText
                 icon={getIconForActivity(a)}
                 iconSize={20}
@@ -97,3 +100,9 @@ export const ActivitiesItinerary = ({ activities }: Props) => {
     </CardView>
   );
 };
+
+const styles = StyleSheet.create({
+  activityTime: {
+    minWidth: 45,
+  },
+});

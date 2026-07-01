@@ -1,8 +1,7 @@
 import { useThemeColor } from "@/hooks";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import Ionicons from "@react-native-vector-icons/ionicons";
 import { AndroidSymbol, SFSymbol, SymbolView, SymbolWeight } from "expo-symbols";
 import { ViewStyle } from "react-native";
-type IoniconsName = React.ComponentProps<typeof Ionicons>["name"];
 
 /**
  * Renders a platform-aware symbol icon that resolves to the appropriate
@@ -113,3 +112,4 @@ type IconSymbol = {
   android: AndroidSymbol;
   web?: AndroidSymbol;
 };
+type IoniconsName = React.ComponentProps<typeof Ionicons>["name"];

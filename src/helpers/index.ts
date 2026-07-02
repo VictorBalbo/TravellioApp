@@ -2,5 +2,5 @@ export { dateDiff, displayDate, isSameDay, utcDate } from "./DateHelper";
 export { getRadiusFromRegion } from "./MapHelper";
 export { getOpenStatus, isOpenNow, PlaceOpenStatus } from "./PlaceHelper";
 export { sanitizeUrl } from "./UrlHelper";
-export { getCurrencySymbol } from "./CurrencyHelper";
+export { getCurrencyName, getCurrencySymbol } from "./CurrencyHelper";
 

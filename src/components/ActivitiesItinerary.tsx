@@ -80,7 +80,7 @@ export const ActivitiesItinerary = ({ activities }: Props) => {
           {items.map((a) => (
             <PressableView key={a.id} style={baseStyle.inlineSectionGap} onPress={() => goToPlace(a.placeId)}>
               <ThemedText type={TextType.Headline} style={styles.activityTime}>
-                {a.scheduledAt && displayDate(a.scheduledAt, "HH:mm")}
+                {a.scheduledAt ? displayDate(a.scheduledAt, "HH:mm") : "--:--"}
               </ThemedText>
               <IconCaptionText
                 icon={getIconForActivity(a)}

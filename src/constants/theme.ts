@@ -23,7 +23,6 @@ export type BaseScheme = {
 export type ThemeScheme = {
   light: ColorScheme;
   dark: ColorScheme;
-  base: BaseScheme;
 };
 
 export const Colors = {
@@ -79,13 +78,6 @@ export const Theme: ThemeScheme = {
     activeTint: Colors.white,
     inactiveTint: Colors.gray,
   },
-  base: {
-    smallSpacing: 4,
-    mediumSpacing: 8,
-    largeSpacing: 16,
-    borderRadius: 16,
-    textSize: 16,
-  },
 } as const;
 
 export const spacing = {
@@ -104,5 +96,8 @@ export const radius = {
 } as const;
 
 export const fontSize = {
+  small: 12,
   medium: 16,
+  large: 24,
+  largeExtra: 32,
 } as const;

@@ -45,7 +45,11 @@ export default function AccommodationDetails() {
   }, [accommodation, focusPlaceMarker]);
 
   return (
-    <HeroView headerImageUrl={accommodation?.imageUrl}>
+    <HeroView
+      {...(accommodation?.imageUrl
+        ? { headerImageUrl: accommodation?.imageUrl }
+        : { headerImageAsset: require("@/assets/images/placeholders/newAccommodation.png") })}
+    >
       <ThemedView style={baseStyle.viewHeader}>
         <ThemedText type={TextType.Display}>{accommodation?.name}</ThemedText>
         <ThemedView style={baseStyle.inlineSectionGap}>

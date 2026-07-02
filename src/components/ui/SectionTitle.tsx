@@ -11,19 +11,22 @@ interface SectionTitleProps {
   value: string;
   valueType?: TextType;
   containerStyle?: ViewStyle;
+  onAddPress?: () => void;
 }
 
-export const SectionTitle = ({ icon, value, valueType = TextType.Title, containerStyle }: SectionTitleProps) => {
+export const SectionTitle = ({
+  icon,
+  value,
+  valueType = TextType.Title,
+  containerStyle,
+  onAddPress,
+}: SectionTitleProps) => {
   return (
     <ThemedView style={[styles.container, containerStyle]}>
       <IconCaptionText icon={icon} text={value} textType={valueType} />
-      <ThemedButton
-        title="Add"
-        icon="plus"
-        type={ButtonType.Secondary}
-        onPress={() => console.log("click")}
-        style={styles.button}
-      />
+      {onAddPress && (
+        <ThemedButton title="Add" icon="plus" type={ButtonType.Secondary} onPress={onAddPress} style={styles.button} />
+      )}
     </ThemedView>
   );
 };

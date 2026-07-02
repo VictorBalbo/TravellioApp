@@ -22,7 +22,7 @@ import { StyleSheet } from "react-native";
 
 export default function DestinationOverview() {
   const { t } = useTranslation();
-  const internalRouter = useInternalRouterContext();
+  const { goToAccommodation, goToAddAccommodation } = useInternalRouterContext();
   const { destinationId } = useLocalSearchParams();
   const { destinations, transportations } = useTripContext();
   const { focusDestinationMarkers } = useMapContext();
@@ -88,7 +88,11 @@ export default function DestinationOverview() {
       <ThemedView style={baseStyle.viewBody}>
         {/* Accommodations */}
         <ThemedView style={baseStyle.titleSectionGap}>
-          <SectionTitle value={t("yourStay")} valueType={TextType.Title} />
+          <SectionTitle
+            value={t("yourStay")}
+            valueType={TextType.Title}
+            onAddPress={() => goToAddAccommodation(destination?.id)}
+          />
           {accommodations.length === 0 && (
             <CardView style={styles.notInTripContainer}>
               <ThemedText type={TextType.Body} style={styles.textCenter}>
@@ -99,7 +103,7 @@ export default function DestinationOverview() {
           {accommodations.length > 0 &&
             accommodations.map((a) => (
               <CardView key={a.id}>
-                <PressableView onPress={() => internalRouter.goToAccommodation(a.id)}>
+                <PressableView onPress={() => goToAccommodation(a.id)}>
                   <ThemedView style={baseStyle.inlineSectionSpaceBetween}>
                     <IconCaptionText
                       icon="bed"

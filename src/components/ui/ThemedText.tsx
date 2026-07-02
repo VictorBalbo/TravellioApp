@@ -1,4 +1,4 @@
-import { Theme } from "@/constants/theme";
+import { fontSize } from "@/constants/theme";
 import { useThemeColor } from "@/hooks";
 import { StyleSheet, Text, type TextProps } from "react-native";
 
@@ -52,33 +52,33 @@ export const ThemedText = ({ style, type = TextType.Body, color, ...rest }: Them
 
 const styles = StyleSheet.create({
   display: {
-    fontSize: Theme.base.textSize * 2, // Size: 32
-    lineHeight: Theme.base.textSize * 2 * 1.1875, // Height: 38
+    fontSize: fontSize.largeExtra, // Size: 32
+    lineHeight: fontSize.largeExtra * 1.1875, // Height: 38
     fontWeight: "700", // Bold
   },
   title: {
-    fontSize: Theme.base.textSize * 1.5, // Size: 24
-    lineHeight: Theme.base.textSize * 1.5 * 1.25, // Height: 30
+    fontSize: fontSize.large, // Size: 24
+    lineHeight: fontSize.large * 1.25, // Height: 30
     fontWeight: "700", // Bold
   },
   headline: {
-    fontSize: Theme.base.textSize, // Size: 16
-    lineHeight: Theme.base.textSize * 1.375, // Height: 22
+    fontSize: fontSize.medium, // Size: 16
+    lineHeight: fontSize.medium * 1.375, // Height: 22
     fontWeight: "600", // SemiBold
   },
   body: {
-    fontSize: Theme.base.textSize, // Size: 16
-    lineHeight: Theme.base.textSize * 1.5, // Height: 24
+    fontSize: fontSize.medium, // Size: 16
+    lineHeight: fontSize.medium * 1.5, // Height: 24
     fontWeight: "400", // Normal,
   },
   footnote: {
-    fontSize: Theme.base.textSize * 0.875, // Size: 14
-    lineHeight: Theme.base.textSize * 0.875 * 1.5, // Height: 21
+    fontSize: fontSize.medium * 0.875, // Size: 14
+    lineHeight: fontSize.medium * 0.875 * 1.5, // Height: 21
     fontWeight: "400", // Normal
   },
   caption: {
-    fontSize: Theme.base.textSize * 0.75, // Size: 12
-    lineHeight: Theme.base.textSize * 0.75 * 1.5, // Height: 18
+    fontSize: fontSize.small, // Size: 12
+    lineHeight: fontSize.small * 1.5, // Height: 18
     fontWeight: "400", // Normal
   },
 });

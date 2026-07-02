@@ -7,7 +7,7 @@ dayjs.extend(utc);
 const locales = getLocales();
 const deviceLanguage = locales[0].languageCode ?? "en";
 
-export const utcDate = (date: Date) => dayjs(date);
+export const utcDate = (date?: Date) => dayjs(date);
 
 export const displayDate = (date: Date, format: string, locale?: string) =>
   dayjs(date)

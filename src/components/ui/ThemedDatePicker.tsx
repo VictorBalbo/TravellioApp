@@ -33,11 +33,13 @@ export const ThemedDatePicker = ({
 
   // Fix for datepicker not setting localling correctly on first render
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (selection) {
         setValue(selection);
       }
     }, 100);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dateChangeHandler = (selectedDate: Date) => {

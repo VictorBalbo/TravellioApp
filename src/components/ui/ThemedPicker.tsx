@@ -1,6 +1,8 @@
-import { baseStyle } from "@/constants";
+import { baseStyle, spacing } from "@/constants";
 import { useThemeColor } from "@/hooks";
 import { Host, Picker, PickerItemProps } from "@expo/ui";
+import { Fragment } from "react";
+import { ViewStyle } from "react-native";
 import { CardView } from "./CardView";
 import { Icon, IconSymbols } from "./Icon";
 import { TextType, ThemedText } from "./ThemedText";
@@ -15,6 +17,7 @@ export type ThemedPickerProps = {
   label?: string;
   icon?: keyof IconSymbols;
   cardContainer?: boolean;
+  containerStyle?: ViewStyle;
 };
 
 export const ThemedPicker = ({
@@ -23,21 +26,24 @@ export const ThemedPicker = ({
   onValueChange,
   label,
   icon,
+  containerStyle,
   cardContainer = false,
 }: ThemedPickerProps) => {
   const captionColor = useThemeColor("caption");
 
   const themedPicker = (
-    <ThemedView style={baseStyle.inlineSectionGap}>
+    <Fragment>
       {icon && <Icon name={icon} color={captionColor} />}
-      <ThemedView style={{ flex: 1 }}>
+      <ThemedView>
         {label && <ThemedText type={TextType.Caption}>{label}</ThemedText>}
         <Host
+          matchContents
           style={{
-            flexGrow: 1,
             width: "100%",
-            height: 20,
-            marginLeft: -15,
+            alignSelf: "flex-start",
+            marginHorizontal: -spacing.medium,
+            marginVertical: -spacing.small,
+            flexWrap: "wrap",
           }}
         >
           <Picker selectedValue={value} onValueChange={onValueChange} appearance="menu">
@@ -47,12 +53,12 @@ export const ThemedPicker = ({
           </Picker>
         </Host>
       </ThemedView>
-    </ThemedView>
+    </Fragment>
   );
 
   if (cardContainer) {
-    return <CardView>{themedPicker}</CardView>;
+    return <CardView style={[containerStyle, baseStyle.inlineSectionGap]}>{themedPicker}</CardView>;
   } else {
-    return themedPicker;
+    return <ThemedView style={[containerStyle, baseStyle.inlineSectionGap]}>{themedPicker}</ThemedView>;
   }
 };

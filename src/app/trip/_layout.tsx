@@ -34,6 +34,8 @@ export default function TripLayout() {
             <BottomSheet
               snapPoints={["50%", "20%", "93%"]}
               enableDynamicSizing={false}
+              keyboardBehavior="interactive"
+              keyboardBlurBehavior="restore"
               backgroundStyle={{ backgroundColor: background }}
               style={styles.bottomSheet}
               handleStyle={[

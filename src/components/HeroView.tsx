@@ -4,7 +4,7 @@ import { useThemeColor } from "@/hooks";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { Fragment, type PropsWithChildren } from "react";
-import { Image, ImageSourcePropType, KeyboardAvoidingView, Platform, StyleSheet, ViewStyle } from "react-native";
+import { Image, ImageSourcePropType, StyleSheet, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Props = PropsWithChildren<{
@@ -34,38 +34,33 @@ export const HeroView = ({
   const hasImage = !!headerImageUrl || !!headerImageAsset;
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, position: "relative" }}
-    >
-      <ThemedView style={styles.container}>
-        <ThemedView style={styles.closeButtonContainer}>
-          <PressableView onPress={onClose} style={[styles.closeButton, { borderColor }]}>
-            <Icon name="arrowLeft" color={Colors.white} />
-          </PressableView>
-        </ThemedView>
-
-        <ThemedView>
-          {hasImage && (
-            <Fragment>
-              <Image source={headerImageUrl ? { uri: headerImageUrl } : headerImageAsset} style={styles.headerImage} />
-              {showHeaderImageGradient && (
-                <LinearGradient
-                  colors={["transparent", background]}
-                  start={{ x: 0, y: 0.5 }}
-                  end={{ x: 0, y: 1 }}
-                  style={styles.headerGradient}
-                />
-              )}
-            </Fragment>
-          )}
-          {!hasImage && <ThemedView style={styles.noImageHeader} />}
-        </ThemedView>
-        <ThemedView style={[{ paddingBottom: bottom - shiftContentUp, bottom: shiftContentUp }, contentStyle]}>
-          {children}
-        </ThemedView>
+    <ThemedView style={[styles.container, { position: "relative" }]}>
+      <ThemedView style={styles.closeButtonContainer}>
+        <PressableView onPress={onClose} style={[styles.closeButton, { borderColor }]}>
+          <Icon name="arrowLeft" color={Colors.white} />
+        </PressableView>
       </ThemedView>
-    </KeyboardAvoidingView>
+
+      <ThemedView>
+        {hasImage && (
+          <Fragment>
+            <Image source={headerImageUrl ? { uri: headerImageUrl } : headerImageAsset} style={styles.headerImage} />
+            {showHeaderImageGradient && (
+              <LinearGradient
+                colors={["transparent", background]}
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 0, y: 1 }}
+                style={styles.headerGradient}
+              />
+            )}
+          </Fragment>
+        )}
+        {!hasImage && <ThemedView style={styles.noImageHeader} />}
+      </ThemedView>
+      <ThemedView style={[{ paddingBottom: bottom - shiftContentUp, bottom: shiftContentUp }, contentStyle]}>
+        {children}
+      </ThemedView>
+    </ThemedView>
   );
 };
 
